@@ -4,7 +4,6 @@ const createHeader = () => {
 
     const headerLogo = htmlCreator.createImg('./assets/icons/logo.svg', 'header-logo'); 
 
-
     const chefHatIcon = htmlCreator.createImg('./assets/icons/chef-hat.svg');
 
     const headerTitleFirstPart = htmlCreator.createTitle('h3', 'Food');
@@ -29,8 +28,7 @@ const createHeader = () => {
     
 
     const header = document.createElement('header');
-    header.id = 'landing-header';
-
+    header.classList.add('header-landing')
     
     header.appendChild(headerLogo);
     header.appendChild(headerCentralContainer);
@@ -100,7 +98,7 @@ const createCardSection = () => {
         const cardIcon = htmlCreator.createImg(cardInfo.urlImg);
         const title = htmlCreator.createTitle('h4', cardInfo.cardTitle);
         const text = htmlCreator.createParagrafh(cardInfo.cardText);
-
+        
         cardContainer.appendChild(cardIcon);
         cardContainer.appendChild(title);
         cardContainer.appendChild(text);
@@ -108,7 +106,12 @@ const createCardSection = () => {
         cardSection.appendChild(cardContainer);
     });
 
-
+    setTimeout(() => {
+        const cards = document.querySelectorAll('.card-landing');
+        cards.forEach(card => {
+            card.classList.add('card-animation');
+        });
+    }, 200);
 
     return cardSection;
 }
@@ -116,6 +119,7 @@ const createCardSection = () => {
 
 const createMain = () => {
     const main = document.createElement('main');
+    main.classList.add('main-landing');
     const middleContainer = createMiddleContainer();
     const cardSection = createCardSection();
 
@@ -128,10 +132,23 @@ const createMain = () => {
 
 function landingPageComponent() {
     document.body.style.backgroundImage = 'url(./assets/images/background-landing.png)';
+    document.body.classList.add('body-landing')
     const header = createHeader();
     const main = createMain();
 
     const mainContainer = htmlCreator.createSection('main-container-landing');
+    const ballOrnamentOne = htmlCreator.createImg('./assets/icons/side-ball.svg', 'side-ball-one');
+    const ballOrnamentTwo = htmlCreator.createImg('./assets/icons/side-ball.svg', 'side-ball-two');
+    const ballOrnamentThree = htmlCreator.createImg('./assets/icons/side-ball.svg', 'side-ball-three');
+    const ballOrnamentFour = htmlCreator.createImg('./assets/icons/side-ball.svg', 'side-ball-four');
+    const sideTableOrnament = htmlCreator.createImg('./assets/icons/side-table.svg', 'side-table-ornament');
+
+    mainContainer.appendChild(ballOrnamentOne);
+    mainContainer.appendChild(ballOrnamentTwo);
+    mainContainer.appendChild(ballOrnamentThree);
+    mainContainer.appendChild(ballOrnamentFour);
+    mainContainer.appendChild(sideTableOrnament);
+
     mainContainer.appendChild(header);
     mainContainer.appendChild(main);
 
