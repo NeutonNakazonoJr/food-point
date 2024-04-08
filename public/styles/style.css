@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+:root {
+    --wine-color: #670029;
+    --white-smoke: #F2F7F2;
+    --blackberry: #311432;
+    --cherry: #A73E5C;
+    --raspberry: #B22222
+}
+
+body {
+    background-size: cover; 
+    background-position: center;    
+    background-repeat: no-repeat;
+    transition: background-image 0.5s ease;
+    height: 100vh;
+    position: relative;
+    font-family: "Poppins", sans-serif;
+}
+
+#main-container-landing {
+    box-sizing: border-box;
+    width: 90%;
+    height: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f2f7f2da;
+    border-radius: 18px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.40);
+    padding: 0px 32px;
+}
+
+header {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0px;
+    color: var(--wine-color);
+    position: relative;
+
+    & div {
+        display: flex;
+        gap: 12px
+    };
+
+    & h3 {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0px   
+    };
+
+    & h3::first-letter {
+        font-weight: bold
+    };
+
+    & h3::first-line:nth-child(7) {
+        font-size: 50px;
+    }
+}
+
+#header-logo {
+    width: 34px;
+}
+
+#header-central-container {
+    display: flex;
+}
+
+.header-button {
+    margin-left: 12px;
+    padding: 2px 16px;
+    border-radius: 4px;
+    font-size: 18px;
+    border: 3px solid var(--wine-color);  
+}
+
+#login-btn {
+    background-color: inherit;
+    color: var(--wine-color);
+}
+
+#register-btn {
+    background-color: var(--wine-color);
+    color: var(--white-smoke);
+}
+
+
+#content-section {
+    width: 40%;
+    min-width: 300px;
+    color: var(--blackberry);
+
+    & h1 {
+        margin: 0px 0px 16px;
+        font-weight: bolder;
+        font-size: 32px;
+        line-height: 40px;
+    }
+
+    & p {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 20px;
+    }
+
+    & span {
+        color: var(--cherry);
+    }
+
+    & button {
+        background-color: var(--raspberry);
+        border: 0px;
+        padding: 10px 0px;
+        width: 200px;
+        color: var(--white-smoke);
+        font-size: 18px;
+        font-weight: 500;
+        border-radius: 4px;
+        box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        transition: background-color ease 0.4s
+    };
+
+    & button:hover {
+        background-color: var(--wine-color);
+    }
+}
