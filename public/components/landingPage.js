@@ -45,8 +45,7 @@ const createContentSection = () => {
     const titleText = '<span class="content-span">Planeje</span> e Compartilhe Momentos de Sabor!';
 
     const text = `Profissional ou um entusiasta da culinária, nosso aplicativo é seu parceiro perfeito
-    para <span class="content-span">planejar eventos gastronômicos extraordinários</span>. Desde festas íntimas até grandes celebrações,
-    estamos aqui para tornar cada momento culinário memorável e delicioso.`
+    para <span class="content-span">planejar eventos gastronômicos extraordinários</span>. Estamos aqui para tornar cada momento culinário memorável e delicioso.`
 
     const h1 = document.createElement('h1');
     h1.innerHTML = titleText;
@@ -64,10 +63,64 @@ const createContentSection = () => {
 }
 
 
+const createMiddleContainer = () => {
+    const contentSection = createContentSection();
+    const mainLogo = htmlCreator.createImg('./assets/icons/main-logo.svg');
+
+    const middleContainer = htmlCreator.createSection('middle-container');
+    middleContainer.appendChild(contentSection);
+    middleContainer.appendChild(mainLogo);
+
+    return middleContainer;
+}
+
+
+const createCardSection = () => {
+    const cardSection = htmlCreator.createSection('card-section-landing');
+    const cardInfos = [
+        {
+            urlImg: './assets/icons/bandeja.svg',
+            cardTitle: 'Construa seus Pratos',
+            cardText: 'Crie suas pratos únicos e memoráveis, adicionando ingredientes, instruções e imagens'
+        },
+        {
+            urlImg: './assets/icons/gg_list.svg',
+            cardTitle: 'lista de Compras Dinâmica',
+            cardText: 'Deixe nosso sistema calcular automaticamente a quantidade dos ingredientes necessários para suas receitas.'
+        }, 
+        {
+            urlImg: './assets/icons/calendar.svg',
+            cardTitle: 'Personalização do Evento',
+            cardText: 'Dê vida ao seu evento com convites personalizados, E sugestões de cardápio de acordo com seu estilo de comida preferido.'
+        }
+    ];
+
+    cardInfos.forEach(cardInfo => {
+        const cardContainer = htmlCreator.createDiv('.card-landing');
+        const cardIcon = htmlCreator.createImg(cardInfo.urlImg);
+        const title = htmlCreator.createTitle('h4', cardInfo.cardTitle);
+        const text = htmlCreator.createParagrafh(cardInfo.cardText);
+
+        cardContainer.appendChild(cardIcon);
+        cardContainer.appendChild(title);
+        cardContainer.appendChild(text);
+
+        cardSection.appendChild(cardContainer);
+    });
+
+
+
+    return cardSection;
+}
+
+
 const createMain = () => {
     const main = document.createElement('main');
-    const contentSection = createContentSection();
-    main.appendChild(contentSection);
+    const middleContainer = createMiddleContainer();
+    const cardSection = createCardSection();
+
+    main.appendChild(middleContainer);
+    main.appendChild(cardSection);
 
     return main;
 }
