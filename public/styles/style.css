@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-
 :root {
     --wine-color: #670029;
     --white-smoke: #F2F7F2;
     --blackberry: #311432;
     --cherry: #A73E5C;
-    --raspberry: #B22222
+    --raspberry: #B22222;
 }
 
-body {
+.body-landing {
     background-size: cover; 
     background-position: center;    
     background-repeat: no-repeat;
@@ -32,12 +31,43 @@ body {
     padding: 0px 32px 32px;
 }
 
-header {
+#side-ball-one {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}
+
+#side-ball-two {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+}
+
+#side-ball-three {
+    position: absolute;
+    left: calc(100% - 28px);
+    top: 8px;
+}
+
+#side-ball-four {
+    position: absolute;
+    left: calc(100% - 28px);
+    bottom: 8px;
+}
+
+#side-table-ornament {
+    position: absolute;
+    left: calc(100% - 28px);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.header-landing {
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0px 32px;
+    padding: 32px 0px;
     color: var(--wine-color);
     position: relative;
 
@@ -74,23 +104,23 @@ header {
     padding: 2px 16px;
     border-radius: 4px;
     font-size: 18px;
-    border: 2px solid var(--wine-color);  
+    border: 2px solid var(--raspberry);  
 }
 
 #login-btn {
     background-color: inherit;
-    color: var(--wine-color);
+    color: var(--raspberry);
     transition: background-color ease 0.5s;
 }
 
 #login-btn:hover {
-    background-color: var(--wine-color);
+    background-color: var(--raspberry);
     color: var(--white-smoke);
     cursor: pointer;
 }
 
 #register-btn {
-    background-color: var(--wine-color);
+    background-color: var(--raspberry);
     color: var(--white-smoke);
     transition: background-color border-color ease 0.5s;
 }
@@ -184,6 +214,9 @@ main {
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
     border: 1px solid var(--cherry);
     text-align: center;
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
 
     & h4 {
         color: var(--blackberry);
@@ -199,3 +232,8 @@ main {
 
     }
 }
+
+.card-animation {
+    opacity: 1;
+    transform: translateX(0);
+  }
