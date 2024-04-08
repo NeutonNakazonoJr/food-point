@@ -119,6 +119,7 @@ const createCardSection = () => {
 
 const createMain = () => {
     const main = document.createElement('main');
+    main.classList.add('main-landing');
     const middleContainer = createMiddleContainer();
     const cardSection = createCardSection();
 

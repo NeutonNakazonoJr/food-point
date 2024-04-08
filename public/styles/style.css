@@ -13,7 +13,7 @@
     background-position: center;    
     background-repeat: no-repeat;
     transition: background-image 0.5s ease;
-    height: calc(100vh + 200px);
+    height: calc(100vh + 15rem);
     position: relative;
     font-family: "Poppins", sans-serif;
 }
@@ -26,9 +26,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #f2f7f2da;
-    border-radius: 18px;
+    border-radius: 1.2rem;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.40);
-    padding: 0px 32px 32px;
+    padding: 0rem 2.5rem 2.5rem;
 }
 
 #side-ball-one {
@@ -67,32 +67,32 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 32px 0px;
+    padding: 2.5rem 0rem;
     color: var(--wine-color);
     position: relative;
 
     & div {
         display: flex;
         gap: 12px
-    };
+    }
 
     & h3 {
-        font-size: 32px;
+        font-size: 2.5rem;
         font-weight: 500;
         margin: 0px   
-    };
+    }
 
     & h3::first-letter {
         font-weight: bold
-    };
+    }
 
     & h3::first-line:nth-child(7) {
-        font-size: 50px;
+        font-size: 2.5rem;
     }
 }
 
 #header-logo {
-    width: 34px;
+    width: 2rem;
 }
 
 #header-central-container {
@@ -103,7 +103,7 @@
     margin-left: 12px;
     padding: 2px 16px;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 1.2rem;
     border: 2px solid var(--raspberry);  
 }
 
@@ -131,10 +131,10 @@
     cursor: pointer;
 } 
 
-main {
+.main-landing {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 2.5rem;
 }
 
 
@@ -144,26 +144,27 @@ main {
     align-items: center;
 
     & img {
-        height: 320px;
+        height: 20rem;
     }
 }
 
 #content-section {
     width: 40%;
-    min-width: 300px;
+    width: 50%;
     color: var(--blackberry);
 
     & h1 {
         margin: 0px 0px 16px;
         font-weight: bolder;
-        font-size: 32px;
+        font-size: 2.1rem;
         line-height: 40px;
     }
 
     & p {
         font-weight: 600;
-        font-size: 18px;
-        line-height: 20px;
+        font-size: 1rem;
+        line-height: 1.2rem;
+        max-width: 25rem;
     }
 
     & span {
@@ -174,9 +175,9 @@ main {
         background-color: var(--raspberry);
         border: 0px;
         padding: 10px 0px;
-        width: 200px;
+        width: 15rem;
         color: var(--white-smoke);
-        font-size: 18px;
+        font-size: 1rem;
         font-weight: 500;
         border-radius: 4px;
         box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
@@ -207,7 +208,7 @@ main {
 
 .card-landing {
     box-sizing: border-box;
-    max-width: 250px;
+    max-width: 17rem;
     padding: 12px;
     border-radius: 8px;
     background-color: var(--cherry);
@@ -220,14 +221,14 @@ main {
 
     & h4 {
         color: var(--blackberry);
-        font-size: 16px;
+        font-size: 1.1rem;
         font-weight: 700;
         margin: 5px 0px;
     }
 
     & p {
         color: var(--white-smoke);
-        font-size: 14px;
+        font-size: 0.9rem;
         font-weight: 400;
 
     }
