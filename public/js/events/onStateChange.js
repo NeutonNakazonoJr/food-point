@@ -3,7 +3,7 @@
  * @param {string} path exemple: "/home" 
  */
 export default function dispatchOnStateChange(path) {
-    const event = new CustomEvent("onStateChange", {
+    const event = new CustomEvent("onstatechange", {
         detail: path
     });
     window.dispatchEvent(event);
