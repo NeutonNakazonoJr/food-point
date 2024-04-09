@@ -127,6 +127,12 @@ const htmlCreator = {
         }
 
         return btn;
+    },
+
+    createParagrafh: (innerText) => {
+        const p = document.createElement('p');
+        p.innerText = innerText;
+        return p;
     }
 }
 
