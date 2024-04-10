@@ -1,19 +1,36 @@
+@keyframes homeCardAnimation {
+	0% {
+		opacity: 0;
+		transform: translateY(100vh);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
 #homeMain {
 	background-color: var(--white-smoke);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	padding: 5rem 0;
 	min-height: calc(100vh - 60px);
-	width: 100vw;
+	width: 100%;
 	overflow-x: hidden;
 	overflow-y: auto;
 	margin-top: 60px;
+	& > * {
+		margin-bottom: 2rem;
+	}
 }
 
 #homeMain > .home__card {
+	animation: 1s ease-in-out;
+	animation-name: homeCardAnimation;
 	display: flex;
-	height: 200px;
+	height: 150px;
+	justify-content: center;
 	min-width: 60%;
 	overflow: hidden;
 	font-size: 1rem;
@@ -22,7 +39,7 @@
 	}
 }
 
-#homeMain > .home__card > section {
+#homeMain > .home__card > .home__card__my-event {
 	border-radius: var(--border-radius-1x);
 	color: var(--white-smoke);
 	cursor: pointer;
@@ -32,11 +49,16 @@
 	display: flex;
 	background-image: url("../svg-backgrounds/layer-waves-haikei\ 1.svg");
 	background-color: var(--wine-color);
+	background-position: bottom;
 	z-index: 2;
+	text-decoration: none;
+	&:visited {
+		color: var(--white-smoke);
+	}
 	&:hover,
 	&:focus,
 	&:focus-within {
-		filter: brightness(.9);
+		filter: brightness(0.9);
 	}
 	&:hover ~ a,
 	&:active ~ a,
@@ -103,7 +125,7 @@
 	background-image: url("../icons/hours.svg");
 }
 
-#homeMain > .home__card > a {
+#homeMain > .home__card > .home__card__my-bill {
 	color: var(--white-smoke);
 	background-color: var(--blackberry);
 	margin-left: -200px;
@@ -111,6 +133,7 @@
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
+	padding-left: 1rem;
 	width: 200px;
 	border-radius: var(--border-radius-1x);
 	text-decoration: none;
@@ -129,5 +152,40 @@
 	&:focus-within {
 		filter: brightness(0.9);
 		margin-left: -1rem;
+	}
+}
+
+#homeMain > #homeBtnNewEvent {
+	animation: 1s ease-in-out;
+	animation-name: homeCardAnimation;
+	align-items: center;
+	background-color: var(--white-smoke);
+	border: 2px dashed var(--wine-color);
+	border-radius: var(--border-radius-1x);
+	color: var(--wine-color);
+	display: flex;
+	flex-direction: column;
+	font-weight: 700;
+	height: 150px;
+	width: 50%;
+	justify-content: center;
+	text-decoration: none;
+	transition: all 500ms;
+	& > span:first-child {
+		height: 40px;
+		width: 40px;
+		display: inline-block;
+		background: url("../icons/add-btn.svg") center no-repeat;
+		background-size: contain;
+		transition: all 500ms;
+	}
+	&:hover {
+		background-color: var(--wine-color);
+		color: var(--white-smoke);
+		transition: all 500ms;
+		& > span:first-child {
+			transition: all 500ms;
+			background-image: url("../icons/add-btn-hover.svg");
+		}
 	}
 }

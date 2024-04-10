@@ -35,15 +35,16 @@
 		clip-path: polygon(0% 0%, 0% 100%, 5% 100%, 10% 0%);
 	}
 	70% {
-		clip-path: polygon(0% 0%, 0% 100%, 90% 100%, 100% 0%);
+		clip-path: polygon(0% 0%, 0% 100%, 95% 100%, 100% 0%);
 	}
 	100% {
-		clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%);
+		clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 110% 0%);
 	}
 }
 
 #mainHeader {
 	animation: 1s ease-in-out;
+	animation-name: animationMainHeaderV2;
 	align-items: center;
 	background-color: var(--raspberry);
 	display: flex;
@@ -54,6 +55,7 @@
 	left: 0;
 	top: 0;
 	width: 100vw;
+	z-index: 10;
 }
 
 #mainHeader > h1 {
@@ -75,6 +77,7 @@
 
 #mainHeader > a {
 	animation: 1s 1s ease-in-out alternate both;
+	animation-name: spawnHeaderButton;
 	align-items: center;
 	background-color: var(--wine-color);
 	border: 1px solid var(--wine-color);
