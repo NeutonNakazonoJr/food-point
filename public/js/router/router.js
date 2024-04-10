@@ -1,3 +1,4 @@
+import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
 
 const title = "Food Point";
@@ -22,6 +23,11 @@ const routes = {
         title: title,
         description: "Conheça o Food Point!",
     },
+	"/home": {
+		html: homePage,
+		title: "Home | " + title,
+		description: "Veja e crie eventos gastronômicos!"
+	}
 };
 
 /** Check the current path and returns according with it

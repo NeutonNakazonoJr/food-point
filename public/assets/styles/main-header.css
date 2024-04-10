@@ -1,8 +1,10 @@
 @keyframes spawnHeaderButton {
 	0% {
+		opacity: 0;
 		width: 0;
 	}
 	50% {
+		opacity: 1;
 		width: 80px;
 	}
 	100% {
@@ -10,7 +12,7 @@
 	}
 }
 
-@keyframes clipMainHeader {
+@keyframes animationMainHeaderV1 {
 	0% {
 		clip-path: polygon(49% 0%, 51% 0%, 50% 0%, 50% 0%);
 	}
@@ -25,8 +27,23 @@
 	}
 }
 
+@keyframes animationMainHeaderV2 {
+	0% {
+		clip-path: polygon(0% 0%, 0% 100%, 0% 100%, 5% 0%);
+	}
+	10% {
+		clip-path: polygon(0% 0%, 0% 100%, 5% 100%, 10% 0%);
+	}
+	70% {
+		clip-path: polygon(0% 0%, 0% 100%, 90% 100%, 100% 0%);
+	}
+	100% {
+		clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%);
+	}
+}
+
 #mainHeader {
-	animation: clipMainHeader 1s ease-in-out;
+	animation: 1s ease-in-out;
 	align-items: center;
 	background-color: var(--raspberry);
 	display: flex;
@@ -54,7 +71,7 @@
 }
 
 #mainHeader > a {
-	animation: spawnHeaderButton 1s 1s ease-in-out alternate both;
+	animation: 1s 1s ease-in-out alternate both;
 	align-items: center;
 	background-color: var(--wine-color);
 	border: 1px solid var(--wine-color);
