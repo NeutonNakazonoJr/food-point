@@ -1,0 +1,133 @@
+#homeMain {
+	background-color: var(--white-smoke);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 5rem 0;
+	min-height: calc(100vh - 60px);
+	width: 100vw;
+	overflow-x: hidden;
+	overflow-y: auto;
+	margin-top: 60px;
+}
+
+#homeMain > .home__card {
+	display: flex;
+	height: 200px;
+	min-width: 60%;
+	overflow: hidden;
+	font-size: 1rem;
+	& > * {
+		height: 100%;
+	}
+}
+
+#homeMain > .home__card > section {
+	border-radius: var(--border-radius-1x);
+	color: var(--white-smoke);
+	cursor: pointer;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 1rem;
+	display: flex;
+	background-image: url("../svg-backgrounds/layer-waves-haikei\ 1.svg");
+	background-color: var(--wine-color);
+	z-index: 2;
+	&:hover,
+	&:focus,
+	&:focus-within {
+		filter: brightness(.9);
+	}
+	&:hover ~ a,
+	&:active ~ a,
+	&:focus ~ a,
+	&:focus-visible ~ a,
+	&:focus-within ~ a {
+		margin-left: -1rem;
+	}
+}
+
+#homeMain > .home__card .home__card__img {
+	height: 90%;
+	border-radius: var(--border-radius-1x);
+	width: 30%;
+	object-fit: cover;
+}
+
+#homeMain > .home__card .home__card__info {
+	display: flex;
+	justify-content: space-between;
+	height: 90%;
+	width: 65%;
+	& > div {
+		display: flex;
+		flex-direction: column;
+	}
+	& > div:last-child {
+		align-items: flex-end;
+	}
+}
+
+#homeMain > .home__card .home__card__info__title {
+	font-family: var(--font-pacifico);
+	font-weight: 400;
+}
+
+#homeMain > .home__card .home__card__info__local,
+#homeMain > .home__card .home__card__info__main-food,
+#homeMain > .home__card .home__card__info__date,
+#homeMain > .home__card .home__card__info__hours {
+	display: flex;
+	align-items: center;
+	&::before {
+		content: "";
+		height: 18px;
+		width: 18px;
+		margin-right: 5px;
+		display: inline-block;
+		background: center no-repeat;
+		background-size: contain;
+		background-image: url("../icons/local.svg");
+	}
+}
+
+#homeMain > .home__card .home__card__info__main-food::before {
+	background-image: url("../icons/restaurant-sharp.svg");
+}
+
+#homeMain > .home__card .home__card__info__date::before {
+	background-image: url("../icons/calendar-bolder.svg");
+}
+
+#homeMain > .home__card .home__card__info__hours::before {
+	background-image: url("../icons/hours.svg");
+}
+
+#homeMain > .home__card > a {
+	color: var(--white-smoke);
+	background-color: var(--blackberry);
+	margin-left: -200px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	width: 200px;
+	border-radius: var(--border-radius-1x);
+	text-decoration: none;
+	transition: margin 500ms;
+	&::before {
+		content: "";
+		display: block;
+		background: url("../icons/bill.svg") center no-repeat;
+		height: 40px;
+		width: 40px;
+	}
+	&:hover,
+	&:active,
+	&:focus,
+	&:focus-visible,
+	&:focus-within {
+		filter: brightness(0.9);
+		margin-left: -1rem;
+	}
+}

@@ -6,11 +6,54 @@
 		<meta name="description" content="" />
 		<link rel="stylesheet" href="./assets/styles/style.css" />
 		<link rel="stylesheet" href="./assets/styles/main-header.css" />
+		<link rel="stylesheet" href="./assets/styles/homePage.css" />
 		<title>Food Point</title>
 	</head>
 	<body>
-		<a href="/home">Home</a>
 		<div id="root">
+			<header id="mainHeader">
+				<h1>Food Point</h1>
+				<a href="#">
+					<img
+						src="./assets/icons/profile-placeholder.svg"
+						alt="foto de perfil do usuário"
+					/>
+					<span></span>
+				</a>
+			</header>
+			<main id="homeMain">
+				<article class="home__card">
+					<section>
+						<img
+							class="home__card__img"
+							src="https://img.freepik.com/fotos-gratis/massa-fresca-com-farto-queijo-a-bolonhesa-e-parmesao-gerado-por-ia_188544-9469.jpg?t=st=1712773655~exp=1712777255~hmac=0711228877b295d6f4609d4c9d99870f5cb24ab212798119badc04d1adb9381c&w=826"
+							alt="prato com macarrão. um garfo está levantando uma porção do macarrão"
+						/>
+						<div class="home__card__info">
+							<div>
+								<h3 class="home__card__info__title">
+									Feira do rolo
+								</h3>
+								<span class="home__card__info__local"
+									>Residência barra funda 2 nº266</span
+								>
+								<span class="home__card__info__main-food"
+									>Pato no tucupi</span
+								>
+							</div>
+							<div>
+								<span class="home__card__info__date">
+									06/04/2024 <span>(seg)</span>
+								</span>
+								<span class="home__card__info__hours"
+									>15:30</span
+								>
+							</div>
+						</div>
+					</section>
+					<a href="#"> Ver lista de compras </a>
+				</article>
+			</main>
 		</div>
 		<script type="module" src="./js/index.js"></script>
 	</body>
