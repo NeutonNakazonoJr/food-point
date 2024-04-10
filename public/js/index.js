@@ -1,6 +1,5 @@
-import router from "./router/router.js";
+import initRouter from "./router/router.js";
 
 const root = document.getElementById("root");
-root.innerHTML = "";
-root.appendChild(router.getRoute("/"));
 
+window.addEventListener("DOMContentLoaded", () => initRouter(root));
