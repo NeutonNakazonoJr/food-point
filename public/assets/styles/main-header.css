@@ -108,3 +108,10 @@
 		background-image: url("../icons/expand-triangle.svg");
 	}
 }
+
+
+@media screen and (max-width: 425px) {
+	#mainHeader {
+		padding: 0 1rem;
+	}
+}

@@ -136,14 +136,16 @@
 	padding-left: 1rem;
 	width: 200px;
 	border-radius: var(--border-radius-1x);
+	text-align: center;
 	text-decoration: none;
 	transition: margin 500ms;
 	&::before {
 		content: "";
 		display: block;
 		background: url("../icons/bill.svg") center no-repeat;
-		height: 40px;
-		width: 40px;
+		background-size: contain;
+		height: 30px;
+		width: 30px;
 	}
 	&:hover,
 	&:active,
@@ -167,7 +169,7 @@
 	flex-direction: column;
 	font-weight: 700;
 	height: 150px;
-	width: 50%;
+	width: 40%;
 	justify-content: center;
 	text-decoration: none;
 	transition: all 500ms;
@@ -185,7 +187,123 @@
 		transition: all 500ms;
 		& > span:first-child {
 			transition: all 500ms;
-			background-image: url("../icons/add-btn-hover.svg");
+			/* background-image: url("../icons/add-btn-hover.svg"); */
+			filter: grayscale(1) contrast(2) invert();
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	#homeMain > .home__card {
+		max-width: 80%;
+	}
+	#homeMain > .home__card > .home__card__my-event {
+		width: 100%;
+
+		&:hover ~ a,
+		&:active ~ a,
+		&:focus ~ a,
+		&:focus-visible ~ a,
+		&:focus-within ~ a {
+			margin-left: -1rem;
+		}
+	}
+
+	#homeMain > .home__card .home__card__info {
+		padding: 0 1rem;
+		width: 70%;
+	}
+
+	#homeMain > .home__card .home__card__info__local,
+	#homeMain > .home__card .home__card__info__main-food,
+	#homeMain > .home__card .home__card__info__date,
+	#homeMain > .home__card .home__card__info__hours {
+		&::before {
+			height: 14px;
+			width: 14px;
+		}
+	}
+
+	#homeMain > .home__card .home__card__info__date > span {
+		display: none;
+	}
+
+	#homeMain > .home__card > .home__card__my-bill {
+		margin-left: -1rem;
+		width: 150px;
+		&::before {
+			height: 20px;
+			width: 20px;
+		}
+	}
+
+	#homeMain > #homeBtnNewEvent {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#homeMain > .home__card {
+		height: 200px;
+	}
+	#homeMain > .home__card .home__card__info {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		flex-direction: column;
+		& > div:last-child {
+			align-items: flex-start;
+		}
+	}
+	#homeMain > #homeBtnNewEvent {
+		width: 70%;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#homeMain > .home__card {
+		flex-direction: column;
+		height: 250px;
+	}
+
+	#homeMain > .home__card > .home__card__my-event {
+		width: 100%;
+		height: 70%;
+
+		&:hover ~ a,
+		&:active ~ a,
+		&:focus ~ a,
+		&:focus-visible ~ a,
+		&:focus-within ~ a {
+			margin-left: 0rem;
+		}
+	}
+
+	#homeMain > .home__card .home__card__img {
+		width: 40%;
+	}
+
+	#homeMain > .home__card .home__card__info {
+		width: 60%;
+		padding: 0 1rem;
+	}
+
+	#homeMain > .home__card > .home__card__my-bill {
+		width: 100%;
+		height: 30%;
+		margin: -1rem 0 0 0;
+		flex-direction: row;
+		padding-top: 1rem;
+		&::before {
+			margin-right: 5px;
+		}
+
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-visible,
+		&:focus-within {
+			margin-left: 0rem;
 		}
 	}
 }
