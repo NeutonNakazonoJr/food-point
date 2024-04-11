@@ -1,5 +1,7 @@
+
 const userRepository = require('../repositories/userRepository.js');
 const { validate : uuidValidate } = require('uuid');
+const { userUpdatePasswordSchema } = require('../schemas/userSchema.js');
 
 const userMiddleware = {
 
@@ -8,20 +10,49 @@ const userMiddleware = {
             const { id } = req.params;
 
             if (!uuidValidate(id)) { 
-                throw new Error('ID inválido');
+                return res.status(400).json({error: 'ID inválido.'});
             };
-
-            const getUser = await userRepository.getUserById(id);
-
+            
+            const [ getUser ] = await userRepository.getUserById(id);
+            
             if (!getUser) { 
-                throw new Error('Usuário não encontrado.')
+                return res.status(400).json({ error: 'Usuário não encontrado.'});
             };
          
         } catch (error) {
-            return res.status(404).json({ error: error.message });
+            return res.status(500).json({ error: 'Erro interno no servidor' });
         }
 
         next();
+    },
+
+    validateUserEmail: async (req, res, next) => {
+        try {
+            
+            if (req.method === 'PATCH' && !req.body.email) {
+                next();
+            }
+
+            const { email } = req.body;
+            const [ registeredEmail ] = await userRepository.getUserEmail(email);
+
+            if (registeredEmail) {
+                return res.status(400).json({ error: 'Email e/ou Senha inválido' });
+            }
+
+            next();
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
+    },
+
+    validatePasswordUpdate: async (req, res, next) => {
+        try {
+            await userUpdatePasswordSchema.validateAsync(req.body);
+            next();
+        } catch (error) {
+            return res.status(400).json({ error: error.message});
+        }
     }
 }
 
