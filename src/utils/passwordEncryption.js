@@ -6,11 +6,11 @@ const comparePassword = async (loginPassword, userPassword) => {
 }
 
 const encryptPassword = async (password) => {
-  const encryptedPassword = bcrypt.hash(password, 10);
-  return encryptedPassword;
+    const encryptedPassword = bcrypt.hash(password, 10);
+    return encryptedPassword;
 } 
 
 module.exports = {
-  comparePassword,
-  encryptPassword,
+    comparePassword,
+    encryptPassword,
 }

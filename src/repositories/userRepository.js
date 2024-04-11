@@ -40,7 +40,6 @@ const userRepository = {
         const indexIdParameter = formattedParameterForQuery.length + 1;
         const formattedParameters = formattedParameterForQuery.toString();
 
-
         const arrayValuesQuery = [... Object.values(newInfos), userId];
       
         const query = `UPDATE "user" SET ${formattedParameters} WHERE id = $${indexIdParameter} RETURNING ${attributesToUpdate}`;
