@@ -1,0 +1,125 @@
+@keyframes spawnHeaderButton {
+	0% {
+		opacity: 0;
+		width: 0;
+	}
+	50% {
+		opacity: 1;
+		width: 80px;
+	}
+	100% {
+		width: 90px;
+	}
+}
+
+@keyframes animationMainHeaderV1 {
+	0% {
+		clip-path: polygon(49% 0%, 51% 0%, 50% 0%, 50% 0%);
+	}
+	10% {
+		clip-path: polygon(49% 0%, 51% 0%, 50% 100%, 50% 100%);
+	}
+	50% {
+		clip-path: polygon(40% 0%, 60% 0%, 50% 100%, 50% 100%);
+	}
+	100% {
+		clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+	}
+}
+
+@keyframes animationMainHeaderV2 {
+	0% {
+		clip-path: polygon(0% 0%, 0% 100%, 0% 100%, 5% 0%);
+	}
+	10% {
+		clip-path: polygon(0% 0%, 0% 100%, 5% 100%, 10% 0%);
+	}
+	70% {
+		clip-path: polygon(0% 0%, 0% 100%, 95% 100%, 100% 0%);
+	}
+	100% {
+		clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 110% 0%);
+	}
+}
+
+#mainHeader {
+	animation: 1s ease-in-out;
+	align-items: center;
+	background-color: var(--raspberry);
+	display: flex;
+	height: 60px;
+	justify-content: space-between;
+	padding: 0 3rem;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	z-index: 10;
+}
+
+#mainHeader > h1 {
+	color: var(--white-smoke);
+	font-weight: 600;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&::before {
+		content: "";
+		width: 30px;
+		height: 30px;
+		display: inline-block;
+		background-image: url("../icons/chef-hat-white.svg");
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+}
+
+#mainHeader > a {
+	animation: 1s 1s ease-in-out alternate both;
+	align-items: center;
+	background-color: var(--wine-color);
+	border: 1px solid var(--wine-color);
+	border-radius: var(--border-radius-3x);
+	display: flex;
+	cursor: pointer;
+	filter: brightness(1);
+	justify-content: space-between;
+	height: 70%;
+	overflow: hidden;
+	width: 90px;
+	&:hover {
+		filter: brightness(0.9);
+	}
+	& > img {
+		height: 100%;
+		border-radius: 100%;
+		width: 45px;
+		object-fit: cover;
+	}
+	& > span {
+		margin-right: 10px;
+		width: 20px;
+		height: 20px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		background-image: url("../icons/expand-triangle.svg");
+	}
+}
+
+
+@media screen and (max-width: 425px) {
+	#mainHeader {
+		padding: 0 1rem;
+	}
+}
+@media screen and (max-width: 350px) {
+	#mainHeader {
+		& > h1 {
+			font-size: 1.5rem;
+		}
+		& > a {
+			width: 70px;
+		}
+	}
+}
