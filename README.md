@@ -32,15 +32,15 @@ Plataforma de planejamento de eventos gatronômicos.
   }
 
 - **RESPONSE 400 (JSON):**
-```json
+  ```json
   {
 	  "error": "O nome completo deve conter apenas letras"
   }
 
 - **RESPONSE 500 (JSON):**
-```json
+  ```json
   {
-	  "error": "Erro interno no servidor"
+	  "error": "Erro interno no servidor",
   }
 
 #### Regras de Validação dos Dados do Usuário
