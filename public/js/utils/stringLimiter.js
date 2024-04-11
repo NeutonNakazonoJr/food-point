@@ -6,9 +6,9 @@
  * @param {number} lengthLimit
  */
 export default function stringLimiter(string, lengthLimit, useDots = true) {
-	if (string.length >= lengthLimit) {
+	if (typeof string === "string" && string.length >= lengthLimit) {
 		const slicedString = string.substring(0, lengthLimit);
-		return useDots ? slicedString + "..." : slicedString;
+		return useDots ? slicedString.trim() + "..." : slicedString;
 	}
 	return string;
 }

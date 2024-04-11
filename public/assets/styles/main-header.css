@@ -44,7 +44,6 @@
 
 #mainHeader {
 	animation: 1s ease-in-out;
-	animation-name: animationMainHeaderV2;
 	align-items: center;
 	background-color: var(--raspberry);
 	display: flex;
@@ -77,7 +76,6 @@
 
 #mainHeader > a {
 	animation: 1s 1s ease-in-out alternate both;
-	animation-name: spawnHeaderButton;
 	align-items: center;
 	background-color: var(--wine-color);
 	border: 1px solid var(--wine-color);
@@ -113,5 +111,15 @@
 @media screen and (max-width: 425px) {
 	#mainHeader {
 		padding: 0 1rem;
+	}
+}
+@media screen and (max-width: 350px) {
+	#mainHeader {
+		& > h1 {
+			font-size: 1.5rem;
+		}
+		& > a {
+			width: 70px;
+		}
 	}
 }
