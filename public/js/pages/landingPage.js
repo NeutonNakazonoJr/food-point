@@ -1,3 +1,4 @@
+import dispatchOnStateChange from "../events/onStateChange.js";
 import htmlCreator from "../utils/htmlCreator.js";
 
 const createHeader = () => {
@@ -36,6 +37,19 @@ const createHeader = () => {
 		"header-button"
 	);
 
+	loginButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		document.body.style.backgroundImage = "";
+		document.body.classList.remove("body-landing");
+		dispatchOnStateChange("/login");
+	});
+	registerButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		document.body.style.backgroundImage = "";
+		document.body.classList.remove("body-landing");
+		dispatchOnStateChange("/login");
+	});
+
 	const nav = htmlCreator.createNav("nav-landing");
 	nav.appendChild(loginButton);
 	nav.appendChild(registerButton);
@@ -69,6 +83,13 @@ const createContentSection = () => {
 		"Cadastre-se",
 		"main-register-button"
 	);
+
+	registerButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		document.body.style.backgroundImage = "";
+		document.body.classList.remove("body-landing");
+		dispatchOnStateChange("/login");
+	});
 
 	contentSection.appendChild(h1);
 	contentSection.appendChild(p);
