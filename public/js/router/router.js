@@ -33,8 +33,8 @@ const routes = {
 	"/login": {
 		html: createLoginForm,
 		title: "Login | " + title,
-		description: ""
-	}
+		description: "",
+	},
 };
 
 /** Check the current path and returns according with it
@@ -66,13 +66,14 @@ function renderIntoRoot(root, constructorInfo) {
 
 	// Sets meta information about the current page.
 	window.document.title = routeObj.title;
-	window.history.replaceState(null, null);
 	window.document
 		.querySelector('meta[name="description"]')
 		.setAttribute("content", routeObj.description);
 
 	root.innerHTML = "";
 	root.appendChild(HTMLElement);
+	
+	window.scrollTo(0, 0);
 }
 
 /** Starts router listener

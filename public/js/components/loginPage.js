@@ -1,3 +1,4 @@
+import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "./header.js";
 
 const createLoginForm = () => {
@@ -90,7 +91,13 @@ const createLoginForm = () => {
     loginButton.id = 'login-btn';
     loginButton.alt = 'Entrar';
     loginButton.textContent = 'Entrar';
-    loginFormDiv.appendChild(loginButton);
+	
+	loginButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		console.log("click");
+		dispatchOnStateChange("/home");
+	})
+	loginFormDiv.appendChild(loginButton);
 
     return bodyLogin;
 };
