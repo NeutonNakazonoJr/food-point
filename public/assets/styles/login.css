@@ -16,9 +16,9 @@
 }
 
 .body-login {
-    background-image: url('public/assets/images/wallpaper-login.jpeg');
+    background-image: url('../images/wallpaper-login.jpeg');
     background-size: cover;
-    background-repeat: no-repeat;   
+    background-repeat: no-repeat;
     background-attachment: fixed;
 }
 
@@ -26,8 +26,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
@@ -55,6 +55,7 @@
     font-size: 0.9rem;
     border-radius: 8px;
     padding: 20px;
+    position: relative;
 }
 
 #login-form h1 {
@@ -68,7 +69,6 @@
     align-self: flex-start;
     margin-bottom: 10px;
 }
-
 
 #data-login input {
     display: flex;
@@ -127,7 +127,7 @@
     opacity: 1;
 }
 
-#remember-all-password{
+#remember-all-password {
     display: flex;
     justify-content: center;
 }
@@ -141,4 +141,25 @@
     border-radius: 8px;
     font-weight: bold;
     font-size: 1rem;
+    border: none;
+}
+
+#login-btn:hover {
+    cursor: pointer;
+    background-color: var(--blackberry);
+}
+
+@media screen and (max-width: 425px) {
+    #login-form {
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #data-login input {
+        width: 20em;
+    }
+
+    #remember-password {
+        margin-left: 1em;
+    }
 }

@@ -1,5 +1,6 @@
 import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
+import createLoginForm from "../components/loginPage.js";
 
 const title = "Food Point";
 
@@ -28,6 +29,12 @@ const routes = {
 		title: "Home | " + title,
 		description: "Veja e crie eventos gastronômicos!",
 	},
+
+	"/login": {
+		html: createLoginForm,
+		title: "Login | " + title,
+		description: ""
+	}
 };
 
 /** Check the current path and returns according with it
@@ -49,7 +56,8 @@ function router() {
 	// return routes[currentPath] || routes["404"];
 
 	// dev mode:
-	return routes["/home"];
+	// return routes["/home"];
+	return routes["/login"];
 }
 
 /** overrides root innerHTML with html from router
