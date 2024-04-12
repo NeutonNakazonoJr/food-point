@@ -25,19 +25,19 @@ Plataforma de planejamento de eventos gatronômicos.
     "password": "Senha do usuário (string)"
   }
 
-- **RESPONSE 201 (JSON):**
+- **response 201 (JSON):**
   ```json
   {
     "message": "Usuário cadastrado com sucesso"
   }
 
-- **RESPONSE 400 (JSON):**
+- **response 400 (JSON):**
   ```json
   {
 	  "error": "O nome completo deve conter apenas letras"
   }
 
-- **RESPONSE 500 (JSON):**
+- **response 500 (JSON):**
   ```json
   {
 	  "error": "Erro interno no servidor",
@@ -91,7 +91,7 @@ Deve incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e
     }
     ```
 
-- **RESPONSE 200 EX (JSON):**
+- **response 200 EX (JSON):**
     ```json
     {
       "message": "Informação atualizada com sucesso",
@@ -111,21 +111,21 @@ Deve incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e
     }
     ```
 
-- **RESPONSE 400 EX (JSON):**
+- **response 400 EX (JSON):**
     ```json
     {
       "error": "ID inválido."
     }
     ```
 
-- **RESPONSE 404 EX (JSON):**
+- **response 404 EX (JSON):**
     ```json
     {
       "error": "Usuário não encontrado."
     }
     ```
 
-- **RESPONSE 500 (JSON):**
+- **response 500 (JSON):**
     ```json
     {
       "error": "Erro interno no servidor"
@@ -135,7 +135,7 @@ Deve incluir pelo menos uma letra maiúscula, uma letra minúscula, um número e
 #### Regras de Validação dos Dados do Usuário
 
 Ao atualizar as informações do usuário, são aplicadas as seguintes regras de validação:
-- **id** -
+- **id:** 
   - Id deve ser válido e registrado no banco.
 
 - **Nome Completo:**
@@ -162,14 +162,14 @@ As informações são atualizadas com sucesso apenas se estiverem em conformidad
     }
     ```
 
-- **RESPONSE 200 (JSON):**
+- **response 200 (JSON):**
     ```json
     {
       "message": "Senha atualizada com sucesso"
     }
     ```
 
-- **RESPONSE 400 (JSON):**
+- **response 400 (JSON):**
     - Exemplo 1:
     ```json
     {

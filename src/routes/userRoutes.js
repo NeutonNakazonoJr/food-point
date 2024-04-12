@@ -3,7 +3,7 @@ const express = require('express');
 const validateRequestBody = require('../middlewares/validateRequestBody.js');
 
 const userController = require('../controllers/userController.js')
-const userMiddleware = require('../middlewares/userMiddeware.js');
+const userMiddleware = require('../middlewares/userMiddleware.js');
 const usersSchemas = require('../schemas/userSchema.js');
 
 const userRoutes = express();
