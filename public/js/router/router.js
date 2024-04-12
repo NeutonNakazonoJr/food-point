@@ -53,11 +53,7 @@ function router() {
 	}
 
 	// validates if the route exist, if doesn't, returns 404 page.
-	// return routes[currentPath] || routes["404"];
-
-	// dev mode:
-	// return routes["/home"];
-	return routes["/login"];
+	return routes[currentPath] || routes["404"];
 }
 
 /** overrides root innerHTML with html from router

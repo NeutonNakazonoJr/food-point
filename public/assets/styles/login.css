@@ -1,53 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 :root {
-    --wine-color: #670029;
-    --white-smoke: #F2F7F2;
-    --blackberry: #311432;
-    --cherry: #A73E5C;
-    --raspberry: #B22222;
+	--wine-color: #670029;
+	--white-smoke: #f2f7f2;
+	--blackberry: #311432;
+	--cherry: #a73e5c;
+	--raspberry: #b22222;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", sans-serif;
 }
 
 .body-login {
-    background-image: url('../images/wallpaper-login.jpeg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+	background-image: url("../images/wallpaper-login.jpeg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
 }
 
 #black-overlay {
-    position: fixed;
-    top: 0;
+	position: fixed;
+	top: 0;
 	overflow: hidden;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1;
 }
 
 #login-screen {
-    width: 100%;
-    height: 100%;
-    display: flex;
+	width: 100%;
+	height: 100%;
+	display: flex;
 	overflow: hidden;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: var(--wine-color);
-    border: none;
-    position: relative;
-    z-index: 2;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	color: var(--wine-color);
+	border: none;
+	position: relative;
+	z-index: 2;
 }
 
 #login-modal {
@@ -56,125 +56,150 @@
 }
 
 #login-form {
-    background-color: var(--white-smoke);
-    width: 27rem;
-	height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.9rem;
-    border-radius: 8px;
-    padding: 20px;
-    position: relative;
-	& > #img-logo img{
-		width: 150px;
-		height: 150px;
-	}
+	background-color: var(--white-smoke);
+	width: 27rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.9rem;
+	border-radius: 8px;
+	padding: 20px;
+	position: relative;
 }
 
 #login-form h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    font-weight: 600;
-    color: var(--wine-color);
+	font-size: 2rem;
+	margin-bottom: 20px;
+	font-weight: 600;
+	color: var(--wine-color);
 }
 
 #login-form label {
-    align-self: flex-start;
-    margin-bottom: 10px;
+	align-self: flex-start;
+	margin-bottom: 10px;
 }
 
 #data-login input {
-    display: flex;
-    flex-direction: column;
-    width: 25em;
-    padding: 0.5em;
-    margin-bottom: 1em;
-    outline: none;
-    border-radius: 20px;
-    background-color: var(--white-smoke);
-    border: 2px solid var(--wine-color);
+	display: flex;
+	flex-direction: column;
+	width: 25em;
+	padding: 0.5em;
+	margin-bottom: 1em;
+	outline: none;
+	border-radius: 20px;
+	background-color: var(--white-smoke);
+	border: 2px solid var(--wine-color);
 }
 
 #remember-password {
-    display: flex;
-    align-items: center;
-    font-size: 0.9em;
-    margin-bottom: 3em;
+	display: flex;
+	align-items: center;
+	font-size: 0.9em;
+	margin-bottom: 3em;
 }
 
 #remember-password label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #remember-password input[type="checkbox"] {
-    margin-right: 0.5em;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: 1.5em;
-    height: 1.5em;
-    border-radius: 5px;
-    background-color: var(--white-smoke);
-    border: 1.5px solid var(--wine-color);
-    outline: none;
-    cursor: pointer;
-    position: relative;
+	margin-right: 0.5em;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 5px;
+	background-color: var(--white-smoke);
+	border: 1.5px solid var(--wine-color);
+	outline: none;
+	cursor: pointer;
+	position: relative;
 }
 
 #remember-password input[type="checkbox"]::before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 1em;
-    height: 1em;
-    background-color: var(--wine-color);
-    border-radius: 3px;
-    opacity: 0;
-    transition: opacity 0.2s;
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 1em;
+	height: 1em;
+	background-color: var(--wine-color);
+	border-radius: 3px;
+	opacity: 0;
+	transition: opacity 0.2s;
 }
 
 #remember-password input[type="checkbox"]:checked::before {
-    opacity: 1;
+	opacity: 1;
 }
 
 #remember-all-password {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 #login-btn {
-    width: 10rem;
-    padding: 0.5rem;
-    margin-bottom: 1em;
-    color: var(--white-smoke);
-    background-color: var(--wine-color);
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    border: none;
+	width: 10rem;
+	padding: 0.5rem;
+	margin-bottom: 1em;
+	color: var(--white-smoke);
+	background-color: var(--wine-color);
+	border-radius: 8px;
+	font-weight: bold;
+	font-size: 1rem;
+	border: none;
 }
 
 #login-btn:hover {
-    cursor: pointer;
-    background-color: var(--blackberry);
+	cursor: pointer;
+	background-color: var(--blackberry);
 }
 
 @media screen and (max-width: 425px) {
-    #login-form {
-        width: 100vw;
-        height: 100vh;
-    }
+	#login-modal {
+		padding: 0;
+	}
+	#login-form {
+		width: 100vw;
+		height: 100vh;
+	}
 
-    #data-login input {
-        width: 20em;
-    }
+	#data-login input {
+		width: 20em;
+	}
 
-    #remember-password {
-        margin-left: 1em;
-    }
+	#remember-password {
+		margin-left: 1em;
+	}
+}
+
+@media screen and (max-height: 700px) {
+	.body-login {
+		width: 100%;
+		height: 100%;
+	}
+	#login-modal {
+		height: 100vh;
+		padding-bottom: 1rem;
+	}
+
+	#login-form > #img-logo img {
+		width: 150px;
+		height: 150px;
+	}
+
+	#login-form h1 {
+		font-size: 1.5rem;
+		margin-bottom: 10px;
+	}
+}
+
+@media screen and (max-height: 590px) {
+	#login-form > #img-logo img {
+		display: none;
+	}
 }
