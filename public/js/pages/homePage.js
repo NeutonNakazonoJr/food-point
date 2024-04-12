@@ -208,6 +208,5 @@ export default function homePage(
 	const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);
 	wrapper.appendChild(main);
-
 	return wrapper;
 }
