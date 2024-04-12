@@ -1,6 +1,6 @@
 import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
-import createLoginForm from "../components/loginPage.js";
+import createLoginForm from "../pages/loginPage.js";
 
 const title = "Food Point";
 

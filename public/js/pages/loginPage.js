@@ -1,4 +1,4 @@
-import getHeader from "./header.js";
+import getHeader from "../components/header.js";
 
 const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
