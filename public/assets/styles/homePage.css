@@ -1,0 +1,342 @@
+@keyframes homeCardAnimation {
+	0% {
+		opacity: 0;
+		transform: translateY(100vh);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+#homeMain {
+	animation: 2s ease-in-out;
+	background-color: var(--white-smoke);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem 0;
+	min-height: calc(100vh - 60px);
+	width: 100%;
+	overflow: hidden;
+	margin-top: 60px;
+	& > * {
+		margin-bottom: 2rem;
+	}
+	& > h1 {
+		animation: 1s ease-in-out;
+		color: var(--wine-color);
+		margin-bottom: 0;
+		&::before {
+			content: "";
+			height: 25px;
+			width: 25px;
+			margin-right: 5px;
+			display: inline-block;
+			background: center no-repeat;
+			background-size: contain;
+			background-image: url("../icons/glass-of-wine.svg");
+		}
+	}
+	& > span {
+		animation: 1s ease-in-out;
+		color: var(--wine-color);
+	}
+}
+
+#homeMain > .home__card {
+	animation: 1s ease-in-out;
+	display: flex;
+	height: 150px;
+	justify-content: center;
+	min-width: 60%;
+	overflow: hidden;
+	font-size: 1rem;
+	& > * {
+		height: 100%;
+	}
+}
+
+#homeMain > .home__card > .home__card__my-event {
+	border-radius: var(--border-radius-1x);
+	color: var(--white-smoke);
+	cursor: pointer;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 1rem;
+	display: flex;
+	background-image: url("../svg-backgrounds/layer-waves-haikei\ 1.svg");
+	background-color: var(--wine-color);
+	background-position: bottom;
+	z-index: 2;
+	text-decoration: none;
+	&:visited {
+		color: var(--white-smoke);
+	}
+	&:hover,
+	&:focus,
+	&:focus-within {
+		filter: brightness(0.9);
+	}
+	&:hover ~ a,
+	&:active ~ a,
+	&:focus ~ a,
+	&:focus-visible ~ a,
+	&:focus-within ~ a {
+		margin-left: -1rem;
+	}
+}
+
+#homeMain > .home__card .home__card__img {
+	height: 90%;
+	border-radius: var(--border-radius-1x);
+	width: 30%;
+	object-fit: cover;
+}
+
+#homeMain > .home__card .home__card__info {
+	display: flex;
+	justify-content: space-between;
+	height: 90%;
+	width: 65%;
+	& > div {
+		display: flex;
+		flex-direction: column;
+	}
+	& > div:last-child {
+		align-items: flex-end;
+	}
+}
+
+#homeMain > .home__card .home__card__info__title {
+	font-family: var(--font-pacifico);
+	font-weight: 400;
+}
+
+#homeMain > .home__card .home__card__info__local,
+#homeMain > .home__card .home__card__info__main-food,
+#homeMain > .home__card .home__card__info__date,
+#homeMain > .home__card .home__card__info__hours {
+	display: flex;
+	align-items: center;
+	&::before {
+		content: "";
+		height: 18px;
+		width: 18px;
+		margin-right: 5px;
+		display: inline-block;
+		background: center no-repeat;
+		background-size: contain;
+		background-image: url("../icons/local.svg");
+	}
+}
+
+#homeMain > .home__card .home__card__info__main-food::before {
+	background-image: url("../icons/restaurant-sharp.svg");
+}
+
+#homeMain > .home__card .home__card__info__date::before {
+	background-image: url("../icons/calendar-bolder.svg");
+}
+
+#homeMain > .home__card .home__card__info__hours::before {
+	background-image: url("../icons/hours.svg");
+}
+
+#homeMain > .home__card > .home__card__my-bill {
+	color: var(--white-smoke);
+	background-color: var(--blackberry);
+	margin-left: -200px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	padding-left: 1rem;
+	width: 200px;
+	border-radius: var(--border-radius-1x);
+	text-align: center;
+	text-decoration: none;
+	transition: margin 500ms;
+	&::before {
+		content: "";
+		display: block;
+		background: url("../icons/bill.svg") center no-repeat;
+		background-size: contain;
+		height: 30px;
+		width: 30px;
+	}
+	&:hover,
+	&:active,
+	&:focus,
+	&:focus-visible,
+	&:focus-within {
+		filter: brightness(0.9);
+		margin-left: -1rem;
+	}
+}
+
+#homeMain > #homeBtnNewEvent {
+	animation: 1s ease-in-out;
+	align-items: center;
+	background-color: var(--white-smoke);
+	border: 2px dashed var(--wine-color);
+	border-radius: var(--border-radius-1x);
+	color: var(--wine-color);
+	display: flex;
+	flex-direction: column;
+	font-weight: 700;
+	height: 150px;
+	width: 40%;
+	justify-content: center;
+	text-decoration: none;
+	transition: all 500ms;
+	& > span:first-child {
+		height: 40px;
+		width: 40px;
+		display: inline-block;
+		background: url("../icons/add-btn.svg") center no-repeat;
+		background-size: contain;
+		transition: all 500ms;
+	}
+	&:hover {
+		background-color: var(--wine-color);
+		color: var(--white-smoke);
+		transition: all 500ms;
+		& > span:first-child {
+			transition: all 500ms;
+			/* background-image: url("../icons/add-btn-hover.svg"); */
+			filter: grayscale(1) contrast(2) invert();
+		}
+	}
+}
+
+@media screen and (max-width: 768px) {
+	#homeMain > .home__card {
+		max-width: 80%;
+	}
+	#homeMain > .home__card > .home__card__my-event {
+		width: 100%;
+
+		&:hover ~ a,
+		&:active ~ a,
+		&:focus ~ a,
+		&:focus-visible ~ a,
+		&:focus-within ~ a {
+			margin-left: -1rem;
+		}
+	}
+
+	#homeMain > .home__card .home__card__info {
+		padding: 0 1rem;
+		width: 70%;
+	}
+
+	#homeMain > .home__card .home__card__info__local,
+	#homeMain > .home__card .home__card__info__main-food,
+	#homeMain > .home__card .home__card__info__date,
+	#homeMain > .home__card .home__card__info__hours {
+		&::before {
+			height: 14px;
+			width: 14px;
+		}
+	}
+
+	#homeMain > .home__card .home__card__info__date > span {
+		display: none;
+	}
+
+	#homeMain > .home__card > .home__card__my-bill {
+		margin-left: -1rem;
+		width: 150px;
+		&::before {
+			height: 20px;
+			width: 20px;
+		}
+	}
+
+	#homeMain > #homeBtnNewEvent {
+		width: 50%;
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#homeMain {
+		& > h1 {
+			width: 80%;
+			text-align: center;
+			font-size: 1.5rem;
+			&::before {
+				height: 25px;
+				width: 25px;
+			}
+		}
+		& > span {
+			font-weight: 300;
+			width: 80%;
+			text-align: center;
+		}
+	}
+	#homeMain > .home__card {
+		height: 200px;
+	}
+	#homeMain > .home__card .home__card__info {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		flex-direction: column;
+		& > div:last-child {
+			align-items: flex-start;
+		}
+	}
+	#homeMain > #homeBtnNewEvent {
+		width: 70%;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#homeMain > .home__card {
+		flex-direction: column;
+		height: 250px;
+	}
+
+	#homeMain > .home__card > .home__card__my-event {
+		width: 100%;
+		height: 70%;
+
+		&:hover ~ a,
+		&:active ~ a,
+		&:focus ~ a,
+		&:focus-visible ~ a,
+		&:focus-within ~ a {
+			margin-left: 0rem;
+		}
+	}
+
+	#homeMain > .home__card .home__card__img {
+		width: 40%;
+	}
+
+	#homeMain > .home__card .home__card__info {
+		width: 60%;
+		padding: 0 1rem;
+	}
+
+	#homeMain > .home__card > .home__card__my-bill {
+		width: 100%;
+		height: 30%;
+		margin: -1rem 0 0 0;
+		flex-direction: row;
+		padding-top: 1rem;
+		&::before {
+			margin-right: 5px;
+		}
+
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-visible,
+		&:focus-within {
+			margin-left: 0rem;
+		}
+	}
+}
