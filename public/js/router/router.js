@@ -72,7 +72,7 @@ function renderIntoRoot(root, constructorInfo) {
 
 	root.innerHTML = "";
 	root.appendChild(HTMLElement);
-	
+
 	window.scrollTo(0, 0);
 }
 
