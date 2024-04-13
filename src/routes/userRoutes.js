@@ -5,6 +5,7 @@ const validateRequestBody = require('../middlewares/validateRequestBody.js');
 const userController = require('../controllers/userController.js')
 const userMiddleware = require('../middlewares/userMiddleware.js');
 const usersSchemas = require('../schemas/userSchema.js');
+const { userAuthorization } = require('../middlewares/loginMiddleware.js')
 
 const userRoutes = express();
 
@@ -14,17 +15,18 @@ userRoutes.post('/user',
     userController.createNewUser
 );
 
-userRoutes.use('/user/:id', userMiddleware.validateUserId);
+userRoutes.use(userAuthorization);
+userRoutes.use('/user', userMiddleware.validateUserId);
 
-userRoutes.get('/user/:id', userController.getUsersInfosById);
+userRoutes.get('/user', userController.getUsersInfosById);
 
-userRoutes.patch('/user/:id', 
+userRoutes.patch('/user', 
     validateRequestBody(usersSchemas.userUpdateSchema),
     userMiddleware.validateUserEmail,
     userController.updateUsersInfos
 );
 
-userRoutes.put('/user/:id', 
+userRoutes.put('/user', 
     userMiddleware.validatePasswordUpdate,
     userController.updateUsersPassword
 );

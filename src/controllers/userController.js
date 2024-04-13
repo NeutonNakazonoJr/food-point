@@ -14,10 +14,8 @@ const userController = {
     },
 
     getUsersInfosById: async (req, res) => {
-        try {
-            const { id } = req.params;
-            
-            const [ usersInfo ] = await userRepository.getUserById(id);
+        try {        
+            const [ usersInfo ] = await userRepository.getUserById(req.userId);
             return res.status(200).json({ ... usersInfo });
         } catch (error) {
             return res.status(500).json({ 
@@ -29,9 +27,8 @@ const userController = {
     updateUsersInfos: async (req, res) => {
         try {
             const newInfos = req.body;
-            const { id } = req.params;
         
-            const [ updatedInfos ] = await userRepository.updateUserPublicInfos(newInfos, id);
+            const [ updatedInfos ] = await userRepository.updateUserPublicInfos(newInfos, req.userId);
             return res.status(200).json({
                 message: 'Informação atualizada com sucesso',
                 updatedInfos
@@ -44,9 +41,7 @@ const userController = {
     updateUsersPassword: async (req, res) => {
         try {
             const { password } = req.body;
-            const { id } = req.params;
-
-            await userRepository.updateUsersNewPassword(password, id);
+            await userRepository.updateUsersNewPassword(password, req.userId);
             return res.status(200).json({ message: 'Senha atualizada com sucesso'})
         } catch (error) {
             return res.status(500).json({ error: 'Erro interno no servidor' })
