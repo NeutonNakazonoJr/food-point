@@ -30,9 +30,11 @@
 	}
 }
 
-#newEvent-basic-info > .newEvent-basic-genericInput {
+#newEvent-basic-info > .newEvent-basic-genericInput,
+#newEvent-basic-info > div > fieldset {
 	display: flex;
 	flex-direction: column;
+	margin-bottom: 1rem;
 	border: none;
 	& > * {
 		width: 100%;
@@ -44,6 +46,19 @@
 	& > label {
 		font-size: 1rem;
 		font-weight: 300;
+		position: relative;
+		&::before {
+			background: url("../icons/text-icon.svg") no-repeat center;
+			background-size: contain;
+			content: "";
+			position: absolute;
+			font-weight: 900;
+			top: 36px;
+			left: 8px;
+			display: inline-block;
+			height: 1rem;
+			width: 1rem;
+		}
 	}
 	& > input {
 		box-sizing: border-box;
@@ -51,10 +66,25 @@
 		border-radius: var(--border-radius-1x);
 		background-color: var(--blackberry);
 		color: var(--white-smoke);
-		padding: 10px;
-		
+		padding: 10px 10px 10px 30px;
 	}
 }
+
+#newEvent-basic-info > div {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+	& > * {
+		width: 40%;
+	}
+	& > fieldset > label[for="newEvent-basic-date"]::before {
+		background-image: url("../icons/calendar-red.svg");
+	}
+	& > fieldset > label[for="newEvent-basic-time"]::before {
+		background-image: url("../icons/clock.svg");
+	}
+}
+
 
 #newEvent-basic-btns {
 	display: flex;
@@ -97,7 +127,7 @@
 		color: var(--white-smoke);
 		filter: brightness(1);
 		&:hover {
-			filter: brightness(.9);
+			filter: brightness(0.9);
 		}
 		&::before {
 			background-image: url("../icons/send-latter.svg");

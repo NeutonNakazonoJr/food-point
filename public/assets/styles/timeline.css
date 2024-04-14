@@ -19,6 +19,7 @@
 }
 
 #eventProgress-wrapper {
+	background-color: var(--white-smoke);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
