@@ -1,0 +1,115 @@
+#newEvent-basic {
+	color: var(--blackberry);
+	background-color: var(--white-smoke);
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 1rem 5%;
+	& > * {
+		width: 100%;
+	}
+	& > h2 {
+		font-size: 2rem;
+		font-weight: 900;
+	}
+}
+
+#newEvent-basic-form {
+	display: flex;
+	flex-direction: column;
+	& > * {
+		width: 100%;
+	}
+}
+
+#newEvent-basic-info {
+	display: flex;
+	flex-direction: column;
+	& > * {
+		width: 100%;
+	}
+}
+
+#newEvent-basic-info > .newEvent-basic-genericInput {
+	display: flex;
+	flex-direction: column;
+	border: none;
+	& > * {
+		width: 100%;
+	}
+	& > legend {
+		font-size: 1rem;
+		font-weight: 600;
+	}
+	& > label {
+		font-size: 1rem;
+		font-weight: 300;
+	}
+	& > input {
+		box-sizing: border-box;
+		border: none;
+		border-radius: var(--border-radius-1x);
+		background-color: var(--blackberry);
+		color: var(--white-smoke);
+		padding: 10px;
+		
+	}
+}
+
+#newEvent-basic-btns {
+	display: flex;
+	justify-content: space-between;
+	height: 3rem;
+	& > * {
+		align-items: center;
+		background-color: var(--white-smoke);
+		border-radius: var(--border-radius-1x);
+		border: 1px solid var(--raspberry);
+		color: var(--raspberry);
+		display: flex;
+		justify-content: center;
+		font-weight: 600;
+		cursor: pointer;
+		height: 100%;
+		font-size: 1rem;
+		transition: all 300ms;
+		width: 25%;
+		&:hover {
+			background-color: var(--raspberry);
+			color: var(--white-smoke);
+			&::before {
+				filter: brightness(10);
+			}
+		}
+		&::before {
+			background: url("../icons/cancel.svg") center no-repeat;
+			background-size: contain;
+			content: "";
+			margin-right: 5px;
+			display: inline-block;
+			width: 1rem;
+			height: 1rem;
+			transition: all 300ms;
+		}
+	}
+	& > button:last-child {
+		background-color: var(--raspberry);
+		color: var(--white-smoke);
+		filter: brightness(1);
+		&:hover {
+			filter: brightness(.9);
+		}
+		&::before {
+			background-image: url("../icons/send-latter.svg");
+		}
+		&::after {
+			background: url("../icons/arrow-rigth.svg") center no-repeat;
+			background-size: contain;
+			content: "";
+			margin-left: 5px;
+			display: inline-block;
+			width: 1rem;
+			height: 1rem;
+		}
+	}
+}
