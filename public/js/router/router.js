@@ -1,6 +1,7 @@
 import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
 import createLoginForm from "../pages/loginPage.js";
+import createGuestPage from "../pages/guestPage.js";
 
 const title = "Food Point";
 
@@ -35,6 +36,11 @@ const routes = {
 		title: "Login | " + title,
 		description: "",
 	},
+	"/guest": {
+		html: createGuestPage,
+		title: "Guests | " + title,
+		description: "Planeje sua lista de convidados!"
+	}
 };
 
 /** Check the current path and returns according with it
@@ -53,7 +59,8 @@ function router() {
 	}
 
 	// validates if the route exist, if doesn't, returns 404 page.
-	return routes[currentPath] || routes["404"];
+	//return routes[currentPath] || routes["404"];
+	return routes["/guest"]
 }
 
 /** overrides root innerHTML with html from router
