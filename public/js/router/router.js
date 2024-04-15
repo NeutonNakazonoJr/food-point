@@ -1,6 +1,7 @@
 import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
 import createLoginForm from "../pages/loginPage.js";
+import createRegisterForm from "../pages/RegisterPage.js";
 
 const title = "Food Point";
 
@@ -33,7 +34,13 @@ const routes = {
 	"/login": {
 		html: createLoginForm,
 		title: "Login | " + title,
-		description: "",
+		description: "Logar na plataforma Food Point",
+	},
+
+	"register": {
+		html: createRegisterForm,
+		title: "Cadastre-se | " + title,
+		description: "Cadastre-se no Food Point", 
 	},
 };
 

@@ -15,7 +15,7 @@
 	font-family: "Poppins", sans-serif;
 }
 
-.body-login {
+.body-register {
 	background-image: url("../images/wallpaper-login.jpeg");
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -34,7 +34,7 @@
 	z-index: 1;
 }
 
-#login-screen {
+#register-screen {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -48,7 +48,7 @@
 	z-index: 2;
 }
 
-#login-modal {
+#register-modal {
 	height: 100vh;
 	padding: 5rem 0 2rem 0;
 	display: flex;
@@ -56,7 +56,7 @@
 	justify-content: center;
 }
 
-#login-form {
+#register-form {
 	background-color: var(--white-smoke);
 	width: 27rem;
 	display: flex;
@@ -69,19 +69,19 @@
 	position: relative;
 }
 
-#login-form h1 {
+#register-form h1 {
 	font-size: 2rem;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	font-weight: 600;
 	color: var(--wine-color);
 }
 
-#login-form label {
+#register-form label {
 	align-self: flex-start;
 	margin-bottom: 10px;
 }
 
-#data-login input {
+#data-register input {
 	display: flex;
 	flex-direction: column;
 	width: 25em;
@@ -93,60 +93,9 @@
 	border: 2px solid var(--wine-color);
 }
 
-#remember-password {
-	display: flex;
-	align-items: center;
-	font-size: 0.9em;
-	margin-bottom: 3em;
-}
-
-#remember-password label {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-#remember-password input[type="checkbox"] {
-	margin-right: 0.5em;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	width: 1.5em;
-	height: 1.5em;
-	border-radius: 5px;
-	background-color: var(--white-smoke);
-	border: 1.5px solid var(--wine-color);
-	outline: none;
-	cursor: pointer;
-	position: relative;
-}
-
-#remember-password input[type="checkbox"]::before {
-	content: "";
-	position: absolute;
-	top: 2px;
-	left: 2px;
-	width: 1em;
-	height: 1em;
-	background-color: var(--wine-color);
-	border-radius: 3px;
-	opacity: 0;
-	transition: opacity 0.2s;
-}
-
-#remember-password input[type="checkbox"]:checked::before {
-	opacity: 1;
-}
-
-#remember-all-password {
-	display: flex;
-	justify-content: center;
-}
-
-#loginPage-btn {
+#registerPage-btn {
 	width: 10rem;
 	padding: 0.5rem;
-	margin-bottom: 1em;
 	color: var(--white-smoke);
 	background-color: var(--wine-color);
 	border-radius: 8px;
@@ -155,52 +104,53 @@
 	border: none;
 }
 
-#loginPage-btn:hover {
+#registerPage-btn:hover {
 	cursor: pointer;
 	background-color: var(--blackberry);
 }
 
 @media screen and (max-width: 425px) {
-	#login-modal {
+	#register-modal {
 		padding: 0;
 	}
-	#login-form {
+
+	#register-form {
 		width: 100vw;
 		height: 100vh;
 		border-radius: 0;
 	}
 
-	#data-login input {
+	#data-register input {
 		width: 20em;
-	}
-
-	#remember-password {
-		margin-left: 1em;
 	}
 }
 
 @media screen and (max-height: 700px) {
-	.body-login {
+	.body-register {
 		width: 100%;
 		height: 100%;
 	}
-	#login-modal {
+    
+	#register-modal {
 		height: 100vh;
 	}
 
-	#login-form > #img-logo img {
+	#register-form > #img-logo img {
 		width: 15em;
 		height: 15em;
 	}
 
-	#login-form h1 {
+	#register-form h1 {
 		font-size: 1.5rem;
 		margin-bottom: 10px;
 	}
 }
 
 @media screen and (max-height: 590px) {
-	#login-form > #img-logo img {
+	#register-form > #img-logo img {
 		display: none;
 	}
 }
+
+
+
