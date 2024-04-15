@@ -1,13 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-:root {
-	--wine-color: #670029;
-	--white-smoke: #f2f7f2;
-	--blackberry: #311432;
-	--cherry: #a73e5c;
-	--raspberry: #b22222;
-}
-
 * {
 	margin: 0;
 	padding: 0;
@@ -22,16 +14,6 @@
 	background-attachment: fixed;
 	width: 100%;
 	height: 100%;
-}
-
-#black-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 1;
 }
 
 #register-screen {
@@ -50,7 +32,7 @@
 
 #register-modal {
 	height: 100vh;
-	padding: 5rem 0 2rem 0;
+	padding: 5rem 0 1rem 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -65,7 +47,7 @@
 	justify-content: center;
 	font-size: 0.9rem;
 	border-radius: 8px;
-	padding: 20px;
+	padding: 1em;
 	position: relative;
 }
 
@@ -93,6 +75,57 @@
 	border: 2px solid var(--wine-color);
 }
 
+#acceptTerms {
+	display: flex;
+	align-items: center;
+	font-size: 0.9em;
+}
+
+#acceptTerms label {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+#accept-terms-input {
+	margin-right: 0.5em;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 5px;
+	background-color: var(--white-smoke);
+	border: 1.5px solid var(--wine-color);
+	outline: none;
+	cursor: pointer;
+	position: relative;
+}
+
+#accept-terms-input::before {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 1em;
+	height: 1em;
+	background-color: var(--wine-color);
+	border-radius: 3px;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+#accept-terms-input:checked::before {
+	opacity: 1;
+}
+
+#accept-all-terms {
+	display: flex;
+	justify-content: center;
+}
+
+
 #registerPage-btn {
 	width: 10rem;
 	padding: 0.5rem;
@@ -107,6 +140,42 @@
 #registerPage-btn:hover {
 	cursor: pointer;
 	background-color: var(--blackberry);
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 2;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+	position: relative;
+	z-index: 1;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: red;
+	text-decoration: none;
+	cursor: pointer;
 }
 
 @media screen and (max-width: 425px) {
@@ -125,17 +194,23 @@
 	}
 }
 
-@media screen and (max-height: 700px) {
+@media screen and (max-height: 590px) {
+	#register-form>#img-logo img {
+		display: none;
+	}
+}
+
+@media screen and (max-height: 670px) {
 	.body-register {
 		width: 100%;
 		height: 100%;
 	}
-    
+
 	#register-modal {
 		height: 100vh;
 	}
 
-	#register-form > #img-logo img {
+	#register-form>#img-logo img {
 		width: 15em;
 		height: 15em;
 	}
@@ -145,12 +220,3 @@
 		margin-bottom: 10px;
 	}
 }
-
-@media screen and (max-height: 590px) {
-	#register-form > #img-logo img {
-		display: none;
-	}
-}
-
-
-

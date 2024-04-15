@@ -37,7 +37,7 @@ const routes = {
 		description: "Logar na plataforma Food Point",
 	},
 
-	"register": {
+	"/register": {
 		html: createRegisterForm,
 		title: "Cadastre-se | " + title,
 		description: "Cadastre-se no Food Point", 
