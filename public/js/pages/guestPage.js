@@ -37,6 +37,11 @@ const createGuestPage = () => {
 	input.id = "add-input";
 	inputdiv.appendChild(input);
 
+	const error = document.createElement("p");
+	error.style.display = "none";
+	error.textContent = "O campo não pode estar vazio";
+	addguest.appendChild(error)
+
 	const button = document.createElement("button");
 	button.id = "add-button";
 	button.textContent = "Adicionar";
@@ -50,21 +55,21 @@ const createGuestPage = () => {
 	endPage.id = "end-page";
 	guestList.appendChild(endPage)
 	
-	const backward = document.createElement("button");
-	backward.id = "back-button";
-	backward.textContent = "Voltar";
+	const skipButton = document.createElement("button");
+	skipButton.id = "skip";
+	skipButton.textContent = "Deixar pra depois";
 
-	const backIcon = document.createElement("img");
-	backIcon.id = "back-icon";
-	backIcon.src = "./assets/icons/back.svg";
-	backIcon.alt = "Icone de seta voltando vermelha";
+	const later = document.createElement("img");
+	later.id = "later";
+	later.src = "./assets/icons/send-latter.svg";
+	later.alt = "Carta com relogio";
 
-	backward.appendChild(backIcon)
-	endPage.appendChild(backward)
+	skipButton.appendChild(later)
+	endPage.appendChild(skipButton)
 
 	const finish = document.createElement("button");
 	finish.id = "finish"
-	finish.textContent = "Concluir Evento"
+	finish.textContent = "Salvar e Continuar"
 
 	const wineIcon = document.createElement("img");
 	wineIcon.id = "finish-icon";
@@ -82,15 +87,29 @@ const createGuestPage = () => {
 		});
 	}
 
+	//logic to control the input
+	input.addEventListener("input", (event) => {
+		let name = input.value;
+		input.value = name.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '')
+	});
+
+
 	//logic to create a new card and send the guest into local storage
 	addguest.addEventListener("submit", (event) => {
 		const guest = input.value;
 		event.preventDefault()
-		buildCard(guest)
-		guests.push(guest)
-		const local = JSON.stringify(guests);
-		localStorage.setItem("guests", local);	
-		 document.getElementById("add-input").value = "";
+		if (guest == ""){
+			error.style.display = "block";
+			setTimeout( () => {
+				error.style.display = "none";
+			}, 500)
+		}else{
+			buildCard(guest)
+			guests.push(guest)
+			const local = JSON.stringify(guests);
+			localStorage.setItem("guests", local);	
+			 document.getElementById("add-input").value = "";
+		}
 	})
 
 	//card builder
@@ -121,7 +140,7 @@ const createGuestPage = () => {
 		guestBox.appendChild(guestCard);
 		guestBox.style.display = "flex";
 
-		//listener to remove the guest card and from the localStorage
+		//listener to remove the guest card and the data from the localStorage
 		deleteButton.addEventListener("click", () => {
 			
 			guestCard.remove();
@@ -139,6 +158,14 @@ const createGuestPage = () => {
 			}
 			});
 	}
+
+	skipButton.addEventListener("click", (e) => { 
+		console.log("Finge que voltou")
+	})
+	//logic that sends the array with the guest list to the api
+	finish.addEventListener("click", () => {
+		console.log(guests)
+	})
 	return body;
 };
 

@@ -51,7 +51,7 @@ body{
     background-color: var(--raspberry);
     color: #fff;
     cursor: pointer;
-    padding: .5rem  1.5rem .5rem 1.5rem ;
+    padding: .5%;
     transition: background-color .3s ease-in-out;
 }
 #add-button:hover {
@@ -88,7 +88,7 @@ body{
     height: 70%;
 }
 #guest-name{
-    margin-bottom: 2rem;
+    margin-bottom: 25%;
     height: 30%;
     overflow: hidden;
     color: white;
@@ -110,15 +110,16 @@ body{
 }
 #end-page{
     margin-top: 2rem;
+    padding-bottom: 2rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
-#back-button{
-    border: 2px solid var(--raspberry);
+#skip{
+    border: none;
     border-radius: 8px;
-    background: transparent;
-    color: var(--raspberry);
+    background: var(--raspberry);
+    color: white;
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
@@ -126,13 +127,13 @@ body{
     width: 13rem;
     height: 2.5rem;
     font-weight: bolder;
+    cursor: pointer;
 }
-#back-icon{
+#later{
     padding: 0 .5rem 0 0;
 }
-#back-button:hover{
-background: var(--raspberry);
-color: #fff;
+#skip:hover{
+background: var(--cherry);
 }
 #finish{
     border: none;
@@ -146,11 +147,142 @@ color: #fff;
     align-items: center;
     width: 13rem;
     height: 2.5rem;
+    cursor: pointer;
 }
 #finish-icon{
     padding: 0 .5rem 0 0;
 }
 #finish:hover{
-    background: var(--wine-color);
+    background: var(--cherry);
 }
-  
+@media screen and (max-width: 1199px) {  
+    #add-guest{
+        width: 45%;
+    }
+}
+@media screen and (max-width: 991px) {
+    #add-guest{
+        width: 50%;
+    }
+    #add-input{
+        width: 78%;
+    }
+    #add-button{
+        width: 22%;
+    }
+    #guest-card{
+        width: 8.5rem;
+    }
+    #guest-img{
+        height: 65%;
+    }
+    #guest-name{
+        height: 35%;
+    }
+}
+@media screen and (max-width: 766px) {
+    #guest-body{
+        margin-top: 3rem;
+    }
+    #add-guest{
+        width: 55%;
+    }
+    #add-input{
+        width: 75%;
+    }
+    #add-button{
+        width: 25%;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-name{
+        height: 40%;
+    }
+}
+@media screen and (max-width: 600px) {
+    #guest-body{
+        margin-top: 6rem;
+    }
+    #add-guest{
+        width: 60%;
+    }
+    #add-input{
+        width: 72%;
+    }
+    #add-button{
+        width: 28%;
+    }
+    #guest-img{
+        height: 55%;
+    }
+    #guest-name{
+        height: 45%;
+    }
+}
+@media screen and (max-width: 575px) {
+    #add-guest{
+        width: 65%;
+    }
+    #add-input{
+        width: 72%;
+    }
+    #add-button{
+        width: 28%;
+    }
+    #guest-img{
+        height: 55%;
+    }
+    #guest-name{
+        height: 45%;
+    }
+}
+@media screen and (max-width: 480px) {
+    #add-guest{
+        width: 75%;
+    }
+    #guest-card{
+        margin: .8rem;
+        width: 8rem;
+    }
+    #guest-box{
+        width: 85%;
+    }
+}
+@media screen and (max-width: 425px) {
+    #add-guest{
+        width: 80%;
+    }
+    #guest-card{
+        width: 7.3rem;
+        margin: .5rem;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-name{
+        height: 40%;
+    }
+    #end-page{
+        flex-direction: column;
+        align-items: center;
+    }
+    #finish{
+        margin-top: 2rem;
+    }
+}
+@media screen and (max-width: 350px) {
+    #add-guest{
+        width: 85%;
+    }
+    #add-input{
+        width: 62%;
+    }
+    #add-button{
+        width: 38%;
+    }
+    #guest-card{
+        width: 7rem;
+        padding: .5rem;
+    }
+}
