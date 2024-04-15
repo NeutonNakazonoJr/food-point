@@ -5,12 +5,12 @@ const comparePassword = async (loginPassword, userPassword) => {
     return passwordValidation;
 }
 
-const encryptPassword = async (password) => {
-    const encryptedPassword = bcrypt.hash(password, 10);
-    return encryptedPassword;
+const hashPassword = async (password) => {
+    const hash = bcrypt.hash(password, 10);
+    return hash;
 } 
 
 module.exports = {
     comparePassword,
-    encryptPassword,
+    hashPassword,
 }

@@ -7,13 +7,12 @@ const userMiddleware = {
 
     validateUserId: async (req, res, next) => {
         try {
-            const { id } = req.params;
-
-            if (!uuidValidate(id)) { 
+            
+            if (!uuidValidate(req.userId)) { 
                 return res.status(400).json({error: 'ID inválido.'});
             };
             
-            const [ getUser ] = await userRepository.getUserById(id);
+            const [ getUser ] = await userRepository.getUserById(req.userId);
             
             if (!getUser) { 
                 return res.status(400).json({ error: 'Usuário não encontrado.'});
