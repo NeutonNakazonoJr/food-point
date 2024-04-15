@@ -8,6 +8,6 @@ root.prepend(eventProgressBar());
 root.prepend(getHeader());
 
 window.addEventListener("DOMContentLoaded", () => {
-	// initRouter(root);
+	initRouter(root);
 	stopScroll();
 });

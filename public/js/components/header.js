@@ -30,7 +30,7 @@ export default function getHeader(
 	animation = true,
 	userIsLogged = true,
 	profilePageUrl = "#",
-	userImg = "./assets/icons/profile-placeholder.svg"
+	userImg = "/assets/icons/profile-placeholder.svg"
 ) {
 	const header = document.createElement("header");
 	header.id = "mainHeader";

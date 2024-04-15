@@ -3,6 +3,7 @@
 	background-color: var(--white-smoke);
 	display: flex;
 	flex-direction: column;
+	height: 100vh;
 	width: 100%;
 	padding: 1rem 5%;
 	& > * {
@@ -85,7 +86,6 @@
 	}
 }
 
-
 #newEvent-basic-btns {
 	display: flex;
 	justify-content: space-between;
@@ -141,5 +141,80 @@
 			width: 1rem;
 			height: 1rem;
 		}
+	}
+	& > #newEvent-basic-btns-save::before {
+		background-image: none;
+	}
+}
+
+#newEvent-basic-form > #newEvent-basic-btns > .newEvent-basic-btns-disabled {
+	background-color: var(--white-smoke);
+	color: var(--raspberry);
+}
+
+@media screen and (max-width: 900px) {
+	#newEvent-basic-info > div > * {
+		width: 49%;
+	}
+
+	#newEvent-basic-btns {
+		& > * {
+			width: 40%;
+		}
+	}
+}
+
+@media screen and (max-width: 700px) {
+	#newEvent-basic-info > div {
+		flex-direction: column;
+		& > * {
+			width: 100%;
+		}
+	}
+
+	#newEvent-basic-btns {
+		& > * {
+			width: 40%;
+		}
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#newEvent-basic-btns {
+		& > * {
+			width: 49%;
+		}
+	}
+}
+
+@media screen and (max-width: 490px) {
+	#newEvent-basic-btns {
+		flex-direction: column-reverse;
+		height: auto;
+		& > * {
+			height: 3rem;
+			margin-bottom: 1rem;
+			width: 100%;
+		}
+	}
+}
+
+@media screen and (max-width: 360px) {
+	#newEvent-basic-info > .newEvent-basic-genericInput,
+	#newEvent-basic-info > div > fieldset {
+		& label {
+			font-size: 0.9rem;
+			&::before {
+				top: 31px;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 321px) {
+	#newEvent-basic-info
+		> .newEvent-basic-genericInput
+		> label[for="newEvent-basic-name"]::before {
+		top: 51px;
 	}
 }
