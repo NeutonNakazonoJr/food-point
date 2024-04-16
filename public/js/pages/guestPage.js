@@ -68,8 +68,10 @@ const createGuestPage = () => {
 	endPage.appendChild(skipButton)
 
 	const finish = document.createElement("button");
-	finish.id = "finish"
-	finish.textContent = "Salvar e Continuar"
+	finish.id = "disabled";
+	finish.textContent = "Salvar e Continuar";
+	finish.disabled = "true";
+
 
 	const wineIcon = document.createElement("img");
 	wineIcon.id = "finish-icon";
@@ -109,6 +111,8 @@ const createGuestPage = () => {
 			const local = JSON.stringify(guests);
 			localStorage.setItem("guests", local);	
 			 document.getElementById("add-input").value = "";
+			 finish.id = "finish";
+			 finish.disabled = false
 		}
 	})
 
@@ -155,6 +159,8 @@ const createGuestPage = () => {
 			
 			if(guests.length === 0){
 				guestBox.style.display = "none";
+				finish.id = "disabled";
+				finish.disabled = "true";
 			}
 			});
 	}

@@ -9,7 +9,7 @@ body{
 
 }
 #guest-body{
-    margin-top: 4rem;
+    margin-top: 1rem;
     width: 90%;
     height: 10rem;
     text-align: center;
@@ -135,6 +135,20 @@ body{
 #skip:hover{
 background: var(--cherry);
 }
+#disabled{
+    border: none;
+    border-radius: 8px;
+    background: #8d6161;
+    color: white;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: pointer;
+}
 #finish{
     border: none;
     border-radius: 8px;
@@ -181,9 +195,6 @@ background: var(--cherry);
     }
 }
 @media screen and (max-width: 766px) {
-    #guest-body{
-        margin-top: 3rem;
-    }
     #add-guest{
         width: 55%;
     }
