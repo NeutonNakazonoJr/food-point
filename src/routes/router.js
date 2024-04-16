@@ -4,9 +4,9 @@ const router = express();
 const userRoutes = require('./userRoutes');
 const loginRoutes = require('./loginRoutes');
 const eventRoutes = require('./eventRoutes');
-const pageRoutes = require("./pageRoutes");
+const pagesRoutes = require('./pagesRoutes');
 
-router.use(pageRoutes);
+router.use(pagesRoutes);
 router.use(loginRoutes);
 router.use(userRoutes);
 router.use(eventRoutes);

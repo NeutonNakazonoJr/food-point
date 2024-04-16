@@ -3,6 +3,7 @@ import { friendlyDayOfWeek } from "../utils/friendlyDayOfWeek.js";
 import stringLimiter from "../utils/stringLimiter.js";
 import { getEvents } from "../api/eventApi.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
+import { getLogged } from "../api/userApi.js";
 
 /**
  * @param {HTMLAnchorElement} anchor
@@ -185,10 +186,12 @@ function generateCreateEventCard(
  * @param {number} userID
  * @returns
  */
-export default function homePage(
+export default async function homePage(
 	constructorInfo = { eventID: "", animation: true }
 ) {
-	window.scrollTo(0, 0);
+	const user = await getLogged();
+	console.log(user);
+	
 	const header = getHeader(constructorInfo.animation);
 	const main = document.createElement("main");
 	main.id = "homeMain";
