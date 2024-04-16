@@ -99,3 +99,13 @@ export function getEvents(userID) {
 		},
 	];
 }
+
+export async function patchEvent(event) {
+	const p = new Promise((res, rej) => {
+		setTimeout(() => {
+			res({success: true});
+		}, 1000);
+	})
+
+	return await p;
+}

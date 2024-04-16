@@ -154,6 +154,23 @@ function generateCreateEventCard(
 	a.href = createEventUrl;
 	a.id = "homeBtnNewEvent";
 
+	a.addEventListener("click", (e) => {
+		e.preventDefault();
+		dispatchOnStateChange("/home/create", {
+			stage: {
+				current: 0,
+				last: 0,
+			},
+			event: {
+				name: "",
+				theme: "",
+				description: "",
+				date: "",
+				time: "",
+			},
+		});
+	});
+
 	const spanImg = document.createElement("span");
 	const spanText = document.createElement("span");
 	spanText.textContent = callToActionText;
@@ -181,9 +198,10 @@ export default function homePage(
 	h1.textContent = "Meus eventos";
 	setAnimationForCard(h1, 0, 100, constructorInfo.animation);
 	main.appendChild(h1);
-	
+
 	const span = document.createElement("span");
-	span.textContent = "Clique em um evento para ver mais detalhes ou crie um novo evento.";
+	span.textContent =
+		"Clique em um evento para ver mais detalhes ou crie um novo evento.";
 	setAnimationForCard(span, 0, 100, constructorInfo.animation);
 	main.appendChild(span);
 
@@ -198,7 +216,7 @@ export default function homePage(
 		setAnimationForCard(myCard, index, 100, constructorInfo.animation);
 		return myCard;
 	});
-	const createEventCard = generateCreateEventCard("./home");
+	const createEventCard = generateCreateEventCard("/home/create");
 
 	cards.forEach((card) => {
 		main.appendChild(card);
