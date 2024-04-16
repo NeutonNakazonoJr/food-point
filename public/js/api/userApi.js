@@ -15,6 +15,7 @@ export async function getLogged(
 		body: JSON.stringify(user),
 	};
 
-	const result = await fetch(loginUrl, requestOptions);
+	const res = await fetch(loginUrl, requestOptions);
+	const result = res.json();
 	return result;
 }

@@ -68,9 +68,9 @@ function router() {
  * @param {HTMLElement} root
  * @param {object} constructorInfo
  */
-function renderIntoRoot(root, constructorInfo) {
+async function renderIntoRoot(root, constructorInfo) {
 	const routeObj = router();
-	const HTMLElement = routeObj.html(constructorInfo);
+	const HTMLElement = await routeObj.html(constructorInfo);
 
 	window.document.title = routeObj.title;
 	window.document
