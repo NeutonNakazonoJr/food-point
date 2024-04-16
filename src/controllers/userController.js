@@ -4,8 +4,8 @@ const userController = {
 
     createNewUser: async (req, res) => {
         try {
-            await userRepository.insertNewUser(req.body);
-            return res.status(201).json({ message: 'Usuário cadastrado com sucesso' });
+            const result = await userRepository.insertNewUser(req.body);
+            return res.status(201).json({ message: 'Usuário cadastrado com sucesso' , result});
         } catch (error) {
             return res.status(500).json({
                 error: 'Erro interno no Servidor'
