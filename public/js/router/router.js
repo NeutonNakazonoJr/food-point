@@ -1,5 +1,6 @@
 import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
+import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
 
@@ -30,17 +31,20 @@ const routes = {
 		title: "Home | " + title,
 		description: "Veja e crie eventos gastronômicos!",
 	},
-
 	"/login": {
 		html: createLoginForm,
 		title: "Login | " + title,
 		description: "Logar na plataforma Food Point",
 	},
-
 	"/register": {
 		html: createRegisterForm,
 		title: "Cadastre-se | " + title,
 		description: "Cadastre-se no Food Point", 
+  },
+	"/home/create": {
+		html: () => newEventBasicPage(),
+		title: "Novo evento | " + title,
+		description: "Crie um novo evento gastronômico.",
 	},
 };
 
@@ -52,14 +56,11 @@ const routes = {
  * }}
  */
 function router() {
-	// exemple:
-	// currentPath = https:foodpoint/ => "/"
 	let currentPath = window.location.pathname;
 	if (currentPath.length == 0) {
 		currentPath = "/";
 	}
 
-	// validates if the route exist, if doesn't, returns 404 page.
 	return routes[currentPath] || routes["404"];
 }
 
@@ -71,7 +72,6 @@ function renderIntoRoot(root, constructorInfo) {
 	const routeObj = router();
 	const HTMLElement = routeObj.html(constructorInfo);
 
-	// Sets meta information about the current page.
 	window.document.title = routeObj.title;
 	window.document
 		.querySelector('meta[name="description"]')
@@ -79,7 +79,7 @@ function renderIntoRoot(root, constructorInfo) {
 
 	root.innerHTML = "";
 	root.appendChild(HTMLElement);
-	
+
 	window.scrollTo(0, 0);
 }
 
@@ -90,8 +90,6 @@ function initRouter(root) {
 	let constructorInfo = { animation: true };
 	renderIntoRoot(root, constructorInfo);
 
-	// Adds a listener in popstate and onstatechange events.
-	// When one of then are trigged, the root is changed
 	window.addEventListener("popstate", (e) =>
 		renderIntoRoot(root, constructorInfo)
 	);

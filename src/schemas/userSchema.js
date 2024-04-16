@@ -45,6 +45,4 @@ const usersSchemas= {
 }
 
 
-
-
 module.exports = usersSchemas;
