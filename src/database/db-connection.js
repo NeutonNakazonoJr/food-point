@@ -16,6 +16,4 @@ const dBConnection = new Pool({
 	port: DB_PORT,
 });
 
-console.log(dBConnection);
-
 module.exports = dBConnection;

@@ -6,10 +6,10 @@ const userRepository = {
     insertNewUser: async (userData) => {
         try {
             const { fullname, email } = userData;
-            const hashPassword = await hashPassword(userData.password);
+            const newHashPassword = await hashPassword(userData.password);
 
             const query = 'INSERT INTO "user" (fullname, email, "password") VALUES ($1, $2, $3);';
-            const newUser = await dbConnection.query(query, [fullname, email, hashPassword]);
+            const newUser = await dbConnection.query(query, [fullname, email, newHashPassword]);
 
             return newUser;
         } catch (error) {
