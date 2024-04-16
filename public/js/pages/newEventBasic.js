@@ -114,17 +114,58 @@ function getFieldset(
 	return fieldset;
 }
 
-function getCancelBtn() {
+function getCancelBtn(modal) {
 	const btn = document.createElement("button");
 	btn.addEventListener("click", (e) => {
 		e.preventDefault();
-		modalBuilder();
-		dispatchOnStateChange("/home", { animation: false });
+		if (modal instanceof HTMLElement) {
+			modal.style.display = "flex";
+		}
 	});
 
 	btn.textContent = "Cancelar";
 
 	return btn;
+}
+
+function cancelThisEventModal() {
+	const modal = document.createElement("div");
+	const container = document.createElement("div");
+	modal.id = "newEvent-basic-modal";
+	container.id = "newEvent-basic-modal-container";
+
+	const h2 = document.createElement("h2");
+	const p = document.createElement("p");
+	const img = document.createElement("img");
+	const divBtn = document.createElement("div");
+	const btnCancel = document.createElement("button");
+	const btnReturn = document.createElement("button");
+
+	h2.textContent = "Cancelar evento?";
+	p.textContent =
+		"ALERTA: Essa ação irá apagar todos os dados escritos até agora!";
+	img.src = "/assets/svg-backgrounds/doubt.svg";
+	btnCancel.textContent = "Cancelar evento";
+	btnReturn.textContent = "Continuar criação";
+
+	btnCancel.addEventListener("click", () => {
+		dispatchOnStateChange("/home", { animation: false });
+	});
+	btnReturn.addEventListener("click", () => {
+		modal.style.display = "none";
+	});
+
+	divBtn.appendChild(btnCancel);
+	divBtn.appendChild(btnReturn);
+
+	container.appendChild(h2);
+	container.appendChild(p);
+	container.appendChild(img);
+	container.appendChild(divBtn);
+
+	modal.appendChild(container);
+	modal.style.display = "none";
+	return modal;
 }
 
 function appendContinueBtn(form, div) {
@@ -276,7 +317,8 @@ export default function newEventBasicPage(
 
 	divInfo.appendChild(divDate);
 
-	const cancelBtn = getCancelBtn();
+	const modal = cancelThisEventModal();
+	const cancelBtn = getCancelBtn(modal);
 	divBtns.appendChild(cancelBtn);
 	appendContinueBtn(form, divBtns);
 
@@ -289,6 +331,7 @@ export default function newEventBasicPage(
 	const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);
 	wrapper.appendChild(timeline);
+	wrapper.appendChild(modal);
 	wrapper.appendChild(main);
 
 	return wrapper;
