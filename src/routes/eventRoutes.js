@@ -16,4 +16,10 @@ eventRoutes.put('/event/:id/basic-infos',
     eventController.updateEventBasicInfos
 );
 
+eventRoutes.post('/event/:id/dish',
+    validateRequestBody(eventSchema.dish)
+)
+
+eventRoutes.post('/event')
+
 module.exports = eventRoutes;
