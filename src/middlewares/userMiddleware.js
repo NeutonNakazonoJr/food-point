@@ -7,7 +7,7 @@ const userMiddleware = {
 
     validateUserId: async (req, res, next) => {
         try {
-            
+
             if (!uuidValidate(req.userId)) { 
                 return res.status(400).json({error: 'ID inválido.'});
             };
