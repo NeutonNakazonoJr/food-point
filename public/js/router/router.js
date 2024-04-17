@@ -2,6 +2,7 @@ import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
 import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
+import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
 
 const title = "Food Point";
@@ -46,6 +47,11 @@ const routes = {
 		title: "Novo evento | " + title,
 		description: "Crie um novo evento gastronômico.",
 	},
+	"/guest": {
+		html: createGuestPage,
+		title: "Guests | " + title,
+		description: "Planeje sua lista de convidados!"
+	}
 };
 
 /** Check the current path and returns according with it
@@ -60,6 +66,9 @@ function router() {
 	if (currentPath.length == 0) {
 		currentPath = "/";
 	}
+
+	// validates if the route exist, if doesn't, returns 404 page.
+	//return routes[currentPath] || routes["404"];
 
 	return routes[currentPath] || routes["404"];
 }
