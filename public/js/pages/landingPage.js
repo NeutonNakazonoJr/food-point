@@ -47,7 +47,7 @@ const createHeader = () => {
 		e.preventDefault();
 		document.body.style.backgroundImage = "";
 		document.body.classList.remove("body-landing");
-		dispatchOnStateChange("/login");
+		dispatchOnStateChange("/register");
 	});
 
 	const nav = htmlCreator.createNav("nav-landing");
@@ -88,7 +88,7 @@ const createContentSection = () => {
 		e.preventDefault();
 		document.body.style.backgroundImage = "";
 		document.body.classList.remove("body-landing");
-		dispatchOnStateChange("/login");
+		dispatchOnStateChange("/register");
 	});
 
 	contentSection.appendChild(h1);

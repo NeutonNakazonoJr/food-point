@@ -7,7 +7,7 @@
 	font-family: "Poppins", sans-serif;
 }
 
-.body-login {
+.body-register {
 	background-image: url("../images/wallpaper-login.jpeg");
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -16,17 +16,7 @@
 	height: 100%;
 }
 
-#black-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 1;
-}
-
-#login-screen {
+#register-screen {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -40,15 +30,15 @@
 	z-index: 2;
 }
 
-#login-modal {
+#register-modal {
 	height: 100vh;
-	padding: 5rem 0 2rem 0;
+	padding: 5rem 0 1rem 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
-#login-form {
+#register-form {
 	background-color: var(--white-smoke);
 	width: 27rem;
 	display: flex;
@@ -57,23 +47,23 @@
 	justify-content: center;
 	font-size: 0.9rem;
 	border-radius: 8px;
-	padding: 20px;
+	padding: 1em;
 	position: relative;
 }
 
-#login-form h1 {
+#register-form h1 {
 	font-size: 2rem;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	font-weight: 600;
 	color: var(--wine-color);
 }
 
-#login-form label {
+#register-form label {
 	align-self: flex-start;
 	margin-bottom: 10px;
 }
 
-#data-login input {
+#data-register input {
 	display: flex;
 	flex-direction: column;
 	width: 25em;
@@ -85,20 +75,20 @@
 	border: 2px solid var(--wine-color);
 }
 
-#remember-password {
+#acceptTerms {
 	display: flex;
 	align-items: center;
 	font-size: 0.9em;
-	margin-bottom: 3em;
 }
 
-#remember-password label {
+#acceptTerms label {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	cursor: pointer;
 }
 
-#remember-password input[type="checkbox"] {
+#accept-terms-input {
 	margin-right: 0.5em;
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -113,7 +103,7 @@
 	position: relative;
 }
 
-#remember-password input[type="checkbox"]::before {
+#accept-terms-input::before {
 	content: "";
 	position: absolute;
 	top: 2px;
@@ -126,19 +116,19 @@
 	transition: opacity 0.2s;
 }
 
-#remember-password input[type="checkbox"]:checked::before {
+#accept-terms-input:checked::before {
 	opacity: 1;
 }
 
-#remember-all-password {
+#accept-all-terms {
 	display: flex;
 	justify-content: center;
 }
 
-#loginPage-btn {
+
+#registerPage-btn {
 	width: 10rem;
 	padding: 0.5rem;
-	margin-bottom: 1em;
 	color: var(--white-smoke);
 	background-color: var(--wine-color);
 	border-radius: 8px;
@@ -147,52 +137,86 @@
 	border: none;
 }
 
-#loginPage-btn:hover {
+#registerPage-btn:hover {
 	cursor: pointer;
 	background-color: var(--blackberry);
 }
 
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 2;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 80%;
+	position: relative;
+	z-index: 1;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+	color: red;
+	text-decoration: none;
+	cursor: pointer;
+}
+
 @media screen and (max-width: 425px) {
-	#login-modal {
+	#register-modal {
 		padding: 0;
 	}
-	#login-form {
+
+	#register-form {
 		width: 100vw;
 		height: 100vh;
 		border-radius: 0;
 	}
 
-	#data-login input {
+	#data-register input {
 		width: 20em;
-	}
-
-	#remember-password {
-		margin-left: 1em;
-	}
-}
-
-@media screen and (max-height: 700px) {
-	.body-login {
-		width: 100%;
-		height: 100%;
-	}
-	#login-modal {
-		height: 100vh;
-	}
-
-	#login-form > #img-logo img {
-		width: 15em;
-		height: 15em;
-	}
-
-	#login-form h1 {
-		font-size: 1.5rem;
-		margin-bottom: 10px;
 	}
 }
 
 @media screen and (max-height: 590px) {
-	#login-form > #img-logo img {
+	#register-form>#img-logo img {
 		display: none;
+	}
+}
+
+@media screen and (max-height: 670px) {
+	.body-register {
+		width: 100%;
+		height: 100%;
+	}
+
+	#register-modal {
+		height: 100vh;
+	}
+
+	#register-form>#img-logo img {
+		width: 15em;
+		height: 15em;
+	}
+
+	#register-form h1 {
+		font-size: 1.5rem;
+		margin-bottom: 10px;
 	}
 }
