@@ -19,16 +19,30 @@ const createMenu = () => {
     const typeDish = document.createElement("div");
     typeDish.id = "dish-menu"
     menu.appendChild(typeDish)
+
     //appetizer button
     const appetizer = document.createElement("button");
     appetizer.className = "dish-type";
     appetizer.textContent = "Entrada";
     const appetizerIcon = document.createElement("img");
     appetizerIcon.className = "dish-icon";
-    appetizerIcon.src = "./assets/icons/appetizer.svg";
-    appetizerIcon.alt = "Icone de bebida;"
-    typeDish.appendChild(appetizer)
-    appetizer.appendChild(appetizerIcon)
+    appetizerIcon.src = "/assets/icons/appetizer.svg";
+    appetizerIcon.alt = "Icone de bebida";
+    typeDish.appendChild(appetizer);
+    appetizer.appendChild(appetizerIcon);
+
+    //salad button
+    const salad = document.createElement("button");
+    salad.className = "dish-type";
+    salad.textContent = "Salada";
+    const saladIcon = document.createElement("img");
+    saladIcon.className = "dish-icon";
+    saladIcon.src = "/assets/icons/salad.svg";
+    saladIcon.alt = "Icone de bebida";
+    typeDish.appendChild(salad);
+    salad.appendChild(saladIcon);
+
+
     setTimeout(icon, 1)
     return page;
 }
@@ -47,19 +61,31 @@ function event(dish, img, icon, iconHover) {
         img.src = iconHover;
     })
     dish.addEventListener("mouseout", () => {
-        if(dish.id == ""){
-            img.src = icon;
-        }else{
+        if (dish.className === "selected") {
             img.src = iconHover;
-        }  
-        })
-    dish.addEventListener("click", () => {
-        let selected = document.querySelector("#select");
-        if (!selected == null){
-            selected.removeAttribute("id");
+        } else {
+            img.src = icon;
         }
-        dish.id = "selected"
-        })
-    }
+    })
+    dish.addEventListener("click", () => {
+        let selected = document.querySelector(".selected");
+        if (selected === null) {
+            dish.className = "selected"
+        } else {
+            selected.className = "dish-type";
+            dish.className = "selected";
+            const imgs = document.querySelectorAll(".dish-icon")
+
+            imgs.forEach(i => {
+                let iHover = i.src
+                if (iHover != img.src) {
+                    let noHover = iHover.replace(/-hover\.svg$/, ".svg");
+                    i.src = noHover;
+                }
+            })
+        }
+    })
+}
+/*falta verificar pq some quando seleciona a imagem*/
 
 export default createMenu

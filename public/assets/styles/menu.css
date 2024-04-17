@@ -35,12 +35,13 @@ body{
     padding: 0 .5rem 0 0;
     width: 2.5rem;
 }
-#selected{
+.selected{
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
     align-items: center;
     height: 4rem;
+    border: 2px solid var(--raspberry);
     font-weight: bolder;
     color: white;
     background: var(--cherry);
