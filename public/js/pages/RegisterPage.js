@@ -1,5 +1,6 @@
 import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "../components/header.js";
+import showToast from "../components/toast.js";
 
 const createRegisterForm = () => {
     const bodyRegister = document.createElement('div');
@@ -222,21 +223,6 @@ const createRegisterForm = () => {
 
     registerFormDiv.appendChild(registerButton);
 
-    function showToast(message, duration = 3000) {
-        const toast = document.createElement('div');
-        toast.classList.add('toast');
-        toast.textContent = message;
-
-        bodyRegister.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.add('hide');
-            setTimeout(() => {
-                toast.remove();
-            }, 500);
-        }, duration);
-    }
-
     function validateFields() {
         const email = document.getElementById("email-register").value;
         const fullName = document.getElementById('fullName-register').value;
@@ -261,7 +247,7 @@ const createRegisterForm = () => {
         const email = document.getElementById('email-register').value;
         const password = document.getElementById('password-register').value;
 
-        fetch('https://149.28.40.46/user', {
+        fetch('/api/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

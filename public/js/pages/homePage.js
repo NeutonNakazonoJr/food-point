@@ -3,6 +3,7 @@ import { friendlyDayOfWeek } from "../utils/friendlyDayOfWeek.js";
 import stringLimiter from "../utils/stringLimiter.js";
 import { getEvents } from "../api/eventApi.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
+import showToast from "../components/toast.js";
 
 /**
  * @param {HTMLAnchorElement} anchor
@@ -109,20 +110,16 @@ function generateMainCard(
 	spanDate.classList.add("home__card__info__date");
 	spanHours.classList.add("home__card__info__hours");
 
-	spanDate.textContent = "Indefinido";
-	spanHours.textContent = "Indefinido";
-	if (
-		cardInfo.date instanceof Date &&
-		cardInfo.date.toString() !== "Invalid Date"
-	) {
-		const eventDay = cardInfo.date.getDay();
-		spanDateDay.textContent = stringLimiter(
+	spanDate.textContent = cardInfo.date;
+	spanHours.textContent = cardInfo.date;
+
+	if (/^(\d{2})\/(\d{2})\/(\d{4})$/.test(cardInfo.date)) {
+		const eventDay = new Date(cardInfo.date).getDay();
+		spanDateDay.textContent = `(${stringLimiter(
 			friendlyDayOfWeek(eventDay),
 			3,
 			false
-		);
-		spanDate.textContent = cardInfo.date.toLocaleDateString();
-		spanHours.textContent = cardInfo.date.toLocaleTimeString();
+		)})`;
 	}
 	spanDate.appendChild(spanDateDay);
 
@@ -154,21 +151,39 @@ function generateCreateEventCard(
 	a.href = createEventUrl;
 	a.id = "homeBtnNewEvent";
 
-	a.addEventListener("click", (e) => {
+	a.addEventListener("click", async (e) => {
 		e.preventDefault();
-		dispatchOnStateChange("/home/create", {
-			stage: {
-				current: 0,
-				last: 0,
-			},
-			event: {
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			};
+			const res = await fetch("/api/event", requestOptions);
+			const result = await res.json();
+			if (res.status !== 201) {
+				throw new Error(result);
+			}
+
+			const event = {
+				id: result.event_id,
 				name: "",
 				theme: "",
 				description: "",
 				date: "",
 				time: "",
-			},
-		});
+			};
+			dispatchOnStateChange("/home/create", {
+				stage: {
+					current: 0,
+					last: 0,
+				},
+				event: event,
+			});
+		} catch (error) {
+			showToast(error.message, 500);
+		}
 	});
 
 	const spanImg = document.createElement("span");
@@ -185,10 +200,7 @@ function generateCreateEventCard(
  * @param {number} userID
  * @returns
  */
-export default function homePage(
-	constructorInfo = { eventID: "", animation: true }
-) {
-	window.scrollTo(0, 0);
+export default async function homePage(constructorInfo = { animation: true }) {
 	const header = getHeader(constructorInfo.animation);
 	const main = document.createElement("main");
 	main.id = "homeMain";
@@ -205,18 +217,32 @@ export default function homePage(
 	setAnimationForCard(span, 0, 100, constructorInfo.animation);
 	main.appendChild(span);
 
-	const events = getEvents(constructorInfo.eventID);
+	const result = await getEvents();
+
+	console.log(result.events);
+
+	const events = Array.isArray(result.events) ? result.events : [];
+	if (result instanceof Error) {
+		showToast(JSON.stringify(result.message));
+	}
 	const cards = events.map((event, index) => {
-		const myCard = generateMainCard(event.eventID, `/event`, `/list`, {
-			title: event.name ?? "Evento vazio",
-			local: event.location ?? "Indefinido",
+		const myCard = generateMainCard(event.event_id, `/event`, `/list`, {
+			title: event.event_name ?? "Evento vazio",
+			local: event.event_location ?? "Indefinido",
 			mainFood: "Indefinido",
-			date: event.date ?? "Indefinido",
+			date: event.event_date ?? "Indefinido",
+			time: event.event_time ?? "Indefinido",
 		});
 		setAnimationForCard(myCard, index, 100, constructorInfo.animation);
 		return myCard;
 	});
 	const createEventCard = generateCreateEventCard("/home/create");
+	setAnimationForCard(
+		createEventCard,
+		events.length + 1,
+		100,
+		constructorInfo.animation
+	);
 
 	cards.forEach((card) => {
 		main.appendChild(card);
