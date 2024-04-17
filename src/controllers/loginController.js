@@ -1,5 +1,6 @@
-const { getUserByEmail } = require('../repositories/userRepository.js');
-const { createToken } = require('../utils/jwt.js');
+const { getUserByEmail } = require("../repositories/userRepository.js");
+const { createToken } = require("../utils/jwt.js");
+const { SECRET_KEY_JWT } = require("../config/config.js");
 
 const loginAuthenticationController = async (req, res) => {
     try {
@@ -10,7 +11,7 @@ const loginAuthenticationController = async (req, res) => {
         const cookieOptions = {
             maxAge: 8 * 60 * 60 * 1000, 
             httpOnly: true,
-            // sameSite: 'strict',
+            sameSite: 'strict',
             secure: true
         };
 

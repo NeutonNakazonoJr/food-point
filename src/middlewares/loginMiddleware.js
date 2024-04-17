@@ -1,3 +1,4 @@
+const { SECRET_KEY_JWT } = require("../config/config.js");
 const { getUserByEmail } = require("../repositories/userRepository.js");
 const { verifyToken } = require("../utils/jwt.js");
 const { comparePassword } = require("../utils/passwordEncryption.js");
@@ -33,7 +34,7 @@ const userAuthorization = async (req, res, next) => {
             return res.status(401).json({ error: 'Token Ausente' });
         }
 
-        const isValidToken = verifyToken(token, process.env.SECRET_KEY_JWT);
+        const isValidToken = verifyToken(token, SECRET_KEY_JWT);
        
         if (!isValidToken) {
             return res.status(401).json({ error: 'Token Inválido'});

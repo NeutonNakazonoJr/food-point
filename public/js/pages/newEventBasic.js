@@ -1,7 +1,7 @@
-import { patchEvent } from "../api/eventApi.js";
+import { putEvent } from "../api/eventApi.js";
 import eventProgressBar from "../components/eventProgressBar.js";
 import getHeader from "../components/header.js";
-import modalBuilder from "../components/modalBuilder.js";
+import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import { activeButton, disableButton } from "../utils/disableButton.js";
 
@@ -42,6 +42,7 @@ const fieldsBuilderInfo = [
 		labelText: "Por favor não coloque 17/09/2024",
 		inputType: "date",
 		inputID: "newEvent-basic-date",
+		title: "Por favor insira uma data maior que a data atual.",
 	},
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -89,17 +90,24 @@ function getFieldset(
 		inputValue !== "" &&
 		typeof inputValue === "string"
 	) {
-		input.value = inputValue.replace("/", "-");
+		input.value = inputValue.replace(/\//g, "-");
+	}
+	if (input.type === "date") {
+		input.min = new Date().toISOString().split("T")[0];
 	}
 
-	input.addEventListener("blur", (e) => {
+	const eventListener = input.type === 'date' ? "blur" : "change";
+
+	input.addEventListener(eventListener, () => {
 		if (input.value !== "") {
 			if (input.checkValidity()) {
 				input.style.outline = "none";
 				form.dispatchEvent(new CustomEvent("bluroninput"));
 			} else {
 				input.style.outline = "2px solid red";
-				input.focus();
+				if(input.type !== "date") {
+					input.focus();
+				}
 				form.dispatchEvent(new CustomEvent("badinput"));
 			}
 		}
@@ -114,12 +122,13 @@ function getFieldset(
 	return fieldset;
 }
 
-function getCancelBtn() {
+function getCancelBtn(modal) {
 	const btn = document.createElement("button");
 	btn.addEventListener("click", (e) => {
 		e.preventDefault();
-		modalBuilder();
-		dispatchOnStateChange("/home", { animation: false });
+		if (modal instanceof HTMLElement) {
+			modal.style.display = "flex";
+		}
 	});
 
 	btn.textContent = "Cancelar";
@@ -127,7 +136,47 @@ function getCancelBtn() {
 	return btn;
 }
 
-function appendContinueBtn(form, div) {
+function cancelThisEventModal() {
+	const modal = document.createElement("div");
+	const container = document.createElement("div");
+	modal.id = "newEvent-basic-modal";
+	container.id = "newEvent-basic-modal-container";
+
+	const h2 = document.createElement("h2");
+	const p = document.createElement("p");
+	const img = document.createElement("img");
+	const divBtn = document.createElement("div");
+	const btnCancel = document.createElement("button");
+	const btnReturn = document.createElement("button");
+
+	h2.textContent = "Cancelar evento?";
+	p.textContent =
+		"ALERTA: Essa ação irá apagar todos os dados escritos até agora!";
+	img.src = "/assets/svg-backgrounds/doubt.svg";
+	btnCancel.textContent = "Cancelar evento";
+	btnReturn.textContent = "Continuar criação";
+
+	btnCancel.addEventListener("click", () => {
+		dispatchOnStateChange("/home", { animation: false });
+	});
+	btnReturn.addEventListener("click", () => {
+		modal.style.display = "none";
+	});
+
+	divBtn.appendChild(btnCancel);
+	divBtn.appendChild(btnReturn);
+
+	container.appendChild(h2);
+	container.appendChild(p);
+	container.appendChild(img);
+	container.appendChild(divBtn);
+
+	modal.appendChild(container);
+	modal.style.display = "none";
+	return modal;
+}
+
+function appendContinueBtn(eventId, form, div) {
 	if (form instanceof HTMLFormElement && div instanceof HTMLDivElement) {
 		const saveBtn = document.createElement("button");
 		const skipBtn = document.createElement("button");
@@ -138,11 +187,11 @@ function appendContinueBtn(form, div) {
 
 		saveBtn.addEventListener("click", (e) => {
 			e.preventDefault();
-			saveInfoAndMoveOn(form);
+			saveInfoAndMoveOn(eventId, form);
 		});
 		skipBtn.addEventListener("click", (e) => {
 			e.preventDefault();
-			skipThisStep();
+			skipThisStep(eventId);
 		});
 
 		form.addEventListener("bluroninput", () => {
@@ -167,7 +216,7 @@ function appendContinueBtn(form, div) {
 	}
 }
 
-async function saveInfoAndMoveOn(form) {
+async function saveInfoAndMoveOn(eventId, form) {
 	if (form instanceof HTMLFormElement) {
 		const fields = {
 			description: "newEvent-basic-description",
@@ -183,25 +232,43 @@ async function saveInfoAndMoveOn(form) {
 		const eventInfos = {
 			name: form.elements[fields.name].value,
 			theme: form.elements[fields.theme].value,
-			description: form.elements[fields.description].value,
-			date: dateFormatted.replace(/\//g, "-"),
-			time: form.elements[fields.time].value,
+			eventDescription: form.elements[fields.description].value,
+			eventDate: dateFormatted,
+			eventTime: form.elements[fields.time].value,
 		};
-		const result = await patchEvent(eventInfos);
-		if (result.success) {
-			const constructorInfo = {};
-			dispatchOnStateChange("/home/create/menu", constructorInfo);
+		const result = await putEvent(eventId, eventInfos);
+		console.log(result);
+
+		if (result instanceof Error) {
+			showToast(result);
 		} else {
-			modalBuilder();
+			const constructorInfo = {
+				event: {
+					id: eventId,
+				},
+				stage: {
+					current: 3,
+					last: 0,
+				},
+			};
+			dispatchOnStateChange("/home/create/guest", constructorInfo);
 		}
 	} else {
 		throw new Error("Erro no tratamento do formulário!!!!");
 	}
 }
 
-function skipThisStep() {
-	const constructorInfo = {};
-	dispatchOnStateChange("/home/create/menu", constructorInfo);
+function skipThisStep(eventId) {
+	const constructorInfo = {
+		event: {
+			id: eventId,
+		},
+		stage: {
+			current: 3,
+			last: 0,
+		},
+	};
+	dispatchOnStateChange("/home/create/guest", constructorInfo);
 }
 
 export default function newEventBasicPage(
@@ -211,6 +278,7 @@ export default function newEventBasicPage(
 			last: 0,
 		},
 		event: {
+			id: "",
 			name: "",
 			theme: "",
 			description: "",
@@ -219,6 +287,13 @@ export default function newEventBasicPage(
 		},
 	}
 ) {
+	if (!constructorInfo.event || constructorInfo.event.id === "") {
+		alert("O evento passado para essa página não é válido!");
+		setTimeout(() => {
+			dispatchOnStateChange("/home", { animation: true });
+		}, 200);
+		return document.createDocumentFragment();
+	}
 	const header = getHeader(false, true);
 	const timeline = eventProgressBar(
 		true,
@@ -243,7 +318,7 @@ export default function newEventBasicPage(
 	divBtns.id = "newEvent-basic-btns";
 
 	fieldsBuilderInfo.forEach((info, index) => {
-		const eventKeys = Object.keys(constructorInfo.event);
+		const eventKeys = ["name", "theme", "description", "date", "time"];
 
 		if (info.inputType !== "text") {
 			const fieldset = getFieldset(
@@ -253,7 +328,10 @@ export default function newEventBasicPage(
 				info.labelText,
 				info.inputID,
 				info.inputType,
-				constructorInfo.event[eventKeys[index]]
+				constructorInfo.event[eventKeys[index]],
+				"",
+				"",
+				info.title ?? ""
 			);
 			divDate.appendChild(fieldset);
 			return;
@@ -276,9 +354,10 @@ export default function newEventBasicPage(
 
 	divInfo.appendChild(divDate);
 
-	const cancelBtn = getCancelBtn();
+	const modal = cancelThisEventModal();
+	const cancelBtn = getCancelBtn(modal);
 	divBtns.appendChild(cancelBtn);
-	appendContinueBtn(form, divBtns);
+	appendContinueBtn(constructorInfo.event.id, form, divBtns);
 
 	form.appendChild(divInfo);
 	form.appendChild(divBtns);
@@ -289,6 +368,7 @@ export default function newEventBasicPage(
 	const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);
 	wrapper.appendChild(timeline);
+	wrapper.appendChild(modal);
 	wrapper.appendChild(main);
 
 	return wrapper;

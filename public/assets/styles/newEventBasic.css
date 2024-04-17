@@ -1,3 +1,86 @@
+#newEvent-basic-modal {
+	position: fixed;
+	background-color: var(--blackberry-transparent);
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#newEvent-basic-modal > div {
+	background: var(--white-smoke);
+	padding: 1rem;
+	border-radius: var(--border-radius-1x);
+	max-width: 90%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	& > img {
+		width: 50%;
+	}
+}
+
+#newEvent-basic-modal > div > div {
+	display: flex;
+	justify-content: space-evenly;
+	width: 100%;
+	& > button {
+		font-size: 0.9rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+		height: 3rem;
+		width: 35%;
+		background-color: var(--white-smoke);
+		border: 2px solid var(--raspberry);
+		color: var(--raspberry);
+		border-radius: var(--border-radius-1x);
+		transition: all 500ms;
+		&:hover {
+			background-color: var(--raspberry);
+			color: var(--white-smoke);
+			&::before {
+				filter: brightness(10);
+			}
+		}
+		&::before {
+			display: inline-block;
+			margin-right: 5px;
+			content: "";
+			background: url("/assets/icons/cancel.svg") center no-repeat;
+			background-size: contain;
+			width: 0.9rem;
+			height: 0.9rem;
+			transition: all 500ms;
+		}
+	}
+	& > button:last-child {
+		background-color: var(--raspberry);
+		color: var(--white-smoke);
+		&:hover {
+			filter: brightness(.8);
+		}
+		&::before {
+			display: none;
+		}
+		&::after {
+			display: inline-block;
+			content: "";
+			background: url("../icons/arrow-rigth.svg") center no-repeat;
+			background-size: contain;
+			margin-left: 5px;
+			width: 0.9rem;
+			height: 0.9rem;
+		}
+	}
+}
+
 #newEvent-basic {
 	color: var(--blackberry);
 	background-color: var(--white-smoke);
@@ -179,6 +262,17 @@
 	}
 }
 
+@media screen and (max-width: 620px) {
+	#newEvent-basic-modal > div > div {
+		flex-direction: column;
+		& > button{
+			width: 100%;
+		}
+		& > button:first-child {
+			margin-bottom: 1rem;
+		}
+	}
+}
 @media screen and (max-width: 600px) {
 	#newEvent-basic-btns {
 		& > * {
