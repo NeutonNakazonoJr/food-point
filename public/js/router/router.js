@@ -43,7 +43,7 @@ const routes = {
 		description: "Cadastre-se no Food Point", 
   },
 	"/home/create": {
-		html: () => newEventBasicPage(),
+		html: newEventBasicPage,
 		title: "Novo evento | " + title,
 		description: "Crie um novo evento gastronômico.",
 	},

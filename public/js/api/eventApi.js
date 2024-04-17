@@ -7,12 +7,22 @@ export function getEvents(userID) {
 	return [];
 }
 
-export async function patchEvent(event) {
-	const p = new Promise((res, rej) => {
-		setTimeout(() => {
-			res({ success: true });
-		}, 1000);
-	});
+export async function putEvent(eventId, eventInfo) {
+	try {
+		const requestOptions = {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(eventInfo),
+		};
+		const url = `/api/event/${eventId}/basic-infos`;
+		const res = await fetch(url, requestOptions);
+		const result = await res.json();
+		if (res.status !== 200 || result.error) {
+			throw new Error(result.error);
+		}
 
-	return await p;
+		return result;
+	} catch (error) {
+		return error;
+	}
 }
