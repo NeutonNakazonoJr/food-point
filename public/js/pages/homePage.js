@@ -3,7 +3,7 @@ import { friendlyDayOfWeek } from "../utils/friendlyDayOfWeek.js";
 import stringLimiter from "../utils/stringLimiter.js";
 import { getEvents } from "../api/eventApi.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
-import { getLogged } from "../api/userApi.js";
+import showToast from "../components/toast.js";
 
 /**
  * @param {HTMLAnchorElement} anchor
@@ -155,21 +155,40 @@ function generateCreateEventCard(
 	a.href = createEventUrl;
 	a.id = "homeBtnNewEvent";
 
-	a.addEventListener("click", (e) => {
+	a.addEventListener("click", async (e) => {
 		e.preventDefault();
-		dispatchOnStateChange("/home/create", {
-			stage: {
-				current: 0,
-				last: 0,
-			},
-			event: {
+		try {
+			const requestOptions = {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+			const res = await fetch("/api/event", requestOptions);
+			const result = await res.json();
+			if(res.status !== 201) {
+				throw new Error(result);
+			}
+
+			const event = {
+				id: result.id,
 				name: "",
 				theme: "",
 				description: "",
 				date: "",
 				time: "",
-			},
-		});
+			}
+			dispatchOnStateChange("/home/create", {
+				stage: {
+					current: 0,
+					last: 0,
+				},
+				event: event,
+			});
+		} catch (error) {
+			showToast(error.message, 500);
+		}
+
 	});
 
 	const spanImg = document.createElement("span");
@@ -189,9 +208,6 @@ function generateCreateEventCard(
 export default async function homePage(
 	constructorInfo = { eventID: "", animation: true }
 ) {
-	const user = await getLogged();
-	console.log(user);
-	
 	const header = getHeader(constructorInfo.animation);
 	const main = document.createElement("main");
 	main.id = "homeMain";
@@ -220,6 +236,12 @@ export default async function homePage(
 		return myCard;
 	});
 	const createEventCard = generateCreateEventCard("/home/create");
+	setAnimationForCard(
+		createEventCard,
+		events.length + 1,
+		100,
+		constructorInfo.animation
+	);
 
 	cards.forEach((card) => {
 		main.appendChild(card);

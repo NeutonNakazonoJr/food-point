@@ -35,7 +35,7 @@ CREATE OR REPLACE FUNCTION is_valid_dish_text(text_to_check VARCHAR) RETURNS BOO
 BEGIN
     RETURN text_to_check ~ '^[a-zA-ZÀ-ÖØ-öø-ÿ\s''-]+$';
 END;
-$$ LANGUAGE sql;
+$$ LANGUAGE plpgsql;
 
 CREATE TABLE dish (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,

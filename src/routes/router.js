@@ -7,8 +7,8 @@ const eventRoutes = require('./eventRoutes');
 const pagesRoutes = require('./pagesRoutes');
 
 router.use(pagesRoutes);
-router.use(loginRoutes);
-router.use(userRoutes);
-router.use(eventRoutes);
+router.use("/api", loginRoutes);
+router.use("/api", userRoutes);
+router.use("/api", eventRoutes);
 
 module.exports = router;

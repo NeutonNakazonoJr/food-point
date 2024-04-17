@@ -1,12 +1,12 @@
-const url = "https://149.28.40.46";
+// const url = "https://localhost";
 
 export async function getLogged(
 	user = {
-		email: "teste@teste.com",
-		password: "Abc123!!",
+		email: "",
+		password: "",
 	}
 ) {
-	const loginUrl = url + "/login";
+	const loginUrl = "/api/login";
 	const requestOptions = {
 		method: "POST",
 		headers: {

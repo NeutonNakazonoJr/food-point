@@ -8,5 +8,6 @@ const goToIndexHTML = (req, res) => {
 
 privatePagesRouter.get("/home", goToIndexHTML);
 privatePagesRouter.get("/home/create", goToIndexHTML);
+privatePagesRouter.get("/home/create/guest", goToIndexHTML);
 
 module.exports = privatePagesRouter;

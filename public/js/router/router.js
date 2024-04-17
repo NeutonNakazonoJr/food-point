@@ -47,7 +47,7 @@ const routes = {
 		title: "Novo evento | " + title,
 		description: "Crie um novo evento gastronômico.",
 	},
-	"/guest": {
+	"/home/create/guest": {
 		html: createGuestPage,
 		title: "Guests | " + title,
 		description: "Planeje sua lista de convidados!"
