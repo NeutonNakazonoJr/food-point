@@ -1,0 +1,27 @@
+#profile-body{
+    margin-top: 3.5rem;
+    width: 100%;
+    display: flex;
+    background-color: var(--white-smoke);
+}
+#left-bar{
+    border: 2px solid black;
+    width: 15%;
+    height: 100vh;
+    background-color: #F7F2F4;
+}
+#button-area{
+    height: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+#back{
+    width: 6rem;
+    padding: .5rem;
+    font-weight: bolder;
+    border: 4px solid var(--raspberry);
+    border-left: none;
+    color: var(--raspberry);
+}
