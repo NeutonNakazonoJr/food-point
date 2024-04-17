@@ -29,6 +29,24 @@ const eventController = {
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
+    },
+
+    getAllEvents: async (req, res) => {
+        try {
+            const events = await eventRepository.findAllEvents(req.userId);
+            return res.status(200).json({ events });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    },
+
+    getAllEventInfos: async (req, res) => {
+        try {
+            const eventInfos = await eventRepository.findCompleteEventInfos(req.params.id);
+            return res.status(200).json({ eventInfos })
+        } catch (error) {
+            
+        }
     }
 }
 

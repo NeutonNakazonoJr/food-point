@@ -19,7 +19,10 @@ eventRoutes.put('/event/:id/basic-infos',
 eventRoutes.post('/event/:id/dish',
     validateRequestBody(eventSchema.dish),
     eventController.createNewDish
-)
+);
 
+eventRoutes.get('/event', eventController.getAllEvents);
+
+eventRoutes.get('/event/:id', eventController.getAllEventInfos);
 
 module.exports = eventRoutes;
