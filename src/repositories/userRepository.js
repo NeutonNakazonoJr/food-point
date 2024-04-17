@@ -13,6 +13,7 @@ const userRepository = {
 
             return newUser;
         } catch (error) {
+           
             return error;
         } 
     },

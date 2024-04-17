@@ -31,15 +31,23 @@ CREATE TABLE event (
     CONSTRAINT valid_time CHECK (event_time ~ '^(([01]\d|2[0-3]):([0-5]\d))$')
 );
 
-CREATE OR REPLACE FUNCTION is_valid_dish_text(text_to_check VARCHAR) RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN text_to_check ~ '^[a-zA-ZÀ-ÖØ-öø-ÿ\s''-]+$';
-END;
-$$ LANGUAGE plpgsql;
+CREATE FUNCTION is_valid_dish_text(text_to_check VARCHAR) RETURNS BOOLEAN AS $$
+    SELECT text_to_check ~ '^[a-zA-ZÀ-ÖØ-öø-ÿ\s''-]+$';
+$$ LANGUAGE sql;
+
 
 CREATE TABLE dish (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     event_id UUID REfERENCES "event" ON DELETE CASCADE NOT NULL,
     dish_name VARCHAR(100) CHECK(is_valid_dish_text(dish_name)) NOT NULL,
     "type" VARCHAR(14) CHECK(is_valid_dish_text("type")) NOT NULL
+);
+
+CREATE TABLE ingredient (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    event_id UUID REfERENCES "event" ON DELETE CASCADE NOT NULL,
+    dish_id UUID REfERENCES "dish" ON DELETE CASCADE NOT NULL,
+    "name" VARCHAR(100) CHECK(is_valid_dish_text("name")) NOT NULL,
+    unity_measure VARCHAR(100) NOT NULL,
+    quantity INT CHECK(quantity > 0)
 );
