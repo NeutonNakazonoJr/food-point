@@ -111,7 +111,7 @@ function generateMainCard(
 	spanHours.classList.add("home__card__info__hours");
 
 	spanDate.textContent = cardInfo.date;
-	spanHours.textContent = cardInfo.date;
+	spanHours.textContent = cardInfo.time;
 
 	if (/^(\d{2})\/(\d{2})\/(\d{4})$/.test(cardInfo.date)) {
 		const eventDay = new Date(cardInfo.date).getDay();

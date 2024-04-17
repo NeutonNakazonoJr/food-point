@@ -5,7 +5,7 @@ import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import { activeButton, disableButton } from "../utils/disableButton.js";
 
-const regex = "^[a-zA-ZÀ-ÖØ-öø-ÿ\\s']+$";
+const regex = /^[a-zA-ZÀ-ÖØ-öø-ÿ\s"^`~:.,?!-]+$/;
 const regexTitle = "Este campos deve possuir somente letras e espaço";
 
 const fieldsBuilderInfo = [
@@ -229,11 +229,12 @@ async function saveInfoAndMoveOn(eventId, form) {
 			time: "newEvent-basic-time",
 		};
 
+		const date = new Date(form.elements[fields.date].value).toLocaleDateString();
 		const eventInfos = {
 			name: form.elements[fields.name].value,
 			theme: form.elements[fields.theme].value,
 			eventDescription: form.elements[fields.description].value,
-			eventDate: form.elements[fields.date].value,
+			eventDate: date,
 			eventTime: form.elements[fields.time].value,
 		};
 		const result = await putEvent(eventId, eventInfos);
