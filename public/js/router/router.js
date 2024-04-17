@@ -2,6 +2,7 @@ import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
 import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
+import createRegisterForm from "../pages/RegisterPage.js";
 
 const title = "Food Point";
 
@@ -25,16 +26,21 @@ const routes = {
 		title: title,
 		description: "Conheça o Food Point!",
 	},
-	"/login": {
-		html: createLoginForm,
-		title: "Login | " + title,
-		description: "",
-	},
 	"/home": {
 		html: homePage,
 		title: "Home | " + title,
 		description: "Veja e crie eventos gastronômicos!",
 	},
+	"/login": {
+		html: createLoginForm,
+		title: "Login | " + title,
+		description: "Logar na plataforma Food Point",
+	},
+	"/register": {
+		html: createRegisterForm,
+		title: "Cadastre-se | " + title,
+		description: "Cadastre-se no Food Point", 
+  },
 	"/home/create": {
 		html: () => newEventBasicPage(),
 		title: "Novo evento | " + title,

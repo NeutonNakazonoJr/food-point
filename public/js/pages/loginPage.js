@@ -1,5 +1,5 @@
 import dispatchOnStateChange from "../events/onStateChange.js";
-import getHeader from "./header.js";
+import getHeader from "../components/header.js";
 
 const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
@@ -49,6 +49,7 @@ const createLoginForm = () => {
     const emailLabel = document.createElement('label');
     emailLabel.textContent = 'Email:';
     const emailInput = document.createElement('input');
+    emailInput.id= "email-login"
     emailInput.type = 'email';
     emailInput.placeholder = 'Digite seu email';
     emailInput.alt = 'Digite seu email';
@@ -61,6 +62,7 @@ const createLoginForm = () => {
     const passwordLabel = document.createElement('label');
     passwordLabel.textContent = 'Senha:';
     const passwordInput = document.createElement('input');
+    passwordInput.id= "password-login"
     passwordInput.type = 'password';
     passwordInput.placeholder = 'Digite sua senha';
     passwordInput.alt = 'Digite sua senha';
@@ -88,7 +90,7 @@ const createLoginForm = () => {
 
     const loginButton = document.createElement('button');
     loginButton.type = 'button';
-    loginButton.id = 'login-btn';
+    loginButton.id = 'loginPage-btn';
     loginButton.alt = 'Entrar';
     loginButton.textContent = 'Entrar';
 	
