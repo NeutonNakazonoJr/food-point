@@ -32,6 +32,32 @@ const eventRepository = {
 
         const { rows } = await dbConnection.query(query, values); 
         return rows;
+    },
+
+    insertNewDish: async (dishInfos, eventId) => {
+
+        const dishQuery = 'INSERT INTO dish (event_id, dish_name, "type") VALUES ($1, $2, $3) RETURNING id';
+        const { rows: [ { id: dishId } ] } = await dbConnection.query(dishQuery, [eventId, dishInfos.dishName, dishInfos.type]);    
+
+        const registeredIngredientsIds = [];
+        
+        const ingredientInfos = dishInfos.ingredients;
+        for (const ingredient of ingredientInfos) {
+            const ingredientQuery = `INSERT INTO ingredient (event_id, dish_id, "name", "unity_measure", quantity)
+                                    VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+
+            const { rows: [{ id : ingredientId }] } = await dbConnection.query(ingredientQuery, [
+                eventId,
+                dishId,
+                ingredient.name,
+                ingredient.unityMeasure,
+                ingredient.quantity
+            ]);
+
+            registeredIngredientsIds.push(ingredientId);
+        }
+        
+        return  { dishId, ingredientsIds: registeredIngredientsIds }
     }
 }
 
