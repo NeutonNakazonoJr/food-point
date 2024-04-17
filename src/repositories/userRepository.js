@@ -1,12 +1,12 @@
 const dbConnection = require('../database/db-connection.js');
-const { encryptPassword } = require('../utils/passwordEncryption.js');
+const { hashPassword } = require('../utils/passwordEncryption.js');
 
 const userRepository = {
 
     insertNewUser: async (userData) => {
         try {
             const { fullname, email } = userData;
-            const hashPassword = await encryptPassword(userData.password);
+            const hashPassword = await hashPassword(userData.password);
 
             const query = 'INSERT INTO "user" (fullname, email, "password") VALUES ($1, $2, $3);';
             const newUser = await dbConnection.query(query, [fullname, email, hashPassword]);
@@ -40,6 +40,7 @@ const userRepository = {
         const indexIdParameter = formattedParameterForQuery.length + 1;
         const formattedParameters = formattedParameterForQuery.toString();
 
+
         const arrayValuesQuery = [... Object.values(newInfos), userId];
       
         const query = `UPDATE "user" SET ${formattedParameters} WHERE id = $${indexIdParameter} RETURNING ${attributesToUpdate}`;
@@ -50,13 +51,20 @@ const userRepository = {
      
     updateUsersNewPassword: async (newPassword, userId) => {
         try {
-            const newPasswordHash = await encryptPassword(newPassword);
+            const newPasswordHash = await hashPassword(newPassword);
             const query = 'UPDATE "user" SET password = $1 WHERE id = $2';
             return await dbConnection.query(query, [newPasswordHash, userId]);
         } catch (error) {
             return error;
         }
-    }
+    },
+
+    getUserByEmail: async (userEmail) => {
+        const query = 'SELECT * FROM "user" WHERE email = $1';
+        const { rows } = await dbConnection.query(query, [userEmail]);
+        return rows;
+    },
+
 }
 
 module.exports = userRepository;
