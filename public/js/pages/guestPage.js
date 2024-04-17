@@ -90,7 +90,7 @@ const createGuestPage = (
 
 	const later = document.createElement("img");
 	later.id = "later";
-	later.src = "./assets/icons/send-latter.svg";
+	later.src = "/assets/icons/send-latter.svg";
 	later.alt = "Carta com relogio";
 
 	skipButton.appendChild(later);
@@ -103,7 +103,7 @@ const createGuestPage = (
 
 	const wineIcon = document.createElement("img");
 	wineIcon.id = "finish-icon";
-	wineIcon.src = "./assets/icons/glass-of-wine-white.svg";
+	wineIcon.src = "/assets/icons/glass-of-wine-white.svg";
 	wineIcon.alt = "Icone de taça de vinho na cor branca";
 	finish.appendChild(wineIcon);
 	endPage.appendChild(finish);
@@ -149,8 +149,8 @@ const createGuestPage = (
 		guestCard.id = "guest-card";
 
 		const guestImg = document.createElement("img");
-		guestImg.id = "guest-img";
-		guestImg.src = "./assets/icons/person.svg";
+		guestImg.id = "guest-img"
+		guestImg.src = "/assets/icons/person.svg";
 		guestImg.alt = "imagem genérica de uma pessoa";
 
 		const guestName = document.createElement("p");
@@ -161,9 +161,9 @@ const createGuestPage = (
 		deleteButton.id = "delete-button";
 
 		const trash = document.createElement("img");
-		trash.src = "./assets/icons/trash.svg";
-		trash.alt = "icone de lixeira";
-
+		trash.src = "/assets/icons/trash.svg";
+		trash.alt = "icone de lixeira"
+		
 		deleteButton.appendChild(trash);
 		guestCard.appendChild(deleteButton);
 		guestCard.appendChild(guestImg);
