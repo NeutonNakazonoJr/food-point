@@ -179,4 +179,5 @@ export default function eventProgressBar(
 	eventWrapper.appendChild(content);
 
 	return eventWrapper;
+
 }
