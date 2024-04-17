@@ -8,6 +8,10 @@ const createRegisterForm = () => {
     const headerRegister = getHeader(true, false);
     bodyRegister.appendChild(headerRegister);
 
+    const blackOverlay = document.createElement('div');
+    blackOverlay.id = 'black-overlay';
+    bodyRegister.appendChild(blackOverlay);
+
     const registerScreen = document.createElement('section');
     registerScreen.id = 'register-screen';
     bodyRegister.appendChild(registerScreen);
@@ -45,7 +49,7 @@ const createRegisterForm = () => {
     const emailLabel = document.createElement('label');
     emailLabel.textContent = 'Email:';
     const emailInput = document.createElement('input');
-    emailInput.id = "email-register"
+    emailInput.id = "email-register";
     emailInput.type = 'email';
     emailInput.placeholder = 'Digite seu email';
     emailInput.alt = 'Digite seu email';
@@ -58,7 +62,7 @@ const createRegisterForm = () => {
     const fullNameLabel = document.createElement('label');
     fullNameLabel.textContent = 'Nome completo:';
     const fullNameInput = document.createElement('input');
-    fullNameInput.id = "fullName-register"
+    fullNameInput.id = "fullName-register";
     fullNameInput.type = 'text';
     fullNameInput.placeholder = 'Digite seu nome';
     fullNameInput.alt = 'Digite seu nome';
@@ -71,7 +75,7 @@ const createRegisterForm = () => {
     const passwordLabel = document.createElement('label');
     passwordLabel.textContent = 'Senha:';
     const passwordInput = document.createElement('input');
-    passwordInput.id = "password-register"
+    passwordInput.id = "password-register";
     passwordInput.type = 'password';
     passwordInput.placeholder = 'Digite sua senha';
     passwordInput.alt = 'Digite sua senha';
@@ -84,7 +88,7 @@ const createRegisterForm = () => {
     const confirmPasswordLabel = document.createElement('label');
     confirmPasswordLabel.textContent = 'Confirmar senha:';
     const confirmPasswordInput = document.createElement('input');
-    confirmPasswordInput.id = "confirm-password"
+    confirmPasswordInput.id = "confirm-password";
     confirmPasswordInput.type = 'password';
     confirmPasswordInput.placeholder = 'Digite novamente sua senha';
     confirmPasswordInput.alt = 'Digite novamente sua senha';
@@ -106,7 +110,6 @@ const createRegisterForm = () => {
     acceptTermsInput.name = 'accept-terms-input';
     const acceptTermsLabel = document.createElement('label');
     acceptTermsLabel.textContent = 'Eu aceito os termos e condições';
-    acceptTermsLabel.setAttribute('for', 'accept-terms-input');
     acceptAllTermsDiv.appendChild(acceptTermsInput);
     acceptAllTermsDiv.appendChild(acceptTermsLabel);
 
@@ -117,14 +120,6 @@ const createRegisterForm = () => {
         const modalContent = document.createElement('div');
         modalContent.classList.add('modal-content');
 
-        const closeButton = document.createElement('span');
-        closeButton.classList.add('close');
-        closeButton.textContent = 'X';
-        closeButton.addEventListener("click", function () {
-            modal.style.display = "none";
-        });
-
-        modalContent.appendChild(closeButton);
 
         const termsContent = `Bem-vindo ao Food Point! Antes de utilizar nosso aplicativo, por favor, leia atentamente estes Termos e Condições. Ao utilizar o Food Point, você concorda com estes termos.
     
@@ -162,8 +157,23 @@ const createRegisterForm = () => {
             modalContent.appendChild(paragraph);
         });
 
-        modal.addEventListener('click', function(e){
-            if(e.target === modalContent || e.target === modal) {
+        const confirmReadBtnDiv = document.createElement('div');
+        confirmReadBtnDiv.id = 'confirmReadBtnDiv';
+        modalContent.appendChild(confirmReadBtnDiv)
+
+        const confirmReadBtn = document.createElement('button');
+        confirmReadBtn.id = 'confirmRead-btn';
+        confirmReadBtn.textContent = 'Confirmo que li os termos';
+        confirmReadBtnDiv.appendChild(confirmReadBtn);
+
+        confirmReadBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+            acceptTermsInput.checked = true;
+            acceptTermsInput.dispatchEvent(new Event('change'));
+        });
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modalContent || e.target === modal) {
                 modal.style.display = 'none';
             }
         })
@@ -173,6 +183,13 @@ const createRegisterForm = () => {
         document.body.appendChild(modal);
 
         modal.style.display = 'block';
+
+        window.addEventListener('popstate', function (event) {
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            console.log('Clicou')
+        });
     });
 
     const registerButton = document.createElement('button');
@@ -183,12 +200,12 @@ const createRegisterForm = () => {
     registerButton.disabled = true;
     registerButton.style.backgroundColor = "gray";
     registerButton.style.cursor = "default";
-    
-    acceptTermsInput.addEventListener('change', function() {
+
+    acceptTermsInput.addEventListener('change', function () {
         if (this.checked) {
             registerButton.disabled = false;
             registerButton.style.backgroundColor = '';
-            registerButton.style.cursor = ''; 
+            registerButton.style.cursor = '';
         } else {
             registerButton.disabled = true;
             registerButton.style.backgroundColor = 'gray';
@@ -198,11 +215,79 @@ const createRegisterForm = () => {
 
     registerButton.addEventListener("click", (e) => {
         e.preventDefault();
-        console.log("CLICOU EM MIM");
-    })
-    
+        if (validateFields()) {
+            submitRegistrationForm();
+        }
+    });
+
     registerFormDiv.appendChild(registerButton);
-    
+
+    function showToast(message, duration = 3000) {
+        const toast = document.createElement('div');
+        toast.classList.add('toast');
+        toast.textContent = message;
+
+        bodyRegister.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('hide');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, duration);
+    }
+
+    function validateFields() {
+        const email = document.getElementById("email-register").value;
+        const fullName = document.getElementById('fullName-register').value;
+        const password = document.getElementById('password-register').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (!email || !fullName || !password || !confirmPassword) {
+            showToast('Por favor, preencha todos os campos.');
+            return false;
+        }
+
+        if (password !== confirmPassword) {
+            showToast("As senhas não correspondem");
+            return false;
+        }
+
+        return true;
+    }
+
+    function submitRegistrationForm() {
+        const fullName = document.getElementById('fullName-register').value;
+        const email = document.getElementById('email-register').value;
+        const password = document.getElementById('password-register').value;
+
+        fetch('https://149.28.40.46/user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                fullname: fullName,
+                email: email,
+                password: password
+            }),
+        })
+            .then(response => {
+                if (response.ok) {
+                    showToast('Usuário cadastrado com sucesso');
+                } else if (response.status === 400) {
+                    return response.json().then(data => {
+                        showToast(data.error);
+                    });
+                } else {
+                    throw new Error('Error');
+                }
+            })
+            .catch(error => {
+                showToast(error.message);
+            });
+    }
+
     return bodyRegister;
 };
 
