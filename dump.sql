@@ -20,7 +20,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TABLE event (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    event_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REfERENCES "user" ON DELETE CASCADE NOT NULL,
     event_name TEXT CHECK(is_valid_text(event_name)),
     theme TEXT CHECK(is_valid_text(theme)),

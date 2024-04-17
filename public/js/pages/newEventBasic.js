@@ -5,6 +5,9 @@ import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import { activeButton, disableButton } from "../utils/disableButton.js";
 
+const regex = "^[a-zA-ZÀ-ÖØ-öø-ÿ\\s']+$";
+const regexTitle = "Este campos deve possuir somente letras e espaço";
+
 const fieldsBuilderInfo = [
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -13,8 +16,8 @@ const fieldsBuilderInfo = [
 		inputType: "text",
 		placeholder: "ex: Churrasco do Claudinho",
 		inputID: "newEvent-basic-name",
-		pattern: "^[a-zA-ZÀ-ÖØ-öø-ÿs']+$",
-		title: "Este campos deve possuir somente letras",
+		pattern: regex,
+		title: regexTitle,
 	},
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -23,8 +26,8 @@ const fieldsBuilderInfo = [
 		inputType: "text",
 		placeholder: "ex: Churrasco brasileiro",
 		inputID: "newEvent-basic-theme",
-		pattern: "^[a-zA-ZÀ-ÖØ-öø-ÿs']+$",
-		title: "Este campos deve possuir somente letras",
+		pattern: regex,
+		title: regexTitle,
 	},
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -33,8 +36,8 @@ const fieldsBuilderInfo = [
 		inputType: "text",
 		placeholder: "ex: Vamos servir picanha e fraldinha com molho barbecue",
 		inputID: "newEvent-basic-description",
-		pattern: "^[a-zA-ZÀ-ÖØ-öø-ÿ\\s']+$",
-		title: "Este campos deve possuir somente letras",
+		pattern: regex,
+		title: regexTitle,
 	},
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -96,7 +99,7 @@ function getFieldset(
 		input.min = new Date().toISOString().split("T")[0];
 	}
 
-	const eventListener = input.type === 'date' ? "blur" : "change";
+	const eventListener = input.type === "date" ? "blur" : "change";
 
 	input.addEventListener(eventListener, () => {
 		if (input.value !== "") {
@@ -105,7 +108,7 @@ function getFieldset(
 				form.dispatchEvent(new CustomEvent("bluroninput"));
 			} else {
 				input.style.outline = "2px solid red";
-				if(input.type !== "date") {
+				if (input.type !== "date") {
 					input.focus();
 				}
 				form.dispatchEvent(new CustomEvent("badinput"));
@@ -225,15 +228,12 @@ async function saveInfoAndMoveOn(eventId, form) {
 			theme: "newEvent-basic-theme",
 			time: "newEvent-basic-time",
 		};
-		const dateFormatted = new Date(
-			form.elements[fields.date].value
-		).toLocaleDateString();
 
 		const eventInfos = {
 			name: form.elements[fields.name].value,
 			theme: form.elements[fields.theme].value,
 			eventDescription: form.elements[fields.description].value,
-			eventDate: dateFormatted,
+			eventDate: form.elements[fields.date].value,
 			eventTime: form.elements[fields.time].value,
 		};
 		const result = await putEvent(eventId, eventInfos);
@@ -287,7 +287,11 @@ export default function newEventBasicPage(
 		},
 	}
 ) {
-	if (!constructorInfo.event || constructorInfo.event.id === "") {
+	if (
+		!constructorInfo.event ||
+		constructorInfo.event.id === "" ||
+		!constructorInfo.event.id
+	) {
 		alert("O evento passado para essa página não é válido!");
 		setTimeout(() => {
 			dispatchOnStateChange("/home", { animation: true });
