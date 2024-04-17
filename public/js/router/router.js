@@ -4,6 +4,7 @@ import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
 import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
+import createEventPageComponent from "../pages/eventPage.js";
 
 const title = "Food Point";
 
@@ -51,6 +52,11 @@ const routes = {
 		html: createGuestPage,
 		title: "Guests | " + title,
 		description: "Planeje sua lista de convidados!"
+	},
+	"/eventPage": {
+		html: createEventPageComponent,
+		title: "Evento | " + title,
+		description: "Informações do evento"
 	}
 };
 
