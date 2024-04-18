@@ -15,14 +15,20 @@ const defaultCardValues = {
 		time: null,
 	},
 	width300: {
-		charLimit: 13,
+		charLimit: 11,
 		title: "Evento vazio",
 		local: "Local vazio",
 		theme: "Tema vazio",
 		date: null,
-		time: null
-	}
-}
+		time: null,
+	},
+	getValue: (isDesktop, targetInfo) => {
+		if (isDesktop) {
+			return defaultCardValues.width780[targetInfo] ?? null;
+		}
+		return defaultCardValues.width300[targetInfo] ?? null;
+	},
+};
 
 /**
  * @param {HTMLAnchorElement} anchor
@@ -53,17 +59,45 @@ function setAnimationForCard(
 	card.style.animationDelay = `${multiplayer * delay}ms`;
 }
 
+function setTextContent(html, text, targetTextValue) {
+	if (html instanceof HTMLElement) {
+		const isDesktopNow = isDesktop();
+		const textLengthLimit =
+			defaultCardValues.getValue(isDesktopNow, "charLimit") ?? 11;
+
+		const textIsValid = text && typeof text === "string" && text.length > 1;
+
+		const targetText = textIsValid
+			? text
+			: defaultCardValues.getValue(isDesktopNow, targetTextValue);
+
+		if (typeof targetText !== "string") {
+			return;
+		}
+		const finalText = stringLimiter(targetText, textLengthLimit);
+		html.textContent = finalText;
+	}
+}
+
+function isDesktop() {
+	const currentWidth =
+		window.innerWidth ||
+		document.documentElement.clientWidth ||
+		document.body.clientWidth;
+	return currentWidth > 780;
+}
+
 function generateMainCard(
 	eventID,
 	eventUrl,
 	billUrl,
 	cardInfo = {},
-	textLengthLimit = 11,
 	cardImg = {
 		src: "https://img.freepik.com/fotos-gratis/massa-fresca-com-farto-queijo-a-bolonhesa-e-parmesao-gerado-por-ia_188544-9469.jpg?t=st=1712773655~exp=1712777255~hmac=0711228877b295d6f4609d4c9d99870f5cb24ab212798119badc04d1adb9381c&w=826",
 		alt: "prato com macarrão. um garfo está levantando uma porção do macarrão",
 	}
 ) {
+	let lastResizeWasDesktop = isDesktop();
 	// my article, the card
 	const article = document.createElement("article");
 	article.classList.add("home__card");
@@ -107,18 +141,15 @@ function generateMainCard(
 	// the items of basicInfo
 	const h3 = document.createElement("h3");
 	const spanLocal = document.createElement("span");
-	const spanMainFood = document.createElement("span");
+	const spanTheme = document.createElement("span");
 
 	h3.classList.add("home__card__info__title");
 	spanLocal.classList.add("home__card__info__local");
-	spanMainFood.classList.add("home__card__info__main-food");
+	spanTheme.classList.add("home__card__info__theme");
 
-	h3.textContent = stringLimiter(cardInfo.title, textLengthLimit);
-	spanLocal.textContent = stringLimiter(cardInfo.local, textLengthLimit);
-	spanMainFood.textContent = stringLimiter(
-		cardInfo.mainFood,
-		textLengthLimit
-	);
+	setTextContent(h3, cardInfo.title, "title");
+	setTextContent(spanLocal, cardInfo.local, "local");
+	setTextContent(spanTheme, cardInfo.theme, "theme");
 
 	// creating and defining the information for
 	// the items of basicDate
@@ -129,8 +160,15 @@ function generateMainCard(
 	spanDate.classList.add("home__card__info__date");
 	spanHours.classList.add("home__card__info__hours");
 
-	spanDate.textContent = cardInfo.date;
-	spanHours.textContent = cardInfo.time;
+	if (typeof cardInfo.date !== "string") {
+		spanDate.style.display = "none";
+	}
+	if (typeof cardInfo.time !== "string") {
+		spanHours.style.display = "none";
+	}
+
+	setTextContent(spanDate, cardInfo.date, "date");
+	setTextContent(spanHours, cardInfo.time, "time");
 
 	if (
 		cardInfo.date &&
@@ -152,7 +190,7 @@ function generateMainCard(
 	// CONNECTING ALL
 	divBasicInfo.appendChild(h3);
 	divBasicInfo.appendChild(spanLocal);
-	divBasicInfo.appendChild(spanMainFood);
+	divBasicInfo.appendChild(spanTheme);
 
 	divDateInfo.appendChild(spanDate);
 	divDateInfo.appendChild(spanHours);
@@ -165,6 +203,19 @@ function generateMainCard(
 
 	article.appendChild(anchorMyEvent);
 	article.appendChild(anchorBillList);
+
+	window.addEventListener("resize", () => {
+		const isDesktopNow = isDesktop();
+		if (isDesktopNow !== lastResizeWasDesktop) {
+			setTextContent(h3, cardInfo.title, "title");
+			setTextContent(spanLocal, cardInfo.local, "local");
+			setTextContent(spanTheme, cardInfo.theme, "theme");
+
+			setTextContent(spanDate, cardInfo.date, "date");
+			setTextContent(spanHours, cardInfo.time, "time");
+			lastResizeWasDesktop = isDesktopNow;
+		}
+	});
 
 	return article;
 }
@@ -252,17 +303,19 @@ export default async function homePage(constructorInfo = { animation: true }) {
 	if (result instanceof Error) {
 		showToast(JSON.stringify(result.message));
 	}
+
 	const cards = events.map((event, index) => {
 		const myCard = generateMainCard(event.event_id, `/event`, `/list`, {
-			title: event.event_name ?? "Evento vazio",
-			local: event.event_location ?? "Indefinido",
-			mainFood: "Indefinido",
-			date: event.event_date ?? "Indefinido",
-			time: event.event_time ?? "Indefinido",
+			title: event.event_name,
+			local: event.event_location,
+			theme: event.theme,
+			date: event.event_date,
+			time: event.event_time,
 		});
 		setAnimationForCard(myCard, index, 100, constructorInfo.animation);
 		return myCard;
 	});
+
 	const createEventCard = generateCreateEventCard("/home/create");
 	setAnimationForCard(
 		createEventCard,
