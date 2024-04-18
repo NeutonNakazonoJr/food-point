@@ -5,6 +5,25 @@ import { getEvents } from "../api/eventApi.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import showToast from "../components/toast.js";
 
+const defaultCardValues = {
+	width780: {
+		charLimit: 20,
+		title: "Evento não definido",
+		local: "Local não definido",
+		theme: "Tema não definido",
+		date: null,
+		time: null,
+	},
+	width300: {
+		charLimit: 13,
+		title: "Evento vazio",
+		local: "Local vazio",
+		theme: "Tema vazio",
+		date: null,
+		time: null
+	}
+}
+
 /**
  * @param {HTMLAnchorElement} anchor
  * @param {string} href
@@ -113,8 +132,15 @@ function generateMainCard(
 	spanDate.textContent = cardInfo.date;
 	spanHours.textContent = cardInfo.time;
 
-	if (/^(\d{2})\/(\d{2})\/(\d{4})$/.test(cardInfo.date)) {
-		const eventDay = new Date(cardInfo.date).getDay();
+	if (
+		cardInfo.date &&
+		typeof cardInfo.date === "string" &&
+		/^(\d{2})\/(\d{2})\/(\d{4})$/.test(cardInfo.date)
+	) {
+		const splicedStr = cardInfo.date.split("/");
+		const correctDate = `${splicedStr[2]}-${splicedStr[1]}-${splicedStr[0]}T00:00:00`;
+		const eventDate = new Date(correctDate);
+		const eventDay = eventDate.getDay();
 		spanDateDay.textContent = `(${stringLimiter(
 			friendlyDayOfWeek(eventDay),
 			3,
@@ -175,6 +201,7 @@ function generateCreateEventCard(
 				time: "",
 			};
 			dispatchOnStateChange("/home/create", {
+				animation: false,
 				stage: {
 					current: 0,
 					last: 0,
