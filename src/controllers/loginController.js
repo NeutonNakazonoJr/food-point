@@ -11,8 +11,8 @@ const loginAuthenticationController = async (req, res) => {
         const cookieOptions = {
             maxAge: 8 * 60 * 60 * 1000, 
             httpOnly: true,
-            sameSite: 'strict',
-            secure: true
+            // sameSite: 'strict',
+            // secure: true
         };
 
         res.cookie('session_token', token, cookieOptions);

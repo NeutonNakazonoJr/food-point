@@ -19,12 +19,24 @@
     flex-direction: row-reverse;
     justify-content: center;
     gap: 1rem;
+    position: relative;
 
     & h1 {
         font-size: 2rem;
         font-weight: 600;
         color: var(--blackberry);
     }
+}
+
+#initial-div-events::after {
+    content: '';
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10rem;
+    height: 1px;
+    background-color: var(--wine-color);
 }
 
 #main-event-container {
@@ -249,39 +261,59 @@
     #main-event-container {
         padding: 1rem;
     }
+}
 
+@media screen and (max-width: 600px) {
+
+    #initial-div-events {
+        margin: 7rem auto 2rem;
+    }
+    
     #main-event-container {
         width: 100%;
         border: none;
         box-shadow: none;
     }
 
+    #main-event-container h1 {
+        font-size: 1.4rem;
+    }
+
     #div-presentation {
         flex-direction: column;
-        flex-direction: column-reverse;
         
         & h1 {
             max-width: 100%;
             font-size: 1.5rem;
         }
     }
-
+    
     #div-calendar {
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+        justify-content: flex-end;
         gap: 0.5rem;
-
+        margin-bottom: 1.5rem;
+    
         & div {
             margin: 0;
         }
-
+    
         & img {
             width: 1.5rem;
         }
-
+    
         & span {
             font-size: 1.1rem;
         }
     }
+
+    .line-pseudo-element::before {
+        left: -6rem
+    }
+    
+    .line-pseudo-element::after {
+        right: -6rem;
+    }
+    
+
 }

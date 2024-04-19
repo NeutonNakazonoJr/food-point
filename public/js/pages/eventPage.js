@@ -3,9 +3,9 @@ import getHeader from "../components/header.js";
 
 const eventInfosMock =  {
     "eventName": "Sabores da Diáspora: Uma Jornada Gastronômica Afro-brasileira",
-    "theme": "Junte-se a nós nesta jornada culinária enquanto exploramos os segredos, os aromas e os sabores da culinária afro-brasileira",
-    "eventDate": "26/04/2024",
-    "eventTime": "20:30",
+    // "theme": "Junte-se a nós nesta jornada culinária enquanto exploramos os segredos, os aromas e os sabores da culinária afro-brasileira",
+    // "eventDate": "26/04/2024",
+    // "eventTime": "20:30",
     "eventLocation": null,
     "eventDescription": " O evento Sabores da Diáspora é uma oportunidade única para os participantes mergulharem na rica diversidade gastronômica dos afro-brasileiros. Desde os pratos tradicionais passados de geração em geração até interpretações modernas, este evento oferece uma imersão completa na cultura e na história por trás da comida que define parte da identidade brasileira. Junte-se a nós nesta jornada culinária enquanto exploramos os segredos, os aromas e os sabores da culinária afro-brasileira",
     "dishes": [
@@ -59,14 +59,14 @@ const createEventMainTitleDiv = () => {
 const createSectionBasicInfos = (basicInfos) => {
 
     const calendarIcon = htmlCreator.createImg('./assets/icons/calendar-red.svg');
-    const eventDate = htmlCreator.createSpan(eventInfosMock.eventDate);
+    const eventDate = htmlCreator.createSpan(eventInfosMock.eventDate || 'Data a definir');
     const divDate = htmlCreator.createDiv('div-date');
     divDate.appendChild(calendarIcon);
     divDate.appendChild(eventDate);
     
 
     const clockIcon = htmlCreator.createImg('./assets/icons/clock.svg');
-    const eventTime = htmlCreator.createSpan(eventInfosMock.eventTime);
+    const eventTime = htmlCreator.createSpan(eventInfosMock.eventTime || 'Horário a definir');
     const divTime = htmlCreator.createDiv('div-time');
     divTime.appendChild(clockIcon);
     divTime.appendChild(eventTime);
@@ -76,14 +76,20 @@ const createSectionBasicInfos = (basicInfos) => {
     divCalendar.appendChild(divDate);
     divCalendar.appendChild(divTime);
     
-    const eventName = htmlCreator.createTitle('h1', eventInfosMock.eventName);
+    const eventName = htmlCreator.createTitle('h1', eventInfosMock.eventName || 'Nome do Evento a definir.');
 
     const divPresentation = htmlCreator.createDiv('div-presentation');
     divPresentation.appendChild(eventName);
     divPresentation.appendChild(divCalendar);
     
 
-    const eventTheme = htmlCreator.createParagraph(`Tema: ${eventInfosMock.theme}`);
+    let eventTheme = document.createElement('p');
+    if (eventInfosMock.theme) {
+        eventTheme.innerText = `Tema: ${eventInfosMock.theme}`;
+    } else {
+        eventTheme.innerText = 'Tema: A definir.';
+    }
+    
     const eventDescription = htmlCreator.createParagraph(eventInfosMock.eventDescription);
     const divTextContent = htmlCreator.createDiv('div-text-content-event');
     divTextContent.appendChild(eventTheme);

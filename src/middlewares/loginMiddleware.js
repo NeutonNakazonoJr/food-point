@@ -21,7 +21,6 @@ const loginValidation = async (req, res, next) => {
 
         next();
     } catch (error) {    
-        console.log(error.message);    
         return res.status(500).json({ error: 'Erro interno no servidor'});
     } 
 }
@@ -29,7 +28,6 @@ const loginValidation = async (req, res, next) => {
 const userAuthorization = async (req, res, next) => {
     try {
         const token = req.cookies.session_token;
-        console.log(token);
         if (!token) {
             return res.status(401).json({ error: 'Token Ausente' });
         }
