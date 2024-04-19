@@ -1,5 +1,6 @@
-const { getUserByEmail } = require('../repositories/userRepository.js');
-const { createToken } = require('../utils/jwt.js');
+const { getUserByEmail } = require("../repositories/userRepository.js");
+const { createToken } = require("../utils/jwt.js");
+const { SECRET_KEY_JWT } = require("../config/config.js");
 
 const loginAuthenticationController = async (req, res) => {
     try {
@@ -17,6 +18,7 @@ const loginAuthenticationController = async (req, res) => {
         return res.status(200).json({ success: true });
 
     } catch (error) {
+        
         return res.status(500).json({ error: 'Erro interno no servidor'});
     }
 }

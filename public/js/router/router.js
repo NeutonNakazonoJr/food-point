@@ -2,6 +2,7 @@ import homePage from "../pages/homePage.js";
 import landingPageComponent from "../pages/landingPage.js";
 import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
+import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
 
 const title = "Food Point";
@@ -42,10 +43,15 @@ const routes = {
 		description: "Cadastre-se no Food Point", 
   },
 	"/home/create": {
-		html: () => newEventBasicPage(),
+		html: newEventBasicPage,
 		title: "Novo evento | " + title,
 		description: "Crie um novo evento gastronômico.",
 	},
+	"/home/create/guest": {
+		html: createGuestPage,
+		title: "Guests | " + title,
+		description: "Planeje sua lista de convidados!"
+	}
 };
 
 /** Check the current path and returns according with it
@@ -61,6 +67,9 @@ function router() {
 		currentPath = "/";
 	}
 
+	// validates if the route exist, if doesn't, returns 404 page.
+	//return routes[currentPath] || routes["404"];
+
 	return routes[currentPath] || routes["404"];
 }
 
@@ -68,9 +77,9 @@ function router() {
  * @param {HTMLElement} root
  * @param {object} constructorInfo
  */
-function renderIntoRoot(root, constructorInfo) {
+async function renderIntoRoot(root, constructorInfo) {
 	const routeObj = router();
-	const HTMLElement = routeObj.html(constructorInfo);
+	const HTMLElement = await routeObj.html(constructorInfo);
 
 	window.document.title = routeObj.title;
 	window.document

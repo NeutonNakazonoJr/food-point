@@ -1,0 +1,299 @@
+body{
+    background-color: var(--white-smoke);
+}
+.guest-page{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+#guest-body{
+    margin-top: 1rem;
+    width: 90%;
+    height: 10rem;
+    text-align: center;
+    color: var(--raspberry);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+#add-guest{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    justify-content: flex-start;
+}
+#guest-label{
+    align-self: start;  
+}
+#input-div{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+#add-input{
+    height: 2.2rem;
+    width: 80%;
+    padding: .5rem;
+    font-size: 15px;
+    border: 2px solid var(--raspberry);
+    border-radius: 8px 0 0 8px;
+    background-color: transparent;
+}
+#add-button{
+    height: 2.2rem;
+    width: 20%;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background-color: var(--raspberry);
+    color: #fff;
+    cursor: pointer;
+    padding: .5%;
+    transition: background-color .3s ease-in-out;
+}
+#add-button:hover {
+    background-color: var(--cherry)
+  }
+#add-input:focus, #add-input:focus-visible {
+    border-color: var(--cherry);
+    outline: none;
+}
+#guest-box{
+    display: none;
+    justify-content: space-around;
+    margin-top: 2rem;
+    width: 100%;
+    height: auto;
+    border: 2px solid var(--raspberry);
+    border-radius: 8px;
+    flex-wrap:wrap;
+}
+#guest-card{
+    position: relative;
+    background-color: var(--blackberry);
+    margin: 1rem;
+    width: 10rem;
+    height:auto;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#guest-img{
+    width: auto;
+    height: 70%;
+}
+#guest-name{
+    margin-bottom: 25%;
+    height: 30%;
+    overflow: hidden;
+    color: white;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+#delete-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--raspberry);
+    color: white;
+    border: none;
+    padding: 0.5rem ;
+    border-radius: 0 8px 0px 8px;
+    cursor: pointer; 
+}
+#end-page{
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+#skip{
+    border: none;
+    border-radius: 8px;
+    background: var(--raspberry);
+    color: white;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    font-weight: bolder;
+    cursor: pointer;
+}
+#later{
+    padding: 0 .5rem 0 0;
+}
+#skip:hover{
+background: var(--cherry);
+}
+#disabled{
+    border: none;
+    border-radius: 8px;
+    background: #8d6161;
+    color: white;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: pointer;
+}
+#finish{
+    border: none;
+    border-radius: 8px;
+    background: var(--raspberry);
+    color: white;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: pointer;
+}
+#finish-icon{
+    padding: 0 .5rem 0 0;
+}
+#finish:hover{
+    background: var(--cherry);
+}
+@media screen and (max-width: 1199px) {  
+    #add-guest{
+        width: 45%;
+    }
+}
+@media screen and (max-width: 991px) {
+    #add-guest{
+        width: 50%;
+    }
+    #add-input{
+        width: 78%;
+    }
+    #add-button{
+        width: 22%;
+    }
+    #guest-card{
+        width: 8.5rem;
+    }
+    #guest-img{
+        height: 65%;
+    }
+    #guest-name{
+        height: 35%;
+    }
+}
+@media screen and (max-width: 766px) {
+    #add-guest{
+        width: 55%;
+    }
+    #add-input{
+        width: 75%;
+    }
+    #add-button{
+        width: 25%;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-name{
+        height: 40%;
+    }
+}
+@media screen and (max-width: 600px) {
+    #guest-body{
+        margin-top: 6rem;
+    }
+    #add-guest{
+        width: 60%;
+    }
+    #add-input{
+        width: 72%;
+    }
+    #add-button{
+        width: 28%;
+    }
+    #guest-img{
+        height: 55%;
+    }
+    #guest-name{
+        height: 45%;
+    }
+}
+@media screen and (max-width: 575px) {
+    #add-guest{
+        width: 65%;
+    }
+    #add-input{
+        width: 72%;
+    }
+    #add-button{
+        width: 28%;
+    }
+    #guest-img{
+        height: 55%;
+    }
+    #guest-name{
+        height: 45%;
+    }
+}
+@media screen and (max-width: 480px) {
+    #add-guest{
+        width: 75%;
+    }
+    #guest-card{
+        margin: .8rem;
+        width: 8rem;
+    }
+    #guest-box{
+        width: 85%;
+    }
+}
+@media screen and (max-width: 425px) {
+    #add-guest{
+        width: 80%;
+    }
+    #guest-card{
+        width: 7.3rem;
+        margin: .5rem;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-name{
+        height: 40%;
+    }
+    #end-page{
+        flex-direction: column;
+        align-items: center;
+    }
+    #finish{
+        margin-top: 2rem;
+    }
+}
+@media screen and (max-width: 350px) {
+    #add-guest{
+        width: 85%;
+    }
+    #add-input{
+        width: 62%;
+    }
+    #add-button{
+        width: 38%;
+    }
+    #guest-card{
+        width: 7rem;
+        padding: .5rem;
+    }
+}

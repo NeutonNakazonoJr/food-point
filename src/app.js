@@ -1,13 +1,12 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cookieParser = require('cookie-parser');
-const app = express();
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const { PORT } = require("./config/config");
 const router = require("./routes/router");
-
-dotenv.config();
+const app = express();
 
 app.use(express.json());
+// TO DO: CORS
 app.use(cookieParser());
 app.use(router);
-
-app.listen(process.env.PORT || 3000);
+app.listen(PORT, () => console.log("server running!"));

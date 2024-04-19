@@ -1,5 +1,6 @@
 import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "../components/header.js";
+import showToast from "../components/toast.js";
 
 const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
@@ -125,21 +126,6 @@ const createLoginForm = () => {
     //     dispatchOnStateChange("/home");
     // })
     loginFormDiv.appendChild(loginButton);
-
-    function showToast(message, duration = 3000) {
-        const toast = document.createElement('div');
-        toast.classList.add('toast');
-        toast.textContent = message;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.add('hide');
-            setTimeout(() => {
-                toast.remove();
-            }, 500);
-        }, duration);
-    }
 
     function validateLoginForm() {
         const email = document.getElementById("email-login").value;

@@ -3,10 +3,12 @@ const router = express();
 
 const userRoutes = require('./userRoutes');
 const loginRoutes = require('./loginRoutes');
-const pageRoutes = require("./pageRoutes");
+const eventRoutes = require('./eventRoutes');
+const pagesRoutes = require('./pagesRoutes');
 
-router.use(loginRoutes);
-router.use(pageRoutes);
-router.use(userRoutes);
+router.use(pagesRoutes);
+router.use("/api", loginRoutes);
+router.use("/api", userRoutes);
+router.use("/api", eventRoutes);
 
 module.exports = router;

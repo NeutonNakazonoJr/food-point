@@ -1,3 +1,5 @@
+import dispatchOnStateChange from "../events/onStateChange.js";
+
 /** @param {HTMLElement} header
  * @param {boolean} animation
  */
@@ -6,6 +8,15 @@ function setAnimationForHeader(header, animation) {
 
 	const headerAnimation = "animationMainHeaderV2";
 	header.style.animationName = headerAnimation;
+}
+
+function redirectToHome(html) {
+	if (html instanceof HTMLElement) {
+		html.style.cursor = "pointer";
+		html.addEventListener("click", () => {
+			dispatchOnStateChange("/home", { animation: true });
+		});
+	}
 }
 
 /** @param {HTMLElement} anchor
@@ -40,11 +51,15 @@ export default function getHeader(
 	h1.textContent = "Food Point";
 	header.appendChild(h1);
 
-	if(userIsLogged) {
+	redirectToHome(h1);
+
+	if (userIsLogged) {
 		const a = document.createElement("a");
 		const img = document.createElement("img");
 		const span = document.createElement("span");
 
+		redirectToHome(h1);
+		
 		a.href = profilePageUrl;
 		img.src = userImg;
 		setANimationForAnchor(a, animation);
