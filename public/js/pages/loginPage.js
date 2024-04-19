@@ -182,8 +182,6 @@ const createLoginForm = () => {
         }
     });
 
-
-
     return bodyLogin;
 };
 

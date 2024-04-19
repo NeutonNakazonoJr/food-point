@@ -1,7 +1,172 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
+:root {
+	--wine-color: #670029;
+	--white-smoke: #f2f7f2;
+	--blackberry: #311432;
+	--blackberry-transparent: #3114328a;
+	--cherry: #a73e5c;
+	--raspberry: #b22222;
+
+	--font-pacifico: "Pacifico", cursive;
+
+	--border-radius-1x: 8px;
+	--border-radius-2x: 16px;
+	--border-radius-3x: 24px;
+}
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+	font-family: "Poppins", sans-serif;
+}
+
+#error-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 5em;
+}
+
+
+#error-container {
+    background-color: var(--white-smoke);
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+#error-message-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+}
+
+#error-message-title h1{ 
+	font-weight: bold;
+}
+
+#error-message-title h3 {
+    font-size: 0.8em;
+    font-weight: 700;
+}
+
+#error-message-title p {
+    font-size: 0.9em;
+    font-weight: 700;
+}
+
+#error-btn {
+    background-color: var(--raspberry);
+    color: var(--white-smoke);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 200px;
+    padding: 0.8em;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 2em;
+}
+
+#error-btn:hover {
+	background-color: var(--blackberry);
+}
+
+#error-btn img {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5em;
+}
+
+#home-button-error-page {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5%;
+}
+
+
+@media screen and (max-width: 760px) {
+	#image-of-error{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	#image-of-error img{
+		width: 40em;
+	}
+
+}
+
+@media screen and (max-height: 760px) {
+	#image-of-error{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	#image-of-error img{
+		width: 40em;
+	}
+
+}
+
+
+@media screen and (max-width: 645px) {
+	#image-of-error img{
+		width: 30em;
+	}
+
+}
+
+@media screen and (max-width: 485px) {
+	#error-message-title {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 80vw;
+	}
+	
+	#error-message-title h1{ 
+		font-weight: bold;
+	}
+	
+    #error-message-title h3 {
+        font-size: 0.7em;
+    }
+	
+    #error-message-title p {
+        font-size: 0.7em;
+    }
+	
+	#error-page {
+		padding-top: 0%;
+	}
+
+	#image-of-error img{
+		width: 90%;
+	}
+
+	#error-container{
+		position: relative;
+	}
+
+	#home-button-error-page{
+		position: absolute;
+		left: -3%;
+		bottom: 8%;
+	}
 }
