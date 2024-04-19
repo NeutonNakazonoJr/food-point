@@ -6,12 +6,11 @@
 }
 #left-side{
     width: 15%;
-    height:94.2vh;
     border-right: 2px solid rgb(171, 171, 171);
     background-color: #e2e6e2;
 }
 #button-area{
-    height: 25%;
+    height: 40%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,7 +31,7 @@
     cursor: pointer;
     position: relative;
     border-radius: 8px;
-    box-shadow: 3px 3px 3px var(--raspberry);
+    box-shadow: 3px 3px 3px var(--wine-color);
     transition-duration: .3s;
     margin: 1rem;
 }
@@ -42,7 +41,7 @@
     left: 0;
     margin-left: .3rem;
     fill: white;
-    transition-duration: 0.3s;
+    transition-duration: .3s;
 }
 #back:hover{
     color: transparent;
@@ -52,18 +51,49 @@
     margin: 0;
     padding: 0;
     border: none;
-    transition-duration: 0.3s;
+    transition-duration: .3s;
 }
 .profile-icon{
     width: 2rem;
     height: auto;
     padding-right: .5rem;
 }
+#menu-area{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    margin-top: 3rem;
+}
+.link{
+    width: 70%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    cursor: pointer;
+    transition-duration: .3s;
+    margin-bottom: 2rem;
+}
+.link:hover{
+    background-color: var(--raspberry);
+    border-radius: 8px;
+    color: white;
+    padding-right: 1rem;
+    transition-duration: .3s;
+    box-shadow: 3px 3px 3px var(--wine-color);
+}
 #right-side{
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 94vh;
 }
 #background{
     width: 100%;
@@ -87,7 +117,6 @@
     height: 15rem;
     background-color: var(--blackberry);
     border-radius: 100%;
-    /*the profile picture should come in this area*/
     background-size: cover;
     background-position: center;
 }
@@ -95,6 +124,9 @@
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
+}
+#image-input{
+    display: none;
 }
 #anchor{
     display: flex;
@@ -104,12 +136,18 @@
     font-weight: bold;
 }
 #form{
-    width: 55%;
+    width: 45%;
     display: flex;
     flex-direction: column;
     margin-top: 6rem;
     color: var(--wine-color);
     font-weight: bolder;
+}
+.div-form{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+    align-items: center;
 }
 .form-icon{
     width: 1rem;
@@ -125,13 +163,7 @@
     border-radius: 20px;
     padding: 0.2rem;
     margin: 0 1rem 0 1rem;
-    width: 27rem;   
-}
-.div-form{
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
-    align-items: center;
+    width: 70%;   
 }
 #endpage{
     margin-top: 8rem;
