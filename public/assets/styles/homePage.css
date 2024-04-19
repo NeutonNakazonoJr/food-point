@@ -114,7 +114,7 @@
 }
 
 #homeMain > .home__card .home__card__info__local,
-#homeMain > .home__card .home__card__info__main-food,
+#homeMain > .home__card .home__card__info__theme,
 #homeMain > .home__card .home__card__info__date,
 #homeMain > .home__card .home__card__info__hours {
 	display: flex;
@@ -131,8 +131,8 @@
 	}
 }
 
-#homeMain > .home__card .home__card__info__main-food::before {
-	background-image: url("../icons/restaurant-sharp.svg");
+#homeMain > .home__card .home__card__info__theme::before {
+	background-image: url("../icons/palet-collor-icon.svg");
 }
 
 #homeMain > .home__card .home__card__info__date::before {
@@ -296,7 +296,7 @@
 		}
 	}
 	#homeMain > #homeBtnNewEvent {
-		width: 80px;
+		width: 80%;
 	}
 }
 

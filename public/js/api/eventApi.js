@@ -2,9 +2,22 @@
  * specific user
  *
  */
-export function getEvents(userID) {
-	// this is just a test information for developers
-	return [];
+export async function getEvents() {
+	try {
+		const url = "/api/event";
+		const res = await fetch(url);
+		const result = await res.json();
+
+		if (res.status !== 200 || result.error) {
+			throw new Error(
+				result.error || "Erro ao buscar os eventos para o usuário."
+			);
+		}
+
+		return result;
+	} catch (error) {
+		return error;
+	}
 }
 
 export async function putEvent(eventId, eventInfo) {
