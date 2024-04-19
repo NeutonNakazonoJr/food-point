@@ -143,7 +143,7 @@ const createLoginForm = () => {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
 
-        fetch('/api/login', {
+        fetch('https://149.28.40.46/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

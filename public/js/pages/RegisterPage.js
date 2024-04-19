@@ -106,17 +106,17 @@ const createRegisterForm = () => {
 
     function createPasswordToggleBtn(passwordField) {
         const toggleBtn = document.createElement('button');
-        toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Mostrar Senha">';
+        toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Mostrar Senha">';
         toggleBtn.type = 'button';
         toggleBtn.classList.add('toggle-password-btn');
 
         toggleBtn.addEventListener('click', function () {
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Ocultar Senha">';
+                toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Ocultar Senha">';
             } else {
                 passwordField.type = 'password';
-                toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Mostrar Senha">';
+                toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Mostrar Senha">';
             }
         });
 
@@ -284,7 +284,7 @@ const createRegisterForm = () => {
         const email = document.getElementById('email-register').value;
         const password = document.getElementById('password-register').value;
 
-        fetch('/api/user', {
+        fetch('https://149.28.40.46/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
