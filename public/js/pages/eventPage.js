@@ -1,5 +1,5 @@
 import getHeader from "../components/header.js";
-
+import { getEventById } from '../api/eventApi.js';
 
 const eventInfosMock =  {
     "eventName": "Sabores da Diáspora: Uma Jornada Gastronômica Afro-brasileira",
@@ -211,15 +211,18 @@ const createButtonSection = () => {
     const buttonSection = htmlCreator.createSection('btn-section');
     buttonSection.appendChild(guestButton);
     buttonSection.appendChild(homeButton);
-
+    // dispatchOnStateChange(href, {});
     return buttonSection;
 }
 
 
+const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
 
-
-const createEventPageComponent = () => {
+    const eventInfos = await getEventById(constructorInfo.eventID);
+    
     const header = getHeader(false, true);
+    // set evento_id localstorage;
+
     const initialDiv = createEventMainTitleDiv();
     const basicInfosSection = createSectionBasicInfos();
     const menuSection = createMenuSection();
