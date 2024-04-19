@@ -8,9 +8,9 @@ const createLoginForm = () => {
     const headerLogin = getHeader(true, false);
     bodyLogin.appendChild(headerLogin);
 
-    const blackOverlay = document.createElement('div');
-    blackOverlay.id = 'black-overlay';
-    bodyLogin.appendChild(blackOverlay);
+    const blackOverlayLogin = document.createElement('div');
+    blackOverlayLogin.classList.add('black-overlay');
+    bodyLogin.appendChild(blackOverlayLogin);
 
     const loginScreen = document.createElement('section');
     loginScreen.id = 'login-screen';
@@ -57,18 +57,43 @@ const createLoginForm = () => {
     dataLoginDiv.appendChild(emailLabel);
     dataLoginDiv.appendChild(emailInput);
 
+    const passwordLoginDiv = document.createElement('div');
+    passwordLoginDiv.id = 'password-login-div';
     const passwordImg = document.createElement('img');
     passwordImg.src = './assets/icons/password-symbol.svg';
     const passwordLabel = document.createElement('label');
     passwordLabel.textContent = 'Senha:';
     const passwordInput = document.createElement('input');
-    passwordInput.id = "password-login"
+    passwordInput.id = "password-login";
     passwordInput.type = 'password';
     passwordInput.placeholder = 'Digite sua senha';
     passwordInput.alt = 'Digite sua senha';
-    dataLoginDiv.appendChild(passwordImg);
-    dataLoginDiv.appendChild(passwordLabel);
-    dataLoginDiv.appendChild(passwordInput);
+    passwordLoginDiv.appendChild(passwordImg);
+    passwordLoginDiv.appendChild(passwordLabel);
+    passwordLoginDiv.appendChild(passwordInput);
+    dataLoginDiv.appendChild(passwordLoginDiv);
+
+    function createPasswordToggleBtn(passwordField) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Mostrar Senha">';
+        toggleBtn.type = 'button';
+        toggleBtn.classList.add('toggle-password-btn');
+
+        toggleBtn.addEventListener('click', function () {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Ocultar Senha">';
+            } else {
+                passwordField.type = 'password';
+                toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Mostrar Senha">';
+            }
+        });
+
+        return toggleBtn;
+    }
+
+    const toggleBtn = createPasswordToggleBtn(passwordInput);
+    passwordLoginDiv.appendChild(toggleBtn);
 
     const rememberPasswordDiv = document.createElement('div');
     rememberPasswordDiv.id = 'remember-password';
@@ -132,7 +157,7 @@ const createLoginForm = () => {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
 
-        fetch('https://149.28.40.46/login', {
+        fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

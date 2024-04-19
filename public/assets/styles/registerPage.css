@@ -10,20 +10,10 @@
 .body-register {
 	background-image: url("../images/wallpaper-login.jpeg");
 	background-size: cover;
-	background-repeat: no-repeat;
 	background-attachment: fixed;
+	background-repeat: no-repeat;
 	width: 100%;
 	height: 100%;
-}
-
-#black-overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 1;
 }
 
 #register-screen {
@@ -38,6 +28,7 @@
 	border: none;
 	position: relative;
 	z-index: 2;
+	overflow: auto;
 }
 
 #register-modal {
@@ -75,8 +66,11 @@
 
 #data-register input {
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	flex-direction: column;
 	width: 25em;
+	line-height: 1.5em;
 	padding: 0.5em;
 	margin-bottom: 1em;
 	outline: none;
@@ -88,13 +82,10 @@
 #acceptTerms {
 	display: flex;
 	align-items: center;
-	font-size: 0.9em;
 }
 
-#acceptTerms label {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#accept-all-terms-span {
+	color: var(--raspberry);
 	cursor: pointer;
 }
 
@@ -135,6 +126,24 @@
 	justify-content: center;
 }
 
+
+#password-div {
+	position: relative;
+}
+
+#confirm-password-div {
+	position: relative;
+}
+
+.toggle-password-btn {
+	background-color: transparent;
+	font-size: 1em;
+	cursor: pointer;
+	border-style: none;
+	position: absolute;
+	top: 55%;
+	right: 5%;
+}
 
 #registerPage-btn {
 	width: 10rem;
@@ -237,49 +246,72 @@
 
 
 @media screen and (max-width: 425px) {
-	#register-modal {
-		padding: 0;
-	}
-
 	#register-form {
 		width: 100vw;
 		height: 100vh;
 		border-radius: 0;
 	}
 
+	.toggle-password-btn {
+		right: 5%;
+	}
+}
+
+@media screen and (max-width: 330px) {
+	#register-complete {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
 	#data-register input {
-		width: 20em;
+		max-width: 20em;
+	}
+
+	#accept-all-terms label {
+		max-width: 15em;
+	}
+}
+
+@media screen and (max-height: 750px) {
+
+	.toggle-password-btn {
+		right: 5%;
 	}
 }
 
 @media screen and (max-height: 650px) {
-	#register-form>#img-logo img {
-		display: none;
+	#register-form {
+		padding-top: 10em;
 	}
+
 }
 
-@media screen and (max-height: 720px) {
-	.body-register {
-		width: 100%;
-		height: 100%;
+@media screen and (max-height: 560px) {
+	#register-form {
+		padding-top: 15em;
 	}
 
-	#register-complete{
-		height: 13em;
-		overflow: auto;
+}
+
+@media screen and (max-height: 490px) {
+	#register-form {
+		padding-top: 20em;
 	}
 
-	#register-modal {
-		height: 100vh;
+}
+
+@media screen and (max-height: 420px) {
+	#register-form {
+		padding-top: 25em;
 	}
 
-	#register-form>#img-logo img {
-		width: 12em;
-		height: 12em;
+}
+
+@media screen and (max-height: 350px) {
+	#register-form {
+		padding-top: 30em;
 	}
 
-	#register-form h1 {
-		font-size: 1.5rem;
-		margin: 1em 0 1em 0;
-	}
 }
