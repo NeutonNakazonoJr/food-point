@@ -12,7 +12,7 @@ const guestController = {
 			const guests = await selectAllGuest(eventId);
 			return res.status(200).json(guests);
 		} catch (error) {
-			res.status(500).json({ reason: "erro interno no servidor", error });
+			return res.status(500).json({ reason: "erro interno no servidor", error });
 		}
 	},
 	createGuest: async (req, res) => {
@@ -22,7 +22,7 @@ const guestController = {
 			const newGuest = await insertNewGuest(eventId, guestName);
 			return res.status(201).json(newGuest);
 		} catch (error) {
-			res.status(500).json({ reason: "erro interno no servidor", error });
+			return res.status(500).json({ reason: "erro interno no servidor", error });
 		}
 	},
 	updateGuest: async (req, res) => {
@@ -32,7 +32,7 @@ const guestController = {
 			const updatedGuest = await updateOneGuest(guestId, guestInfo);
 			return res.status(200).json(updatedGuest);
 		} catch (error) {
-			res.status(500).json({
+			return res.status(500).json({
 				reason: "erro interno no servidor",
 				error: error.message,
 			});
@@ -44,7 +44,7 @@ const guestController = {
 			const result = await deleteGuest(guestId);
 			return res.status(200).json({ success: true, result });
 		} catch (error) {
-			res.status(500).json({ reason: "erro interno no servidor", error });
+			return res.status(500).json({ reason: "erro interno no servidor", error });
 		}
 	},
 };

@@ -5,6 +5,9 @@ const eventRepository = require("../repositories/eventRepository");
 
 const guestMiddleware = {
 	validateGuestId: async (req, res, next) => {
+		if(["GET", "POST"].includes(req.method)) {
+			return next();
+		}
 		try {
 			const guestId = req.params.guestId;
 
@@ -49,7 +52,7 @@ const guestMiddleware = {
 		if (["GET", "POST"].includes(req.method)) {
 			eventMiddleware.validateEventId(req, res, next);
 		} else {
-			next();
+			return next();
 		}
 	},
 };

@@ -13,7 +13,7 @@ guestRouter.use("/guest/:guestId", guestMiddleware.validateGuestId);
 guestRouter.delete("/guest/:guestId", guestController.deleteOneGuest);
 
 guestRouter.use("/guest/", validateRequestBody(guestSchema))
-guestRouter.put("/guest/:guestId", guestController.updateGuest);
 guestRouter.post("/guest/:id", guestController.createGuest);
+guestRouter.put("/guest/:guestId", guestController.updateGuest);
 
 module.exports = guestRouter;

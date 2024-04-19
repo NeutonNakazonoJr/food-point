@@ -18,21 +18,13 @@ const guestRepository = {
 		return rows;
 	},
 	updateOneGuest: async (guestId, guestInfo) => {
-		const values = [];
-		let set = "";
+		const values = [guestInfo.name];
+		let set = '"name" = $1';
 		let paramCounter = 2;
 
-		if (guestInfo.name) {
-			set = '"name" = $1';
-			values.push(guestInfo.name);
-		}
 		if (guestInfo.confirmed || guestInfo.confirmed === false) {
-			if (set === "") {
-				set = "confirmed = $1";
-			} else {
-				set = set + ", confirmed = $2";
-				paramCounter++;
-			}
+			set = set + ", confirmed = $2";
+			paramCounter++;
 			values.push(guestInfo.confirmed);
 		}
 		values.push(guestId);
