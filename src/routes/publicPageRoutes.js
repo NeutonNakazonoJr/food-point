@@ -9,5 +9,6 @@ const goToIndexHTML = (req, res) => {
 publicPagesRouter.get("/", goToIndexHTML);
 publicPagesRouter.get("/login", goToIndexHTML);
 publicPagesRouter.get("/register", goToIndexHTML);
+publicPagesRouter.get("/event", goToIndexHTML);
 
 module.exports = publicPagesRouter;

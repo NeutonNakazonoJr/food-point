@@ -15,7 +15,7 @@ userRoutes.post('/user',
     userController.createNewUser
 );
 
-//userRoutes.use(userAuthorization);
+userRoutes.use(userAuthorization);
 userRoutes.use(userMiddleware.validateUserId);
 
 userRoutes.get('/user', userController.getUsersInfosById);

@@ -53,7 +53,7 @@ const routes = {
 		title: "Guests | " + title,
 		description: "Planeje sua lista de convidados!"
 	},
-	"/eventPage": {
+	"/event": {
 		html: createEventPageComponent,
 		title: "Evento | " + title,
 		description: "Informações do evento"

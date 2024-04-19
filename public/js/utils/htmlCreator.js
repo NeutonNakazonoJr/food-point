@@ -4,11 +4,13 @@ const htmlCreator = {
     createDiv: (divId) => {
         const div = document.createElement('div');
     
-        if (divId.includes('.')) {
-            div.classList.add(divId.substring(1));
-            return div;
+        if (divId) {
+            if (divId.includes('.')) {
+                div.classList.add(divId.substring(1));
+                return div;
+            }    
         }
-    
+        
         div.id = divId;
         return div;
     },
@@ -22,7 +24,11 @@ const htmlCreator = {
     createTitle: (titleType, innerText, titleId) => {
         const title = document.createElement(titleType);
         title.innerText = innerText;
-        titleId ? title.id = titleId : null;
+
+        if (titleId) {
+            titleId.includes('.') ? title.classList.add(titleId) : title.id = titleId;
+        }
+        
         return title;
     },
 
@@ -120,7 +126,7 @@ const htmlCreator = {
         btn.innerText = innerTextButton;
 
         buttonId ? btn.id = buttonId : null;
-        buttonClass ? btn.classList.add(buttonClass) : null;
+        buttonClass ? btn.classList = buttonClass : null;
 
         if (eventType) {
             btn.addEventListener(eventType, eventFunction)
