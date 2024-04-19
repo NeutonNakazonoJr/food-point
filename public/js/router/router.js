@@ -74,8 +74,8 @@ function router() {
 	}
 
 	// validates if the route exist, if doesn't, returns 404 page.
-	//return routes[currentPath] || routes["404"];
-	return routes["/menu"]
+	return routes[currentPath] || routes["404"];
+	// return routes["/home/create/menu"];
 }
 
 /** overrides root innerHTML with html from router
