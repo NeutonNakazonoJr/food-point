@@ -1,14 +1,14 @@
-#profile-body{
+#profile{
     margin-top: 3.5rem;
     width: 100%;
     display: flex;
     background-color: var(--white-smoke);
 }
 #left-side{
-    border: 2px solid black;
     width: 15%;
-    height: 100vh;
-    background-color: #F7F2F4;
+    height:94.2vh;
+    border-right: 2px solid rgb(171, 171, 171);
+    background-color: #e2e6e2;
 }
 #button-area{
     height: 25%;
@@ -21,12 +21,38 @@
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
+    justify-content: flex-start;
     width: 6rem;
+    height: 2rem;
+    border: 2px solid var(--raspberry);
     padding: .5rem;
-    font-weight: bolder;
-    border: 4px solid var(--raspberry);
-    border-left: none;
+    background-color: transparent;
     color: var(--raspberry);
+    font-weight: bolder;
+    cursor: pointer;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 3px 3px 3px var(--raspberry);
+    transition-duration: .3s;
+    margin: 1rem;
+}
+#back-icon{
+    width: 2rem;
+    position: absolute;
+    left: 0;
+    margin-left: .3rem;
+    fill: white;
+    transition-duration: 0.3s;
+}
+#back:hover{
+    color: transparent;
+}
+#back:hover img {
+    left: 40%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    transition-duration: 0.3s;
 }
 .profile-icon{
     width: 2rem;
@@ -37,6 +63,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 #background{
     width: 100%;
@@ -49,7 +76,7 @@
 #header-profile{
     display: flex;
     flex-direction: row;
-    height: 10%;
+    height: 13%;
     flex-wrap: wrap;
     align-content: flex-end;
     justify-content: center;
@@ -67,6 +94,7 @@
 #name-area{
     display: flex;
     flex-direction: column;
+    margin-top: 1rem;
 }
 #anchor{
     display: flex;
@@ -74,4 +102,64 @@
     margin: 1rem 0 1rem 0;
     color: var(--raspberry);
     font-weight: bold;
+}
+#form{
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 6rem;
+    color: var(--wine-color);
+    font-weight: bolder;
+}
+.form-icon{
+    width: 1rem;
+    height: auto;
+}
+.label{
+    margin-left: .5rem;
+    font-size: larger;
+}
+.profile-input{
+    border: 2px solid var(--wine-color);
+    background-color: var(--white-smoke);
+    border-radius: 20px;
+    padding: 0.2rem;
+    margin: 0 1rem 0 1rem;
+    width: 27rem;   
+}
+.div-form{
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+#endpage{
+    margin-top: 8rem;
+    width: 80%;
+    display: flex;
+    justify-content: flex-end;
+}
+#save{
+    display: flex;
+    flex-direction: row-reverse;
+    color: white;
+    background-color: var(--raspberry);
+    border: none;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: pointer;
+    justify-content: center;
+    font-weight: bolder;
+    font-size: large;
+    align-items: center;
+}
+#save:hover{
+    background-color: var(--cherry)
+}
+#save-icon{
+    padding-right: .5rem;
+    width: 2rem;
+    height: auto;
 }
