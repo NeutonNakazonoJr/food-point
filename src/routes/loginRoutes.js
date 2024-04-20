@@ -11,6 +11,4 @@ loginRoutes.post('/login',
     loginAuthenticationController
 );
 
-
-
 module.exports = loginRoutes;
