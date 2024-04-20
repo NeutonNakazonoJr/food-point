@@ -27,13 +27,18 @@
 		background-color: var(--white-smoke);
 		border: none;
 		border-bottom: 2px solid var(--raspberry);
-		&:hover {
-			background-color: var(--blackberry);
-			color: var(--white-smoke);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			background-color: var(--salmon);
+			outline: none;
+			color: var(--blackberry);
 			&::before {
-				filter: brightness(0) saturate(100%) invert(100%) sepia(4%)
-					saturate(3296%) hue-rotate(47deg) brightness(99%)
-					contrast(91%);
+				filter: brightness(0) saturate(100%) invert(10%) sepia(7%)
+					saturate(7141%) hue-rotate(256deg) brightness(100%)
+					contrast(97%);
 			}
 		}
 		&::before {
@@ -68,8 +73,18 @@
 		background-color: var(--raspberry);
 		cursor: auto;
 		color: var(--white-smoke);
-		&:hover {
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
 			background-color: var(--raspberry);
+			color: var(--white-smoke);
+			&::before {
+				filter: brightness(0) saturate(100%) invert(100%) sepia(4%)
+					saturate(3296%) hue-rotate(47deg) brightness(99%)
+					contrast(91%);
+			}
 		}
 		&::before {
 			filter: brightness(0) saturate(100%) invert(100%) sepia(4%)
@@ -123,7 +138,11 @@
 			cursor: pointer;
 			border-radius: var(--border-radius-1x);
 			transition: all 500ms;
-			&:hover {
+			&:hover,
+			&:focus,
+			&:focus-visible,
+			&:focus-within,
+			&:active {
 				filter: brightness(0.8);
 			}
 		}
@@ -190,8 +209,12 @@
 		background: url("../icons/trash.svg") no-repeat center;
 		background-size: 50%;
 		background-color: var(--raspberry);
-		&:hover {
-			filter: brightness(.8);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
 		}
 	}
 }
@@ -204,7 +227,11 @@
 	padding: 5px 0;
 	color: var(--raspberry);
 	transition: all 500ms;
-	&:hover {
+	&:hover,
+	&:focus,
+	&:focus-visible,
+	&:focus-within,
+	&:active {
 		color: var(--white-smoke);
 		background-color: var(--raspberry);
 	}
@@ -235,7 +262,7 @@
 		width: 80%;
 		display: flex;
 		align-items: center;
-		padding-left: .5rem;
+		padding-left: 0.5rem;
 		color: var(--white-smoke);
 		&::before {
 			content: "";
@@ -256,8 +283,12 @@
 		background: url("../icons/pen.svg") no-repeat center;
 		background-size: 50%;
 		background-color: var(--white-smoke);
-		&:hover {
-			filter: brightness(.8);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
 		}
 	}
 	& > button:last-of-type {
@@ -285,7 +316,7 @@
 		font-weight: 700;
 		color: var(--white-smoke);
 		text-decoration: none;
-		padding: .5rem 3rem;
+		padding: 0.5rem 3rem;
 		border-radius: var(--border-radius-1x);
 		&::after {
 			content: "";
@@ -296,8 +327,12 @@
 			margin-left: 5px;
 			display: inline-block;
 		}
-		&:hover {
-			filter: brightness(.8);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
 		}
 	}
 }

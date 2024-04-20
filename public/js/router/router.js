@@ -4,8 +4,8 @@ import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
 import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
-import createMenu from "../pages/menuPage.js";
 import createEventPageComponent from "../pages/eventPage.js";
+import menuPage from "../pages/menu/menuPage.js";
 
 const title = "Food Point";
 
@@ -50,7 +50,7 @@ const routes = {
 		description: "Crie um novo evento gastronômico.",
 	},
 	"/home/create/menu": {
-		html: createMenu,
+		html: menuPage,
 		title: "Novo evento | " + title,
 		description: "Crie o seu cardápio.",
 	},
@@ -80,8 +80,8 @@ function router() {
 	}
 
 	// validates if the route exist, if doesn't, returns 404 page.
-	return routes[currentPath] || routes["404"];
-	// return routes["/home/create/menu"];
+	// return routes[currentPath] || routes["404"];
+	return routes["/home/create/menu"];
 }
 
 /** overrides root innerHTML with html from router
