@@ -42,7 +42,7 @@ export async function putEvent(eventId, eventInfo) {
 
 export async function getEventById(eventId) {
 	try {
-		const url = `api/event/${eventId}`
+		const url = `/api/event/${eventId}`
 		const res = await fetch(url);
 		if (!res.ok) {			
 			const error = await res.json();

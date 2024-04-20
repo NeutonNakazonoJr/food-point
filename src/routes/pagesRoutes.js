@@ -15,5 +15,7 @@ pagesRoutes.get("/home", goToIndexHTML);
 pagesRoutes.get("/home/create", goToIndexHTML);
 pagesRoutes.get("/home/create/guest", goToIndexHTML);
 
+pagesRoutes.get("/event", goToIndexHTML);
+
 
 module.exports = pagesRoutes;
