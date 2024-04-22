@@ -1,4 +1,5 @@
 import getHeader from "../components/header.js";
+import dispatchOnStateChange from "../events/onStateChange.js";
 
 const createProfile = () => {
     const page = document.createElement("div");
@@ -283,6 +284,9 @@ const createProfile = () => {
 
     //logic of the page
 
+    back.addEventListener("click", () => {
+        dispatchOnStateChange("/home")
+    })
     //change tabs
     editProfileMenu.addEventListener("click", () => {
         if(rightSide.contains(helpTab)){
