@@ -43,7 +43,6 @@ const eventController = {
     getAllEventInfos: async (req, res) => {
         try {
             const eventInfos = await eventRepository.findCompleteEventInfos(req.params.id);
-            console.log(eventInfos);
             return res.status(200).json({ eventInfos })
         } catch (error) {
             

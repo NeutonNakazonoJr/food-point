@@ -9,9 +9,10 @@ const htmlCreator = {
                 div.classList.add(divId.substring(1));
                 return div;
             }    
+
+            div.id = divId;
         }
-        
-        div.id = divId;
+      
         return div;
     },
 
@@ -50,35 +51,37 @@ const htmlCreator = {
     },
 
 
-    createInput: (type, id, placeholder, className) => {
+    createInput: (type, id, placeholder, className, value, pattern) => {
         const input = document.createElement('input');
     
         type ? input.type = type : null;
         id ? input.id = id : null;
         placeholder ? input.placeholder = placeholder : null;
         className ? input.classList.add = className : null;
+        value ? input.value = value : null;
+        pattern ? input.pattern = pattern : null;
     
         return input;
     },
 
-    createForm: (formTitle = "", formInputs = [{ type: '', id: '', placeholder: '', className: '', labelName: '' }], submitBtnName = '') => {
+    createForm: (formTitle = "", formInputs = [{ type: '', id: '', placeholder: '', className: '', labelText: '', pattern: '' }], submitBtnName = '') => {
         const form = document.createElement('form');
     
         if (formTitle) {
-            formTitle = createTitle('h2', formTitle);
+            formTitle = htmlCreator.createTitle('h2', formTitle);
             form.appendChild(formTitle);
         }
     
         formInputs.forEach(input => {
-            const { type, id, placeholder, className, labelName } = input;
-            const newInput = createInput(type, id, placeholder, className);
+            const { type, id, placeholder, className, value, pattern } = input;
+            const newInput = htmlCreator.createInput(type, id, placeholder, className, value, pattern);
     
-            if (labelName) {
+            if (input.labelText) {
     
-                const divInput = createDiv('.div-input-form');
+                const divInput = htmlCreator.createDiv('.div-input-form');
     
                 const label = document.createElement('label');
-                label.innerText = labelName;
+                label.innerText = input.labelText;
                 label.setAttribute('for', id);
                 divInput.appendChild(label)
                 divInput.appendChild(newInput);
@@ -89,7 +92,7 @@ const htmlCreator = {
         })
     
         if (submitBtnName) {
-            submitBtnName = createButton(submitBtnName, 'submit-btn');
+            submitBtnName = htmlCreator.createButton(submitBtnName, 'submit-btn');
             form.appendChild(submitBtnName)
         }
     
@@ -121,17 +124,13 @@ const htmlCreator = {
         return list;
     },
 
-    createButton: (innerTextButton, buttonId, buttonClass, eventType, eventFunction) => {
+    createButton: (innerTextButton, buttonId, buttonClass) => {
         const btn = document.createElement('button');
         btn.innerText = innerTextButton;
 
         buttonId ? btn.id = buttonId : null;
         buttonClass ? btn.classList = buttonClass : null;
-
-        if (eventType) {
-            btn.addEventListener(eventType, eventFunction)
-        }
-
+        
         return btn;
     },
 
