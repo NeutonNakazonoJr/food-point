@@ -19,7 +19,7 @@ const createProfile = () => {
     back.textContent = "Voltar";
     const backIcon = document.createElement("img");
     backIcon.id = "back-icon"
-    backIcon.src = "./assets/icons/flag-back.svg";
+    backIcon.src = "/assets/icons/flag-back.svg";
     backIcon.alt = "icone de flecha para voltar"
     leftSide.appendChild(buttonArea);
     buttonArea.appendChild(back);
@@ -90,7 +90,7 @@ const createProfile = () => {
     anchor.textContent = "Editar foto de perfil"
     const aIcon = document.createElement("img");
     aIcon.className = "profile-icon"
-    aIcon.src = "./assets/icons/pencil.svg";
+    aIcon.src = "/assets/icons/pencil.svg";
     aIcon.alt = "Icone de um lápis;"
     textarea.appendChild(name);
     textarea.appendChild(anchor);
@@ -108,7 +108,7 @@ const createProfile = () => {
     nameForm.className = "div-form"
     const personIcon = document.createElement("img");
     personIcon.className = "form-icon"
-    personIcon.src = "./assets/icons/userLogin.svg";
+    personIcon.src = "/assets/icons/userLogin.svg";
     personIcon.alt = "Icone de pessoa";
     const nameLabel = document.createElement("label");
     nameLabel.className = "label"
@@ -128,7 +128,7 @@ const createProfile = () => {
     emailForm.className = "div-form"
     const emailIcon = document.createElement("img");
     emailIcon.className = "form-icon";
-    emailIcon.src = "./assets/icons/email-symbol.svg";
+    emailIcon.src = "/assets/icons/email-symbol.svg";
     emailIcon.alt = "Icone de carta";
     const emailLabel = document.createElement("label");
     emailLabel.className = "label";
@@ -153,7 +153,7 @@ const createProfile = () => {
     save.textContent = "Salvar Informações"
     const saveIcon = document.createElement("img");
     saveIcon.className = "save-icon"
-    saveIcon.src = "./assets/icons/save.svg"
+    saveIcon.src = "/assets/icons/save.svg"
     saveIcon.alt = "Icone de disquete"
     save.appendChild(saveIcon);
     endpage.appendChild(save)
@@ -171,7 +171,7 @@ const createProfile = () => {
     securityHeader.id = "security-header";
     const securityIcon = document.createElement("img");
     securityIcon.className = "tab-icon";
-    securityIcon.src = "./assets/icons/password-symbol.svg"
+    securityIcon.src = "/assets/icons/password-symbol.svg"
     securityIcon.alt = "Icone de Cadeado"
     const securityTitle = document.createElement("h2");
     securityTitle.textContent = "Edite sua senha";
@@ -187,7 +187,7 @@ const createProfile = () => {
     passwordForm.className = "div-form"
     const passwordIcon = document.createElement("img");
     passwordIcon.className = "form-icon";
-    passwordIcon.src = "./assets/icons/password-symbol.svg";
+    passwordIcon.src = "/assets/icons/password-symbol.svg";
     passwordIcon.alt = "Icone de cadeado";
     const passwordLabel = document.createElement("label");
     passwordLabel.className = "label";
@@ -207,7 +207,7 @@ const createProfile = () => {
     confirmForm.className = "div-form"
     const confirmIcon = document.createElement("img");
     confirmIcon.className = "form-icon";
-    confirmIcon.src = "./assets/icons/password-symbol.svg";
+    confirmIcon.src = "/assets/icons/password-symbol.svg";
     confirmIcon.alt = "Icone de cadeado";
     const confirmLabel = document.createElement("label");
     confirmLabel.className = "label";
@@ -232,7 +232,7 @@ const createProfile = () => {
     savePassword.textContent = "Salvar Senha"
     const buttonIcon = document.createElement("img");
     buttonIcon.className = "save-icon"
-    buttonIcon.src = "./assets/icons/save.svg"
+    buttonIcon.src = "/assets/icons/save.svg"
     buttonIcon.alt = "Icone de disquete"
     savePassword.appendChild(buttonIcon);
     securityEndpage.appendChild(savePassword)
@@ -244,7 +244,7 @@ const createProfile = () => {
     helpHeader.className = "tab-header"
     const helpIcon = document.createElement("img");
     helpIcon.className = "tab-icon";
-    helpIcon.src = "./assets/icons/support.svg"
+    helpIcon.src = "/assets/icons/support.svg"
     helpIcon.alt = "Icone de ajuda e suporte"
     const helpTitle = document.createElement("h1");
     helpTitle.textContent = "Central de Ajuda";
