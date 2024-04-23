@@ -64,11 +64,11 @@ export default class DishController {
 
 		this.#dishes.splice(index, 1);
 		console.log(`Prato com ID ${dishId} removido com sucesso.`);
-		console.log("DELETE", this.#dishes);
+		console.log("DELETE  | current arr: ", this.#dishes);
 	}
 
 	findDishIndex(dishId) {
-		const index = this.#dishes.findIndex((dish) => dish.ID === dishId);
+		const index = this.#dishes.findIndex((dish) => dish.ID === parseInt(dishId));
 		return index;
 	}
 
@@ -76,6 +76,7 @@ export default class DishController {
 		const ingredientIndex = this.#dishes[dishIndex].ingredients.findIndex(
 			(ingredient) =>
 				ingredient.ingredientId === targetIngredient.ingredientId
+				|| ingredient.ingredientId === targetIngredient
 		);
 		return ingredientIndex;
 	}
@@ -86,6 +87,10 @@ export default class DishController {
 		}
 
 		const index = this.findDishIndex(dishId);
+		if(index === -1) {
+			console.log("não encontramos esse ID:" + dishId);
+			return;
+		}
 		const ingredientIndex = this.findIngredientIndex(index, ingredients);
 		if (ingredientIndex !== -1) {
 			this.updateIngredient(dishId, ingredients);
@@ -99,6 +104,10 @@ export default class DishController {
 
 	updateIngredient(dishId, newIngredient) {
 		const index = this.findDishIndex(dishId);
+		if(index === -1) {
+			console.log("não encontramos esse ID:" + dishId);
+			return;
+		}
 		const ingredientIndex = this.findIngredientIndex(index, newIngredient);
 		if (ingredientIndex === -1) {
 			console.log(`o ingrediente com ID ${ingredientIndex} não existe.`);
@@ -117,6 +126,10 @@ export default class DishController {
 
 	deleteIngredient(dishId, targetIngredient) {
 		const index = this.findDishIndex(dishId);
+		if(index === -1) {
+			console.log("não encontramos esse ID:" + dishId);
+			return;
+		}
 		const ingredientIndex = this.findIngredientIndex(
 			index,
 			targetIngredient
@@ -124,7 +137,7 @@ export default class DishController {
 		if (ingredientIndex === -1) {
 			console.log(`o ingrediente com ID ${ingredientIndex} não existe.`);
 		}
-		this.#dishes[index].ingredients.slice(ingredientIndex, 1);
+		this.#dishes[index].ingredients.splice(ingredientIndex, 1);
 		console.log(`Ingredientes atualizados para o prato com ID ${dishId}.`);
 		console.log("PUT", this.#dishes);
 	}

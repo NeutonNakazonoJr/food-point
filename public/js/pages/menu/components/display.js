@@ -7,9 +7,9 @@ function editThisDish(dishId) {
 	window.dispatchEvent(event);
 }
 
-function deleteThisDish(dishId) {
+function deleteThisDish(dishId, type) {
 	const event = new CustomEvent("dishSelectedToDelete", {
-		detail: dishId,
+		detail: { dishId, type },
 	});
 	window.dispatchEvent(event);
 }
@@ -36,7 +36,7 @@ function generateCard(dish, editing) {
 
 	deleteBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		deleteThisDish(dish.ID);
+		deleteThisDish(dish.ID, dish.type);
 	});
 
 	window.addEventListener("dishSelectedToEdit", (e) => {
@@ -53,7 +53,7 @@ function generateCard(dish, editing) {
 		}
 		p.textContent = p.textContent.replace("(editando)", "");
 		editBtn.disabled = false;
-		editBtn.removeAttribute('style');
+		editBtn.removeAttribute("style");
 	});
 
 	div.appendChild(p);
@@ -104,6 +104,7 @@ export default function getDisplay(menu, currentType) {
 		rebootDiv();
 	});
 	window.addEventListener("updateDish", rebootDiv);
+	window.addEventListener("dishSelectedToDelete", rebootDiv);
 
 	return div;
 }

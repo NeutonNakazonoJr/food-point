@@ -1,10 +1,11 @@
-function saveDish(dishId, newDishId, dishName, dishType) {
+function saveDish(dishId, newDishId, dishName, dishType, addNewDish = true) {
 	const event = new CustomEvent("updateDish", {
 		detail: {
 			ID: dishId,
 			newDishId: newDishId,
 			name: dishName,
-			type: dishType
+			type: dishType,
+			addNewDish: addNewDish
 		},
 	});
 	window.dispatchEvent(event);
@@ -23,6 +24,16 @@ function saveIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
 	window.dispatchEvent(event);
 }
 
+function deleteIngredient(dishId, ingredientId) {
+	const event = new CustomEvent("deleteIngredient", {
+		detail: {
+			dishId,
+			ingredientId,
+		},
+	});
+	window.dispatchEvent(event);
+}
+
 function getDishField(dishId, dishName, dishType) {
 	const fieldset = document.createElement("fieldset");
 
@@ -30,6 +41,9 @@ function getDishField(dishId, dishName, dishType) {
 	const input = document.createElement("input");
 	const btn = document.createElement("button");
 	const inputID = "newEventMenu-form-dishName";
+	
+	let lastInputValue = dishName;
+	let saved = true;
 
 	label.htmlFor = inputID;
 	input.id = inputID;
@@ -37,14 +51,21 @@ function getDishField(dishId, dishName, dishType) {
 	input.placeholder = "Pão com gergelim";
 	input.pattern = `^[a-zA-ZÀ-ÖØ-öø-ÿ\\s'\\-]+$`;
 	input.title = "O nome do prato deve conter apenas letras e hífen";
-	input.value = dishName;
+	input.value = dishName.trim();
 	btn.type = "button";
-	btn.disabled = true;
-	btn.style.cursor = "not-allowed";
 	btn.textContent = "Salvar prato";
+
+	if(!dishName || dishName.trim() === '') {
+		btn.disabled = true;
+		btn.style.cursor = "not-allowed";
+	}
 
 	input.addEventListener("input", () => {
 		if (input.reportValidity()) {
+			if(lastInputValue !== input.value) {
+				saved = false;
+				lastInputValue = input.value.trim();
+			}
 			btn.disabled = false;
 			input.removeAttribute("style");
 			btn.removeAttribute("style");
@@ -57,9 +78,17 @@ function getDishField(dishId, dishName, dishType) {
 
 	btn.addEventListener("click", () => {
 		if (input.reportValidity()) {
-			saveDish(dishId, dishId, input.value, dishType);
+			saved = true;
+			saveDish(dishId, dishId, input.value.trim(), dishType, true);
 		}
 	});
+	
+	window.addEventListener("dispatchIngredientChange", () => {
+		if(!saved && input.checkValidity()) {
+			saved = true;
+			saveDish(dishId, dishId, input.value.trim(), dishType, false);
+		}
+	})
 
 	fieldset.appendChild(label);
 	fieldset.appendChild(input);
@@ -162,19 +191,19 @@ function createIngredientFieldset(
 		unitSelect.appendChild(opt);
 	});
 
-	
-	nameInput.addEventListener("change", saveIngrediente);
-	quantityInput.addEventListener("change", saveIngrediente);
-	unitSelect.addEventListener("change", saveIngrediente);
-	
+	nameInput.addEventListener("input", saveIngrediente);
+	quantityInput.addEventListener("input", saveIngrediente);
+	unitSelect.addEventListener("input", saveIngrediente);
+
 	fieldset.appendChild(nameInput);
 	fieldset.appendChild(quantityInput);
 	fieldset.appendChild(unitSelect);
 
-	if(ingredient.ingredientId) {
+	if (ingredient.ingredientId) {
 		const deleteButton = document.createElement("button");
 		deleteButton.dataset.ingredientId = ingredient.ingredientId;
-		deleteButton.addEventListener("click", deleteThisIngredient)
+		deleteButton.dataset.dishId = dishId;
+		deleteButton.addEventListener("click", deleteThisIngredient);
 		fieldset.appendChild(deleteButton);
 	}
 
@@ -196,8 +225,13 @@ function createIngredientFieldset(
 }
 
 function deleteThisIngredient(e) {
-	if(e instanceof Event && e.target instanceof HTMLButtonElement) {
-		console.log(e.target.dataset.ingredientId);
+	if (e instanceof Event && e.target instanceof HTMLButtonElement) {
+		const ingredientId = parseInt(e.target.dataset.ingredientId);
+		const dishId = parseInt(e.target.dataset.dishId);
+		if(isNaN(ingredientId) || isNaN(dishId)) {
+			return;
+		}
+		deleteIngredient(dishId, ingredientId);
 	}
 }
 
@@ -224,16 +258,10 @@ function getIngredientsField(dishId, ingredients) {
 		});
 	}
 	addIngredient.addEventListener("click", (e) => {
+		console.log("addIngredient exec" + Date.now());
 		e.preventDefault();
 		window.dispatchEvent(new CustomEvent("dispatchIngredientChange"));
-		const ingredientField = createIngredientFieldset(
-			dishID,
-			null,
-			"",
-			null,
-			null
-		);
-		fieldset.insertBefore(ingredientField, addIngredient);
+		saveIngredient(dishID, null, "", null, null);
 	});
 
 	fieldset.appendChild(addIngredient);
@@ -242,6 +270,7 @@ function getIngredientsField(dishId, ingredients) {
 }
 
 export default function getForm(dish) {
+	console.log("get FORM - " + Date.now());
 	const form = document.createElement("form");
 	form.id = "newEventMenu-form";
 	form.addEventListener("submit", (e) => e.preventDefault());
@@ -252,43 +281,9 @@ export default function getForm(dish) {
 	p.textContent =
 		"Organize as comidas servidas durante o evento gastronômico";
 
-	let dishFieldset = getDishField(
-		dish.ID,
-		dish.name,
-		dish.type
-	);
+	let dishFieldset = getDishField(dish.ID, dish.name, dish.type);
 
 	let ingredientsField = getIngredientsField(dish.ID, dish.ingredients);
-
-	window.addEventListener("selectDishType", (e) => {
-		if (e.detail && e.detail.controller && e.detail.key && e.detail.type) {
-			const controller = e.detail.controller;
-
-			if (controller.getLengthOfDishes() <= 0) {
-				controller.addDish("", "", e.detail.type);
-			}
-			const dishes = controller.getDishes();
-			const dish =
-				dishes.length === 1 ? dishes[0] : dishes[dishes.length - 1];
-
-			const newDishFieldset = getDishField(
-				dish.ID,
-				dish.name,
-				dish.type,
-				dish.ingredients
-			);
-			const newIngredientsField = getIngredientsField(
-				dish.ID,
-				dish.ingredients
-			);
-
-			form.replaceChild(newDishFieldset, dishFieldset);
-			form.replaceChild(newIngredientsField, ingredientsField);
-
-			dishFieldset = newDishFieldset;
-			ingredientsField = newIngredientsField;
-		}
-	});
 
 	form.appendChild(h1);
 	form.appendChild(p);

@@ -33,12 +33,14 @@ const menu = {
 };
 
 function dispatchIngredientChange() {
+	console.log("--dispatchIngredientChange--");
 	const event = new CustomEvent("dispatchIngredientChange");
 	window.dispatchEvent(event);
 }
 
 export default function menuPage(constructorInfo) {
 	let currentType = "stater";
+	let ingredientChangeHasBeenDispatched = false;
 
 	const header = getHeader(false, true);
 	const progressBar = eventProgressBar(true, true, 0, 1);
@@ -47,30 +49,52 @@ export default function menuPage(constructorInfo) {
 	menu.stater.controller.addDish(Date.now(), "", "Entrada");
 
 	window.addEventListener("selectDishType", (e) => {
-		dispatchIngredientChange();
+		if (!ingredientChangeHasBeenDispatched) {
+			ingredientChangeHasBeenDispatched = true;
+			dispatchIngredientChange();
+		}
 		currentType = e.detail.key;
+		if (menu[currentType].controller.getLengthOfDishes() <= 0) {
+			menu[currentType].controller.addDish(Date.now(), "", e.detail.type);
+		}
+		const dishes = menu[currentType].controller.getDishes();
+		const newForm = getForm(dishes[dishes.length - 1]);
+		main.replaceChild(newForm, form);
+		form = newForm;
+		ingredientChangeHasBeenDispatched = false;
 	});
 
 	window.addEventListener("updateDish", (e) => {
 		if (menu[currentType].name === e.detail.type) {
-			dispatchIngredientChange();
+			if (!ingredientChangeHasBeenDispatched) {
+				ingredientChangeHasBeenDispatched = true;
+				dispatchIngredientChange();
+			}
 			menu[currentType].controller.updateDish(
 				e.detail.ID,
 				e.detail.newDishId,
 				e.detail.name,
 				e.detail.type
 			);
-			menu[currentType].controller.addDish(
-				Date.now(),
-				"",
-				menu[currentType].name
+			let dish = menu[currentType].controller.getOneDish(
+				e.detail.newDishId
 			);
-			const dishes = menu[currentType].controller.getDishes();
-			const newForm = getForm(dishes[dishes.length - 1]);
+			if (e.detail.addNewDish) {
+				menu[currentType].controller.addDish(
+					Date.now(),
+					"",
+					menu[currentType].name
+				);
+				const dishes = menu[currentType].controller.getDishes();
+				dish = dishes[dishes.length - 1];
+			}
+			const newForm = getForm(dish);
 			main.replaceChild(newForm, form);
 			form = newForm;
+			ingredientChangeHasBeenDispatched = false;
 		}
 	});
+
 	window.addEventListener("updateIngredient", (e) => {
 		const ingredient = {
 			ingredientId: e.detail.ingredientId,
@@ -82,11 +106,59 @@ export default function menuPage(constructorInfo) {
 			e.detail.dishId,
 			ingredient
 		);
-		dispatchIngredientChange();
+		if (!ingredientChangeHasBeenDispatched) {
+			ingredientChangeHasBeenDispatched = true;
+			dispatchIngredientChange();
+		}
 		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
 		const newForm = getForm(dish);
 		main.replaceChild(newForm, form);
 		form = newForm;
+		ingredientChangeHasBeenDispatched = false;
+	});
+
+	window.addEventListener("deleteIngredient", (e) => {
+		if (!ingredientChangeHasBeenDispatched) {
+			ingredientChangeHasBeenDispatched = true;
+			dispatchIngredientChange();
+		}
+		menu[currentType].controller.deleteIngredient(
+			e.detail.dishId,
+			e.detail.ingredientId
+		);
+		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
+		const newForm = getForm(dish);
+		main.replaceChild(newForm, form);
+		form = newForm;
+		ingredientChangeHasBeenDispatched = false;
+	});
+
+	window.addEventListener("dishSelectedToDelete", (e) => {
+		if (!ingredientChangeHasBeenDispatched) {
+			ingredientChangeHasBeenDispatched = true;
+			dispatchIngredientChange();
+		}
+		menu[currentType].controller.removeDish(e.detail.dishId);
+		if (menu[currentType].controller.getLengthOfDishes() <= 0) {
+			menu[currentType].controller.addDish(Date.now(), "", e.detail.type);
+		}
+		const dishes = menu[currentType].controller.getDishes();
+		const newForm = getForm(dishes[dishes.length - 1]);
+		main.replaceChild(newForm, form);
+		form = newForm;
+		ingredientChangeHasBeenDispatched = false;
+	});
+
+	window.addEventListener("dishSelectedToEdit", (e) => {
+		if (!ingredientChangeHasBeenDispatched) {
+			ingredientChangeHasBeenDispatched = true;
+			dispatchIngredientChange();
+		}
+		const dish = menu[currentType].controller.getOneDish(e.detail);
+		const newForm = getForm(dish);
+		main.replaceChild(newForm, form);
+		form = newForm;
+		ingredientChangeHasBeenDispatched = false;
 	});
 
 	const aside = getAsideForMenu(menu);

@@ -36,12 +36,13 @@ export default function getAsideForMenu(menu) {
 
 		if (index === 0) {
 			button.classList.add("newEventMenu-selected");
-			dispatchSelectDishType(key, dishTypeName, menu[key].controller);
 		}
 		button.textContent = dishTypeName;
 		button.addEventListener("click", () => {
-			selectThisButton(button, aside);
-			dispatchSelectDishType(key, dishTypeName, menu[key].controller);
+			if (!button.classList.contains("newEventMenu-selected")) {
+				selectThisButton(button, aside);
+				dispatchSelectDishType(key, dishTypeName, menu[key].controller);
+			}
 		});
 		aside.appendChild(button);
 	});
