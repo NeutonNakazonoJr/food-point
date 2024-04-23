@@ -30,8 +30,14 @@ const eventRepository = {
             event_name = $1, theme = $2, event_description = $3,  event_date = $4, event_time = $5, event_location = $6  WHERE event_id = $7 
             RETURNING event_name, theme, event_description, event_date, event_date, event_time, event_location`;
 
-        const { rows } = await dbConnection.query(query, values); 
-        return rows;
+            const { rows } = await dbConnection.query(query, values); 
+            return {
+                eventName: rows[0].event_name,
+                eventTheme: rows[0].theme,
+                eventDescription: rows[0].event_description,
+                eventDate: rows[0].event_date,
+                eventTime: rows[0].event_time
+            }
     },
 
     insertNewDish: async (dishInfos, eventId) => {

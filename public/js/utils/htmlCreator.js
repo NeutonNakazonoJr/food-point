@@ -16,6 +16,35 @@ const htmlCreator = {
         return div;
     },
 
+    
+    createInput: (inputOptions = { type, id, placeholder, className, value, pattern, labelText, classNameDiv }) => {
+        const input = document.createElement('input');
+    
+        inputOptions.type ? input.type = inputOptions.type : null;
+        inputOptions.id ? input.id = inputOptions.id : null;
+        inputOptions.placeholder ? input.placeholder = inputOptions.placeholder : null;
+        inputOptions.className ? input.classList.add = inputOptions.className : null;
+        inputOptions.value ? input.value = inputOptions.value : null;
+        inputOptions.pattern ? input.pattern = inputOptions.pattern : null;
+
+        if (inputOptions.labelText) {
+            const label = document.createElement('label');
+            label.innerText = inputOptions.labelText;
+            label.setAttribute('for', inputOptions.id);
+            
+            const divInput = htmlCreator.createDiv();
+            divInput.appendChild(label)
+            divInput.appendChild(input);
+
+            if (inputOptions.classNameDiv) {
+                divInput.classList.add(inputOptions.classNameDiv);
+            }
+            return divInput;
+        }
+    
+        return input;
+    },
+        
     createSection: (sectionId) => {
         const section = document.createElement('section');
         sectionId ? section.id = sectionId : null;
@@ -51,44 +80,19 @@ const htmlCreator = {
     },
 
 
-    createInput: (type, id, placeholder, className, value, pattern) => {
-        const input = document.createElement('input');
-    
-        type ? input.type = type : null;
-        id ? input.id = id : null;
-        placeholder ? input.placeholder = placeholder : null;
-        className ? input.classList.add = className : null;
-        value ? input.value = value : null;
-        pattern ? input.pattern = pattern : null;
-    
-        return input;
-    },
-
-    createForm: (formTitle = "", formInputs = [{ type: '', id: '', placeholder: '', className: '', labelText: '', pattern: '' }], submitBtnName = '') => {
+    createForm: (formId = '', formTitle = "", inputOptions = [{type, id, placeholder, className, value, pattern, labelText, classNameDiv}], submitBtnName = '') => {
         const form = document.createElement('form');
-    
+        
+        formId ? form.id = formId : null;
+
         if (formTitle) {
             formTitle = htmlCreator.createTitle('h2', formTitle);
             form.appendChild(formTitle);
         }
-    
-        formInputs.forEach(input => {
-            const { type, id, placeholder, className, value, pattern } = input;
-            const newInput = htmlCreator.createInput(type, id, placeholder, className, value, pattern);
-    
-            if (input.labelText) {
-    
-                const divInput = htmlCreator.createDiv('.div-input-form');
-    
-                const label = document.createElement('label');
-                label.innerText = input.labelText;
-                label.setAttribute('for', id);
-                divInput.appendChild(label)
-                divInput.appendChild(newInput);
-                form.appendChild(divInput);
-            } else {
-                form.appendChild(newInput);
-            }
+        
+        inputOptions.forEach(inputInfos => {
+            const newInput = htmlCreator.createInput(inputInfos);
+            form.appendChild(newInput);
         })
     
         if (submitBtnName) {
@@ -124,7 +128,7 @@ const htmlCreator = {
         return list;
     },
 
-    createButton: (innerTextButton, buttonId, buttonClass) => {
+    createButton: (innerTextButton ='', buttonId = '', buttonClass = '') => {
         const btn = document.createElement('button');
         btn.innerText = innerTextButton;
 

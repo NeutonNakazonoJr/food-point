@@ -3,6 +3,7 @@ import { getEventById } from '../api/eventApi.js';
 import htmlCreator from '../utils/htmlCreator.js';
 import dispatchOnStateChange from "../events/onStateChange.js";
 import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
+import showToast from "../components/toast.js";
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -14,7 +15,8 @@ const createEventMainTitleDiv = () => {
 } 
 
 
-const createSectionBasicInfos = (basicInfos, eventID) => {
+export function createSectionBasicInfos(basicInfos, eventID) {
+
     const basicInfosSection = htmlCreator.createSection('basic-infos-section');
 
     if (Object.values(basicInfos).every(value => value === null)) {
@@ -33,7 +35,9 @@ const createSectionBasicInfos = (basicInfos, eventID) => {
         editBtn.classList.add('edit-hidden');
 
         editBtn.addEventListener('click', () => {
-            modalUpdateInfosComponent(basicInfos, eventID);
+            const modalUpdate = modalUpdateInfosComponent(basicInfos, eventID);
+            const mainContainer = document.getElementById('event-main-container');
+            mainContainer.appendChild(modalUpdate);
         })
 
         basicInfosSection.appendChild(editBtn);
@@ -65,9 +69,10 @@ const createSectionBasicInfos = (basicInfos, eventID) => {
     if (basicInfos.eventName) {
         const eventName = htmlCreator.createTitle('h1', basicInfos.eventName);
         divPresentation.appendChild(eventName);
+        basicInfosSection.appendChild(divPresentation);
     }
     
-    if (basicInfos.eventDate || basicInfos.eventTime) {
+    if (basicInfos.eventDate || basicInfos.eventTime ) {
         divPresentation.appendChild(divCalendar);
         basicInfosSection.appendChild(divPresentation);
     }
@@ -89,7 +94,9 @@ const createSectionBasicInfos = (basicInfos, eventID) => {
     editBtn.classList.add('edit-hidden');
 
     editBtn.addEventListener('click', () => {
-        modalUpdateInfosComponent(basicInfos, eventID);
+        const modalUpdate = modalUpdateInfosComponent(basicInfos, eventID);
+        const rootContainer = document.getElementById('root');
+        rootContainer.appendChild(modalUpdate);
     })
     basicInfosSection.appendChild(editBtn);
 
@@ -231,7 +238,6 @@ const createButtonSection = () => {
     const buttonSection = htmlCreator.createSection('btn-section');
     buttonSection.appendChild(guestButton);
     buttonSection.appendChild(homeButton);
-    // dispatchOnStateChange(href, {});
     return buttonSection;
 }
 
@@ -271,7 +277,6 @@ const createHeaderEvent = () => {
 }
 
 
-
 const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
 
     const eventID = constructorInfo.eventID;
@@ -282,12 +287,19 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
 
     const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
 
-    const { eventInfos }  = await getEventById(eventID || storageEventID.eventID);
+    const requestEventInfos = await getEventById(eventID || storageEventID.eventID);
     
+    if (requestEventInfos.error) {
+        showToast(requestEventInfos.error);        
+        dispatchOnStateChange('/home', { animation: false });
+        return document.createDocumentFragment();
+    } 
+
+    const { eventInfos } = requestEventInfos;
+
     const header = createHeaderEvent();
     const initialDiv = createEventMainTitleDiv();
     const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
-    
     const menuSection = createMenuSection(eventInfos.dishes);
     const locationSection = createLocationSection(eventInfos.eventLocation);
     const buttonSection = createButtonSection();
@@ -298,8 +310,8 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     mainContainer.appendChild(locationSection);
     mainContainer.appendChild(buttonSection);
     
-
     const main = document.createElement('main');
+    main.id = 'main-page-event'
     main.appendChild(initialDiv);
     main.appendChild(mainContainer);
     

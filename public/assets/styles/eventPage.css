@@ -1,17 +1,3 @@
-:root {
-	--wine-color: #670029;
-	--white-smoke: #f2f7f2;
-	--blackberry: #311432;
-	--blackberry-transparent: #3114328a;
-	--cherry: #a73e5c;
-	--raspberry: #b22222;
-
-	--font-pacifico: "Pacifico", cursive;
-
-	--border-radius-1x: 8px;
-	--border-radius-2x: 16px;
-	--border-radius-3x: 24px;
-}
 
 #initial-div-events {
     margin: 9rem auto 4rem;
@@ -352,7 +338,7 @@
 @media screen and (max-width: 600px) {
 
     #initial-div-events {
-        margin: 10rem auto 2rem;
+        margin: 8rem auto 0rem;
     }
 
     #div-toggle-btn {
@@ -367,6 +353,7 @@
         width: 100%;
         border: none;
         box-shadow: none;
+        padding: 1rem;
     }
 
     #event-main-container h1 {
@@ -377,8 +364,9 @@
         flex-direction: column;
 
         & h1 {
-            max-width: 100%;
-            font-size: 1.5rem;
+            width: 100%;
+            font-size: 2rem;
+            line-height: 2.4rem;
         }
     }
     
