@@ -1,60 +1,60 @@
 import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "../components/header.js";
 
-const createErrorPage = () => {
-    const errorContainer = document.createElement("section");
-    errorContainer.id = "error-container";
-
-    const errorPage = document.createElement('div')
-    errorPage.id = 'error-page'
-    errorContainer.appendChild(errorPage);
+function createErrorPage(constructorInfo) {
+    const errorPageSection = document.createElement('section');
+    errorPageSection.id = 'error-page-container';
 
     const headerError = getHeader(true, true);
-    errorPage.appendChild(headerError);
+    errorPageSection.appendChild(headerError);
 
-    const errorMessageTitle = document.createElement("div");
-    errorMessageTitle.id = "error-message-title";
+    const titleError = document.createElement('div');
+    titleError.id = 'title-error';
 
-    const h1 = document.createElement("h1");
-    h1.textContent = "Algo deu errado...";
-    errorMessageTitle.appendChild(h1);
+    const titleH1 = document.createElement('h1');
+    titleH1.textContent = 'Algo deu errado...';
 
-    const h3 = document.createElement("h3");
-    h3.textContent = "mas não foi culpa sua.";
-    errorMessageTitle.appendChild(h3);
+    const titleH3 = document.createElement('h3');
+    titleH3.textContent = 'mas não foi sua culpa';
 
-    const p = document.createElement("p");
-    p.textContent = "O que aconteceu: não foi possível salvar o seu evento no banco de dados.";
-    const span = document.createElement("span");
-    span.id = "type-of-error";
-    p.appendChild(span);
-    errorMessageTitle.appendChild(p);
+    const titleH4 = document.createElement('h4');
+    titleH4.textContent = 'O que aconteceu: ' + constructorInfo.error;
 
-    errorPage.appendChild(errorMessageTitle);
+    titleError.appendChild(titleH1);
+    titleError.appendChild(titleH3);
+    titleError.appendChild(titleH4);
 
-    const imageOfError = document.createElement("div");
-    imageOfError.id = "image-of-error";
+    const imageError = document.createElement('div');
+    imageError.id = 'image-error';
+    const errorImage = document.createElement('img');
+    errorImage.alt = 'Imagem de error';
+    errorImage.src = '../images/error-image.png';
+    imageError.appendChild(errorImage);
 
-    const img = document.createElement("img");
-    img.src = "../images/error-image.png";
-    imageOfError.appendChild(img);
+    const buttonErrorPageContainer = document.createElement('div');
+    buttonErrorPageContainer.id = 'button-error-page-container';
 
-    errorPage.appendChild(imageOfError);
+    const buttonErrorPageDiv = document.createElement('div');
+    buttonErrorPageDiv.id = 'button-error-page-div';
 
-    const homeButtonErrorPage = document.createElement("div");
-    homeButtonErrorPage.id = "home-button-error-page";
+    const homeButtonErrorPage = document.createElement('button');
+    homeButtonErrorPage.id = 'button-home-page-error';
+    homeButtonErrorPage.type = 'button';
+    homeButtonErrorPage.alt = 'Voltar para a página principal';
+    homeButtonErrorPage.innerHTML = '<img src="../icons/home.svg" />Página Inicial';
 
-    const button = document.createElement("button");
-    button.id = "error-btn";
-    const imgButton = document.createElement("img");
-    imgButton.src = "../icons/home.svg";
-    button.appendChild(imgButton);
-    button.innerHTML += "Página inicial";
-    homeButtonErrorPage.appendChild(button);
+    homeButtonErrorPage.addEventListener('click', function () {
+        dispatchOnStateChange("/home");
+    });
 
-    errorContainer.appendChild(homeButtonErrorPage);
+    buttonErrorPageDiv.appendChild(homeButtonErrorPage);
+    buttonErrorPageContainer.appendChild(buttonErrorPageDiv);
 
-    return errorContainer;
-};
+    errorPageSection.appendChild(titleError);
+    errorPageSection.appendChild(imageError);
+    errorPageSection.appendChild(buttonErrorPageContainer);
 
-document.body.appendChild(createErrorPage());
+    return errorPageSection;
+}
+
+export default createErrorPage;

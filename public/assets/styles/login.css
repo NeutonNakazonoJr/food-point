@@ -74,6 +74,10 @@
 	margin-bottom: 10px;
 }
 
+#data-login {
+	padding-bottom: 2em;
+}
+
 #data-login input {
 	display: flex;
 	flex-direction: column;
@@ -228,8 +232,7 @@
 	}
 }
 
-@media screen and (max-height: 720px) {
-
+@media screen and (max-height: 720px) {	
 	#login-modal {
 		height: 100vh;
 	}
@@ -251,7 +254,7 @@
 
 @media screen and (max-height: 490px) {
 	#login-form {
-		padding-top: 20em;
+		padding-top: 25em;
 	}
 
 }

@@ -96,23 +96,23 @@ const createLoginForm = () => {
     const toggleBtn = createPasswordToggleBtn(passwordInput);
     passwordLoginDiv.appendChild(toggleBtn);
 
-    const rememberPasswordDiv = document.createElement('div');
-    rememberPasswordDiv.id = 'remember-password';
-    loginCompleteSection.appendChild(rememberPasswordDiv);
+    // const rememberPasswordDiv = document.createElement('div');
+    // rememberPasswordDiv.id = 'remember-password';
+    // loginCompleteSection.appendChild(rememberPasswordDiv);
 
-    const rememberAllPasswordDiv = document.createElement('div');
-    rememberAllPasswordDiv.id = 'remember-all-password';
-    rememberPasswordDiv.appendChild(rememberAllPasswordDiv);
+    // const rememberAllPasswordDiv = document.createElement('div');
+    // rememberAllPasswordDiv.id = 'remember-all-password';
+    // rememberPasswordDiv.appendChild(rememberAllPasswordDiv);
 
-    const rememberPasswordInput = document.createElement('input');
-    rememberPasswordInput.type = 'checkbox';
-    rememberPasswordInput.id = 'remember-passw';
-    rememberPasswordInput.alt = 'lembrar senha';
-    const rememberPasswordLabel = document.createElement('label');
-    rememberPasswordLabel.textContent = 'Lembrar minha senha';
-    rememberPasswordLabel.setAttribute('for', 'remember-passw');
-    rememberAllPasswordDiv.appendChild(rememberPasswordInput);
-    rememberAllPasswordDiv.appendChild(rememberPasswordLabel);
+    // const rememberPasswordInput = document.createElement('input');
+    // rememberPasswordInput.type = 'checkbox';
+    // rememberPasswordInput.id = 'remember-passw';
+    // rememberPasswordInput.alt = 'lembrar senha';
+    // const rememberPasswordLabel = document.createElement('label');
+    // rememberPasswordLabel.textContent = 'Lembrar minha senha';
+    // rememberPasswordLabel.setAttribute('for', 'remember-passw');
+    // rememberAllPasswordDiv.appendChild(rememberPasswordInput);
+    // rememberAllPasswordDiv.appendChild(rememberPasswordLabel);
 
     const loginButton = document.createElement('button');
     loginButton.type = 'button';
@@ -143,7 +143,7 @@ const createLoginForm = () => {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
 
-        fetch('https://149.28.40.46/login', {
+        fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -168,7 +168,6 @@ const createLoginForm = () => {
             .then(data => {
                 dispatchOnStateChange("/home");
                 showToast('Login realizado com sucesso');
-                console.log(data);
             })
             .catch(error => {
                 console.error(error);
@@ -179,6 +178,15 @@ const createLoginForm = () => {
         e.preventDefault();
         if (validateLoginForm()) {
             submitLoginForm();
+        }
+    });
+
+    bodyLogin.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            if (validateLoginForm()) {
+                submitLoginForm();
+            }
         }
     });
 

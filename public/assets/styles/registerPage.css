@@ -248,7 +248,6 @@
 @media screen and (max-width: 425px) {
 	#register-form {
 		width: 100vw;
-		height: 100vh;
 		border-radius: 0;
 	}
 

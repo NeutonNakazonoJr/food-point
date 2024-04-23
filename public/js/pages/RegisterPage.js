@@ -225,7 +225,6 @@ const createRegisterForm = () => {
             if (modal) {
                 modal.style.display = 'none';
             }
-            console.log('Clicou')
         });
     });
 
@@ -249,16 +248,6 @@ const createRegisterForm = () => {
             registerButton.style.cursor = 'default';
         }
     });
-
-    registerButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (validateFields()) {
-            submitRegistrationForm();
-            window.location.href = '/login';
-        }
-    });
-
-    registerFormDiv.appendChild(registerButton);
 
     function validateFields() {
         const email = document.getElementById("email-register").value;
@@ -284,7 +273,7 @@ const createRegisterForm = () => {
         const email = document.getElementById('email-register').value;
         const password = document.getElementById('password-register').value;
 
-        fetch('https://149.28.40.46/user', {
+        fetch('http://localhost:3000/api/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -298,6 +287,7 @@ const createRegisterForm = () => {
             .then(response => {
                 if (response.ok) {
                     showToast('Usuário cadastrado com sucesso');
+                    dispatchOnStateChange('/login', !response.ok);
                 } else if (response.status === 400) {
                     return response.json().then(data => {
                         showToast(data.error);
@@ -310,6 +300,30 @@ const createRegisterForm = () => {
                 showToast(error.message);
             });
     }
+
+    bodyRegister.addEventListener("keypress", function (event) {
+        const confirmReadBtn = document.getElementById('confirmRead-btn');
+        
+        if (confirmReadBtn === true) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+            } else {
+                if (validateFields()) {
+                    submitRegistrationForm();
+                }
+            }
+        }
+
+    });
+
+    registerButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (validateFields()) {
+            submitRegistrationForm();
+        }
+    });
+
+    registerFormDiv.appendChild(registerButton);
 
     return bodyRegister;
 };
