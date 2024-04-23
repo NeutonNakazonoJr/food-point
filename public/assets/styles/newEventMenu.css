@@ -298,6 +298,12 @@
 	}
 }
 
+
+#newEventMenu > div > .newEventMenu-item-editing {
+	background-color: var(--blackberry);
+	border-color: var(--blackberry);
+}
+
 #newEventMenu-footer {
 	display: flex;
 	width: 100%;

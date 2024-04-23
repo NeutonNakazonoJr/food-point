@@ -15,9 +15,13 @@ function selectThisButton(button, parent) {
 	}
 }
 
-function dispatchSelectDishType(dishTypeName) {
+function dispatchSelectDishType(key, dishTypeName, controller) {
 	const event = new CustomEvent("selectDishType", {
-		detail: dishTypeName,
+		detail: {
+			key: key,
+			type: dishTypeName,
+			controller: controller,
+		},
 	});
 	window.dispatchEvent(event);
 }
@@ -32,12 +36,12 @@ export default function getAsideForMenu(menu) {
 
 		if (index === 0) {
 			button.classList.add("newEventMenu-selected");
-			dispatchSelectDishType(dishTypeName);
+			dispatchSelectDishType(key, dishTypeName, menu[key].controller);
 		}
 		button.textContent = dishTypeName;
 		button.addEventListener("click", () => {
 			selectThisButton(button, aside);
-			dispatchSelectDishType(dishTypeName);
+			dispatchSelectDishType(key, dishTypeName, menu[key].controller);
 		});
 		aside.appendChild(button);
 	});
