@@ -147,7 +147,7 @@ background: var(--cherry);
     align-items: center;
     width: 13rem;
     height: 2.5rem;
-    cursor: pointer;
+    cursor: not-allowed;
 }
 #finish{
     border: none;

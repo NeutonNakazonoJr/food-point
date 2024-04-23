@@ -4,6 +4,7 @@ import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
 import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
+import createProfile from "../pages/profilePage.js";
 
 const title = "Food Point";
 
@@ -51,6 +52,11 @@ const routes = {
 		html: createGuestPage,
 		title: "Guests | " + title,
 		description: "Planeje sua lista de convidados!"
+	},
+	"/profile": {
+		html: createProfile,
+		title: "Perfil | " + title,
+		description: "Edite seu perfil"
 	}
 };
 
@@ -68,8 +74,6 @@ function router() {
 	}
 
 	// validates if the route exist, if doesn't, returns 404 page.
-	//return routes[currentPath] || routes["404"];
-
 	return routes[currentPath] || routes["404"];
 }
 
