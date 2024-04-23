@@ -40,8 +40,8 @@ const userMiddleware = {
             }
 
             next();
-        } catch (error) {
-            return res.status(500).json({ error: 'Erro interno no servidor' });
+        } catch (e) {
+            return res.status(500).json({ error: 'Erro interno no servidor' , e});
         }
     },
 

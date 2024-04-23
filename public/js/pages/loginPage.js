@@ -1,5 +1,6 @@
 import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "../components/header.js";
+import showToast from "../components/toast.js";
 
 const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
@@ -101,21 +102,6 @@ const createLoginForm = () => {
     // })
     loginFormDiv.appendChild(loginButton);
 
-    function showToast(message, duration = 3000) {
-        const toast = document.createElement('div');
-        toast.classList.add('toast');
-        toast.textContent = message;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.add('hide');
-            setTimeout(() => {
-                toast.remove();
-            }, 500);
-        }, duration);
-    }
-
     function validateLoginForm() {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
@@ -132,7 +118,7 @@ const createLoginForm = () => {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
 
-        fetch('https://149.28.40.46/login', {
+        fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

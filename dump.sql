@@ -20,7 +20,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TABLE event (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    event_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REfERENCES "user" ON DELETE CASCADE NOT NULL,
     event_name TEXT CHECK(is_valid_text(event_name)),
     theme TEXT CHECK(is_valid_text(theme)),
@@ -49,5 +49,17 @@ CREATE TABLE ingredient (
     dish_id UUID REfERENCES "dish" ON DELETE CASCADE NOT NULL,
     "name" VARCHAR(100) CHECK(is_valid_dish_text("name")) NOT NULL,
     unity_measure VARCHAR(100) NOT NULL,
-    quantity INT CHECK(quantity > 0)
+    quantity INT CHECK(quantity > 0),
+    purchased BOOLEAN DEFAULT false
 );
+
+CREATE FUNCTION is_valid_guest_name(text_to_check VARCHAR) RETURNS BOOLEAN AS $$
+    SELECT text_to_check ~ '^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$';
+$$ LANGUAGE sql;
+
+CREATE TABLE guest (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    event_id UUID REFERENCES "event" ON DELETE CASCADE NOT NULL,
+    "name" VARCHAR(100) CHECK(is_valid_guest_name("name")) NOT NULL,
+    confirmed BOOLEAN DEFAULT false
+)
