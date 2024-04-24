@@ -46,6 +46,22 @@ const userController = {
         } catch (error) {
             return res.status(500).json({ error: 'Erro interno no servidor' })
         }
+    },
+
+    deleteUserAccount: async (req, res) => {
+        try {
+            const [ userId ] = await userRepository.deleteUserRegistration(req.userId);
+
+            if (!userId.id) {
+                throw new Error('Erro interno no servidor');
+            }
+
+            return res.status(200).json({
+                message: 'Conta deletada com sucesso'
+            })
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
     }
 }
 

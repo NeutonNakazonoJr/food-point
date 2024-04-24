@@ -17,40 +17,25 @@ const ingredientController = require('../controllers/ingredientController.js');
 
 eventRoutes.post('/event', eventController.createNewEvent);
 eventRoutes.get('/event', eventController.getAllEvents);
-
 eventRoutes.use('/event/:id', eventMiddleware.validateEventId);
-
 eventRoutes.get('/event/:id', eventController.getAllEventInfos);
-
 eventRoutes.delete('/event/:id', eventController.deleteEvent);
 
-eventRoutes.put('/event/:id/basic-infos', 
-    validateRequestBody(eventSchema.eventBasicInfos),
-    eventController.updateEventBasicInfos
-);
 
-eventRoutes.post('/event/:id/dish',
-    validateRequestBody(eventSchema.dish),
-    eventController.createNewDish
-);
+eventRoutes.put('/event/:id/basic-infos', validateRequestBody(eventSchema.eventBasicInfos), eventController.updateEventBasicInfos);
 
-
+eventRoutes.post('/event/:id/dish', validateRequestBody(eventSchema.dish), eventController.createNewDish);
 eventRoutes.use('/event/:id/dish/:dishId', validateDishId);
-
-eventRoutes.put('/event/:id/dish/:dishId', 
-    validateRequestBody(dishSchema),
-    dishController.updateDishName
-);
-
+eventRoutes.put('/event/:id/dish/:dishId', validateRequestBody(dishSchema), dishController.updateDishName);
 eventRoutes.delete('/event/:id/dish/:dishId', dishController.deleteDish);
 
 
-eventRoutes.use('/event/:id/dish/:dishId/ingredient', validateRequestBody(ingredientSchema));
-
-eventRoutes.post('/event/:id/dish/:dishId/ingredient');
-
+eventRoutes.get('/event/:id/dish/:dishId/ingredient', ingredientController.getIngredientsName);
 eventRoutes.use('/event/:id/dish/:dishId/ingredient/:ingredientId', validateIngredientId);
-
+eventRoutes.delete('/event/:id/dish/:dishId/ingredient/:ingredientId', ingredientController.deleteIngredient);
+eventRoutes.use('/event/:id/dish/:dishId/ingredient', validateRequestBody(ingredientSchema));
+eventRoutes.post('/event/:id/dish/:dishId/ingredient', ingredientController.registerNewIngredient);
 eventRoutes.put('/event/:id/dish/:dishId/ingredient/:ingredientId', ingredientController.updateIngredient);
+
 
 module.exports = eventRoutes;

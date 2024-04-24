@@ -13,6 +13,47 @@ const ingredientController = {
             console.log(error.message);
             return res.status(500).json({error: 'Erro interno no servidor'});
         }
+    },
+
+    registerNewIngredient: async (req, res) => {
+        try {
+            const dishtId = req.params.dishId;
+            const eventId = req.params.id;
+            const [ newIngredientId ] = await ingredientRepository.insertNewIngredient(eventId, dishtId, req.body);
+            return res.status(201).json({
+                message: 'Ingrediente cadastrado com sucesso',
+                newIngredientId
+            })
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
+    },
+
+    getIngredientsName: async (req, res) => {
+        try {
+            const ingredientList = await ingredientRepository.getIngredientsNameByDish(req.params.dishId);
+            return res.status(200).json({ingredientList});
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
+    },
+
+    deleteIngredient: async (req, res) => {
+        try {
+            const ingredientId  = req.params.ingredientId;
+            const [ deletedIngredientId ] = await ingredientRepository.deleteIngredientById(ingredientId);
+
+            if (!deletedIngredientId.id) {
+                throw new Error('Erro interno no servidor');
+            }
+            
+            return res.status(200).json({
+                message: 'Ingrediente deletado com sucesso',
+                id: deletedIngredientId.id
+            })
+        } catch (error) {
+            return res.status(500).json({error: error.message})
+        }
     }
 }
 
