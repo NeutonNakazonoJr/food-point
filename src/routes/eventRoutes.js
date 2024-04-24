@@ -44,10 +44,13 @@ eventRoutes.put('/event/:id/dish/:dishId',
 
 eventRoutes.delete('/event/:id/dish/:dishId', dishController.deleteDish);
 
-eventRoutes.put('/event/:id/dish/:dishId/ingredient/:ingredientId',
-    validateIngredientId,
-    validateRequestBody(ingredientSchema),
-    ingredientController.updateIngredient
-);
+
+eventRoutes.use('/event/:id/dish/:dishId/ingredient', validateRequestBody(ingredientSchema));
+
+eventRoutes.post('/event/:id/dish/:dishId/ingredient');
+
+eventRoutes.use('/event/:id/dish/:dishId/ingredient/:ingredientId', validateIngredientId);
+
+eventRoutes.put('/event/:id/dish/:dishId/ingredient/:ingredientId', ingredientController.updateIngredient);
 
 module.exports = eventRoutes;
