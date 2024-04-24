@@ -5,8 +5,9 @@ import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import { activeButton, disableButton } from "../utils/disableButton.js";
 
-const regex = "^[a-zA-ZÀ-ÖØ-öø-ÿ\\s']+$";
-const regexTitle = "Este campos deve possuir somente letras e espaço";
+const regex = `^[a-zA-ZÀ-ÖØ-öø-ÿ\\s"^\\\`\\~\\:\\.\\,\\?\\!\\-]+$`;
+const regexTitle =
+	'Este campos deve possuir somente letras, espaço, e estes símbolos: [" ^ ` ~ : . , ? ! - ]';
 
 const fieldsBuilderInfo = [
 	{
@@ -229,12 +230,22 @@ async function saveInfoAndMoveOn(eventId, form) {
 			time: "newEvent-basic-time",
 		};
 
+		const dateInputValue = form.elements[fields.date].value;
+		const hours = form.elements[fields.time].value;
+		let date = "";
+		if (dateInputValue !== "") {
+			const myHours = hours !== "" ? hours : "00:00";
+			date = new Date(
+				dateInputValue + "T" + myHours
+			).toLocaleDateString();
+		}
+
 		const eventInfos = {
 			name: form.elements[fields.name].value,
 			theme: form.elements[fields.theme].value,
 			eventDescription: form.elements[fields.description].value,
-			eventDate: form.elements[fields.date].value,
-			eventTime: form.elements[fields.time].value,
+			eventDate: date,
+			eventTime: hours,
 		};
 		const result = await putEvent(eventId, eventInfos);
 		console.log(result);

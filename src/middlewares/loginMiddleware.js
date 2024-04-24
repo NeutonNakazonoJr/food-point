@@ -40,7 +40,7 @@ const userAuthorization = async (req, res, next) => {
             return res.status(401).json({ error: 'Token Inválido'});
         }
 
-        req.userId = isValidToken.userId;
+        req.userId =  isValidToken.userId;
         next();
     } catch (error) {
         return res.status(500).json({ error: 'Erro interno no servidor' });

@@ -1,12 +1,19 @@
 const express = require("express");
 const pagesRoutes = express.Router();
 const path = require("path");
-const privatePagesRouter = require("./privatePageRoutes");
-const publicPagesRouter = require("./publicPageRoutes");
 
+const goToIndexHTML = (req, res) => {
+	res.sendFile(path.join(__dirname, "../../public/index.html"));
+};
 pagesRoutes.use(express.static(path.join(__dirname, "../../public")));
-pagesRoutes.use(publicPagesRouter);
-// middleware de autenticação
-pagesRoutes.use(privatePagesRouter);
+
+pagesRoutes.get("/", goToIndexHTML);
+pagesRoutes.get("/login", goToIndexHTML);
+pagesRoutes.get("/register", goToIndexHTML);
+
+pagesRoutes.get("/home", goToIndexHTML);
+pagesRoutes.get("/home/create", goToIndexHTML);
+pagesRoutes.get("/home/create/guest", goToIndexHTML);
+
 
 module.exports = pagesRoutes;
