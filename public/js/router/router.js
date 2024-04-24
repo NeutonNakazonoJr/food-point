@@ -4,6 +4,7 @@ import newEventBasicPage from "../pages/newEventBasic.js";
 import createLoginForm from "../pages/loginPage.js";
 import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
+import createErrorPage from "../pages/errorPage.js";
 import createProfile from "../pages/profilePage.js";
 
 const title = "Food Point";
@@ -53,6 +54,11 @@ const routes = {
 		title: "Guests | " + title,
 		description: "Planeje sua lista de convidados!"
 	},
+	"/error": {
+		html: createErrorPage,
+		title: "Error | " + title,
+		description: "Algo deu errado"
+  },
 	"/profile": {
 		html: createProfile,
 		title: "Perfil | " + title,

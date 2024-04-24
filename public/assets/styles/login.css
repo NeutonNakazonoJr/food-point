@@ -16,21 +16,21 @@
 	height: 100%;
 }
 
-#black-overlay {
+.black-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 1;
+	z-index: 2;
 }
 
 #login-screen {
 	width: 100%;
 	height: 100%;
 	display: flex;
-	overflow: hidden;
+	overflow: auto;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
@@ -59,6 +59,7 @@
 	border-radius: 8px;
 	padding: 20px;
 	position: relative;
+	overflow: auto;
 }
 
 #login-form h1 {
@@ -73,10 +74,15 @@
 	margin-bottom: 10px;
 }
 
+#data-login {
+	padding-bottom: 2em;
+}
+
 #data-login input {
 	display: flex;
 	flex-direction: column;
 	width: 25em;
+	line-height: 1.5em;
 	padding: 0.5em;
 	margin-bottom: 1em;
 	outline: none;
@@ -135,6 +141,20 @@
 	justify-content: center;
 }
 
+#password-login-div {
+	position: relative;
+}
+
+.toggle-password-btn-login {
+	background-color: transparent;
+	font-size: 1em;
+	cursor: pointer;
+	border-style: none;
+	position: absolute;
+	top: 55%;
+	right: 5%;
+}
+
 #loginPage-btn {
 	width: 10rem;
 	padding: 0.5rem;
@@ -191,10 +211,6 @@
 
 
 @media screen and (max-width: 425px) {
-	#login-modal {
-		padding: 0;
-	}
-
 	#login-form {
 		width: 100vw;
 		height: 100vh;
@@ -212,38 +228,33 @@
 	.toast {
 		width: 12em;
 		border-radius: 5px;
-		z-index: 10;
+		z-index: 9999;
 	}
 }
 
-
-@media screen and (max-height: 590px) {
-	#login-form>#img-logo img {
-		display: none;
-	}
-}
-
-@media screen and (max-height: 720px) {
-	.body-login {
-		width: 100%;
-		height: 100%;
-	}
-
-	#login-complete {
-		height: 13em;
-	}
-
+@media screen and (max-height: 720px) {	
 	#login-modal {
 		height: 100vh;
 	}
+}
 
-	#login-form>#img-logo img {
-		width: 12em;
-		height: 12em;
+@media screen and (max-height: 560px) {
+	#login-form {
+		padding-top: 10em;
 	}
 
-	#login-form h1 {
-		font-size: 1.5rem;
-		margin: 1em 0 1em 0;
+}
+
+@media screen and (max-height: 580px) {
+	#login-form {
+		padding-top: 15em;
 	}
+
+}
+
+@media screen and (max-height: 490px) {
+	#login-form {
+		padding-top: 25em;
+	}
+
 }
