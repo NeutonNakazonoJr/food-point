@@ -17,7 +17,7 @@ const eventController = {
             const [ basicInfos ] = await eventRepository.updateBasicInfos(req.body, eventId);
             return res.status(200).json({ basicInfos });
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: 'Erro interno no servidor' });
         }
     },
 
@@ -27,7 +27,7 @@ const eventController = {
             const newDishAndIngridientsId = await eventRepository.insertNewDish(req.body, eventId);
             return res.status(201).json(newDishAndIngridientsId);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: 'Erro interno no servidor' });
         }
     },
 
@@ -36,7 +36,7 @@ const eventController = {
             const events = await eventRepository.findAllEvents(req.userId);
             return res.status(200).json({ events });
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: 'Erro interno no servidor' });
         }
     },
 
@@ -46,7 +46,20 @@ const eventController = {
             console.log(eventInfos);
             return res.status(200).json({ eventInfos })
         } catch (error) {
-            
+            console.log(error.message);
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
+    },
+
+    deleteEvent: async (req, res) => {
+        try {
+            const [ deletedEventId ] = await eventRepository.deletedEventById(req.params.id);
+            if (!deletedEventId.event_id) {
+                throw new Error('Erro interno no servidor');
+            }
+            return res.status(200).json({ message: 'Evento deletado com sucesso' });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
         }
     }
 }

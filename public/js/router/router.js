@@ -6,6 +6,8 @@ import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
 import createEventPageComponent from "../pages/eventPage.js";
 import menuPage from "../pages/menu/menuPage.js";
+import createErrorPage from "../pages/errorPage.js";
+import createProfile from "../pages/profilePage.js";
 
 const title = "Food Point";
 
@@ -42,8 +44,8 @@ const routes = {
 	"/register": {
 		html: createRegisterForm,
 		title: "Cadastre-se | " + title,
-		description: "Cadastre-se no Food Point", 
-  },
+		description: "Cadastre-se no Food Point",
+	},
 	"/home/create": {
 		html: newEventBasicPage,
 		title: "Novo evento | " + title,
@@ -57,13 +59,23 @@ const routes = {
 	"/home/create/guest": {
 		html: createGuestPage,
 		title: "Guests | " + title,
-		description: "Planeje sua lista de convidados!"
+		description: "Planeje sua lista de convidados!",
 	},
 	"/event": {
 		html: createEventPageComponent,
 		title: "Evento | " + title,
-		description: "Informações do evento"
-	}
+		description: "Informações do evento",
+	},
+	"/error": {
+		html: createErrorPage,
+		title: "Error | " + title,
+		description: "Algo deu errado",
+	},
+	"/profile": {
+		html: createProfile,
+		title: "Perfil | " + title,
+		description: "Edite seu perfil",
+	},
 };
 
 /** Check the current path and returns according with it
@@ -80,8 +92,7 @@ function router() {
 	}
 
 	// validates if the route exist, if doesn't, returns 404 page.
-	// return routes[currentPath] || routes["404"];
-	return routes["/home/create/menu"];
+	return routes[currentPath] || routes["404"];
 }
 
 /** overrides root innerHTML with html from router

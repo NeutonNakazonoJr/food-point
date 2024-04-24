@@ -94,6 +94,12 @@ const eventRepository = {
         const { rows } = await dbConnection.query(query, [eventId]);
         const eventInfos = rows[0].event_and_dishes;
         return eventInfos;
+    },
+
+    deletedEventById: async (eventId) => {
+        const query = 'DELETE FROM "event" WHERE event_id = $1 RETURNING event_id';
+        const { rows } = await dbConnection.query(query, [eventId]);
+        return rows;
     }
 }
 
