@@ -69,27 +69,34 @@ const eventRepository = {
     findCompleteEventInfos: async (eventId) => {
         const query = `SELECT
         json_build_object(
-            'eventName', e.event_Name,
-            'eventDate', e.event_date,
-            'eventTime', e.event_time,
-            'eventLocation', e.event_location,
-            'eventDescription', e.event_description,
-            'dishes', json_agg(
-                json_build_object(
-                    'dishId', d.id,
-                    'type', d.type,
-                    'dishNname', d.dish_name
+            'basicInfos', json_build_object (
+                'eventName', e.event_Name,
+                'eventDate', e.event_date,
+                'eventTime', e.event_time,
+                'eventLocation', e.event_location,
+                'eventDescription', e.event_description,
+                'eventTheme', e.theme
+            ),
+            'dishes', CASE WHEN count(d.id) > 0 THEN
+                json_agg(
+                    json_build_object(
+                        'dishId', d.id,
+                        'type', d.type,
+                        'dishName', d.dish_name
+                    )
                 )
-            )
+            ELSE
+                '[]'::json
+            END
         ) AS event_and_dishes
         FROM
             event e
-        JOIN
+        LEFT JOIN
             dish d ON e.event_id = d.event_id
         WHERE
             e.event_id = $1
         GROUP BY
-            e.event_name, e.event_date, e.event_time, e.event_location, e.event_description;
+            e.event_name, e.event_date, e.event_time, e.event_location, e.event_description, e.theme;
         `;
         const { rows } = await dbConnection.query(query, [eventId]);
         const eventInfos = rows[0].event_and_dishes;

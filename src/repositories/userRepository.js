@@ -66,6 +66,12 @@ const userRepository = {
         return rows;
     },
 
+    deleteUserRegistration: async (userId) => {
+        const query = 'DELETE FROM "user" WHERE id = $1 RETURNING id';
+        const { rows } = await dbConnection.query(query, [userId]);
+        return rows;
+    }
+
 }
 
 module.exports = userRepository;
