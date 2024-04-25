@@ -1,5 +1,6 @@
 import getHeader from "../components/header.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
+import notification from "../components/notification.js";
 
 const createProfileDesktop = () => {
     const page = document.createElement("div");
@@ -132,7 +133,7 @@ const createProfileDesktop = () => {
     emailDiv.className = "div-label"
     const emailIcon = document.createElement("img");
     emailIcon.className = "form-icon";
-    emailIcon.src = "./assets/icons/email-symbol.svg";
+    emailIcon.src = "/assets/icons/email-symbol.svg";
     emailIcon.alt = "Icone de carta";
     const emailLabel = document.createElement("label");
     emailLabel.textContent = "Email: "
@@ -321,24 +322,6 @@ const createProfileDesktop = () => {
         rightSide.appendChild(helpTab)
     })
     
-    //logic for notifications on the page
-    function notification(message) {
-        const alert = document.createElement("div");
-        alert.className = "notification";
-        alert.textContent = message;
-        page.appendChild(alert);
-    
-        setTimeout(() => {
-            alert.classList.add("show"); 
-            setTimeout(() => {
-                alert.classList.remove("show"); 
-                alert.classList.add("return");
-                setTimeout(() => {
-                    page.removeChild(alert);
-                }, 500);
-            }, 3000); 
-        }, 100); 
-    }
     //input image logic and send to API
     anchor.addEventListener("click", (event) => {
         event.preventDefault();
@@ -385,7 +368,7 @@ const createProfileDesktop = () => {
         const fullName = nameInput.value.trim().toLowerCase();
         const email = emailInput.value.trim().toLowerCase();
 
-        fetch("https://149.28.40.46/user", {
+        fetch("/api/user", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -400,10 +383,10 @@ const createProfileDesktop = () => {
                 notification("Dados Atualizados com Sucesso!");
             }else if(response.status === 400){
                 return response.json().then(data => {
-                    notification(data.error);
+                    console.error(data.error);
                 });
             } else {
-                throw new Error("Erro ao atualizar os dados!");
+                throw new Error();
             }
         })
         .catch(error => {
@@ -434,7 +417,7 @@ const createProfileDesktop = () => {
     function submitNewPassword() {
         const password = passwordInput.value;
 
-        fetch("https://149.28.40.46/user", {
+        fetch("/api/user", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

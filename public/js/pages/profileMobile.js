@@ -1,6 +1,7 @@
 import getHeader from "../components/header.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 
+
 const createProfileMobile = () => {
     const page = document.createElement("div");
     page.id = "profile"
@@ -388,24 +389,6 @@ const createProfileMobile = () => {
         }, 50);
         page.removeChild(helpTab)
     })
-    //logic for notifications
-    function notification(message) {
-        const alert = document.createElement("div");
-        alert.className = "notification";
-        alert.textContent = message;
-        page.appendChild(alert);
-
-        setTimeout(() => {
-            alert.classList.add("show");
-            setTimeout(() => {
-                alert.classList.remove("show");
-                alert.classList.add("return");
-                setTimeout(() => {
-                    page.removeChild(alert);
-                }, 500);
-            }, 3000);
-        }, 100);
-    }
     //logic to change pictures and send to api
     anchor.addEventListener("click", (event) => {
         event.preventDefault();
@@ -450,7 +433,7 @@ const createProfileMobile = () => {
         const fullName = nameInput.value.trim().toLowerCase();
         const email = emailInput.value.trim().toLowerCase();
 
-        fetch("https://149.28.40.46/user", {
+        fetch("/api/user", {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -499,7 +482,7 @@ const createProfileMobile = () => {
     function submitNewPassword() {
         const password = passwordInput.value;
 
-        fetch("https://149.28.40.46/user", {
+        fetch("/api/user", {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

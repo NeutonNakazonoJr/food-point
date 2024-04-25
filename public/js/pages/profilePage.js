@@ -1,5 +1,5 @@
-import createProfileDesktop from "/profileDesktop.js";
-import createProfileMobile from "/profileMobile.js";
+import createProfileDesktop from "./profileDesktop.js";
+import createProfileMobile from "./profileMobile.js";
 
 const createProfile = () => {
     const page = document.createElement("div");
