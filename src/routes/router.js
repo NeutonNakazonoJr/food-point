@@ -11,6 +11,6 @@ router.use(pagesRoutes);
 router.use("/api", loginRoutes);
 router.use("/api", userRoutes);
 router.use("/api", eventRoutes);
-router.use("/api", guestRouter)
+router.use("/api", guestRouter);
 
 module.exports = router;

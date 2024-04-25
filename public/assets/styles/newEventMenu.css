@@ -1,0 +1,344 @@
+#newEventMenu {
+	background-color: var(--white-smoke);
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 1rem 4rem;
+	width: 100%;
+	color: var(--blackberry);
+}
+
+#newEventMenu > aside {
+	background-color: var(--white-smoke);
+	border: 2px solid var(--raspberry);
+	border-radius: var(--border-radius-1x);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	width: 15%;
+	& > button {
+		padding: 0.5rem 0;
+		cursor: pointer;
+		font-weight: 700;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--raspberry);
+		background-color: var(--white-smoke);
+		border: none;
+		border-bottom: 2px solid var(--raspberry);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			background-color: var(--salmon);
+			outline: none;
+			color: var(--blackberry);
+			&::before {
+				filter: brightness(0) saturate(100%) invert(10%) sepia(7%)
+					saturate(7141%) hue-rotate(256deg) brightness(100%)
+					contrast(97%);
+			}
+		}
+		&::before {
+			background: url("../icons/salsicha.svg") center no-repeat;
+			background-size: contain;
+			content: "";
+			margin-right: 5px;
+			display: inline-block;
+			width: 1rem;
+			height: 1rem;
+		}
+	}
+	& > button:nth-of-type(2)::before {
+		background-image: url("../icons/salad.svg");
+	}
+	& > button:nth-of-type(3)::before {
+		background-image: url("../icons/bandeja-de-comida\ 1.svg");
+	}
+	& > button:nth-of-type(4)::before {
+		background-image: url("../icons/accompaniment-type-icon.svg");
+	}
+	& > button:nth-of-type(5)::before {
+		background-image: url("../icons/icecream.svg");
+	}
+	& > button:nth-of-type(6)::before {
+		background-image: url("../icons/drink.svg");
+	}
+	& > button:last-child {
+		border: none;
+	}
+	& > .newEventMenu-selected {
+		background-color: var(--raspberry);
+		cursor: auto;
+		color: var(--white-smoke);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			background-color: var(--raspberry);
+			color: var(--white-smoke);
+			&::before {
+				filter: brightness(0) saturate(100%) invert(100%) sepia(4%)
+					saturate(3296%) hue-rotate(47deg) brightness(99%)
+					contrast(91%);
+			}
+		}
+		&::before {
+			filter: brightness(0) saturate(100%) invert(100%) sepia(4%)
+				saturate(3296%) hue-rotate(47deg) brightness(99%) contrast(91%);
+		}
+	}
+}
+
+#newEventMenu > #newEventMenu-form {
+	display: flex;
+	flex-direction: column;
+	width: 45%;
+	& > h1 {
+		width: 100%;
+		line-height: 2rem;
+		font-size: 2rem;
+		font-weight: 700;
+	}
+	& > p {
+		line-height: 1rem;
+		width: 100%;
+		padding-bottom: 1rem;
+	}
+	& fieldset {
+		border: none;
+	}
+	& > fieldset:first-of-type {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		& > label {
+			font-size: 1rem;
+			font-weight: 700;
+			width: 100%;
+		}
+		& > input {
+			border-radius: var(--border-radius-1x);
+			border: none;
+			padding: 5px 10px;
+			background-color: var(--blackberry);
+			color: var(--white-smoke);
+			width: 65%;
+		}
+		& > button {
+			border: none;
+			background-color: var(--raspberry);
+			color: var(--white-smoke);
+			padding: 5px 15px;
+			width: 30%;
+			cursor: pointer;
+			border-radius: var(--border-radius-1x);
+			transition: all 500ms;
+			&:hover,
+			&:focus,
+			&:focus-visible,
+			&:focus-within,
+			&:active {
+				filter: brightness(0.8);
+			}
+		}
+	}
+	& > fieldset:nth-of-type(2) {
+		display: flex;
+		flex-direction: column;
+		margin-top: 1rem;
+		width: 100%;
+		& > * {
+			width: 100%;
+		}
+		& > legend {
+			font-size: 1rem;
+			font-weight: 700;
+		}
+	}
+}
+
+#newEventMenu > #newEventMenu-form .newEventMenu-ingredient {
+	display: flex;
+	/* overflow: hidden; */
+	border-radius: var(--border-radius-1x);
+	width: 100%;
+	margin: 0.5rem 0;
+	position: relative;
+
+	& > input:active,
+	& > input:focus,
+	& > input:focus-visible,
+	& > input:focus-within {
+		outline: none;
+	}
+	& > input[type="text"] {
+		border-radius: var(--border-radius-1x) 0 0 var(--border-radius-1x);
+		border: none;
+		background-color: var(--blackberry);
+		color: var(--white-smoke);
+		padding: 5px 10px;
+		width: 50%;
+	}
+
+	& > input[type="number"],
+	& > select {
+		border: 2px solid var(--blackberry);
+		color: var(--blackberry);
+		padding: 5px 10px;
+		background-color: var(--white-smoke);
+		text-align: center;
+		width: 25%;
+	}
+	& > input[type="number"] {
+		border-right: none;
+	}
+	& > select {
+		border-radius: 0 var(--border-radius-1x) var(--border-radius-1x) 0;
+	}
+	& > button:last-of-type {
+		position: absolute;
+		width: 2.5rem;
+		right: -3rem;
+		height: 100%;
+		border: 2px solid var(--blackberry);
+		background: url("../icons/trash.svg") no-repeat center;
+		background-size: 50%;
+		background-color: var(--raspberry);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
+		}
+	}
+}
+
+#newEventMenu > #newEventMenu-form > fieldset:nth-of-type(2) button {
+	background-color: var(--white-smoke);
+	border: 2px dashed var(--raspberry);
+	border-radius: var(--border-radius-1x);
+	cursor: pointer;
+	padding: 5px 0;
+	color: var(--raspberry);
+	transition: all 500ms;
+	&:hover,
+	&:focus,
+	&:focus-visible,
+	&:focus-within,
+	&:active {
+		color: var(--white-smoke);
+		background-color: var(--raspberry);
+	}
+}
+
+#newEventMenu > div {
+	padding-left: 3%;
+	border-left: 2px solid var(--raspberry);
+	width: 30%;
+	display: flex;
+	flex-direction: column;
+	& > h6 {
+		font-size: 1rem;
+	}
+}
+
+#newEventMenu > div > .newEventMenu-item {
+	display: flex;
+	background-color: var(--wine-color);
+	align-items: center;
+	border: 2px solid var(--wine-color);
+	overflow: hidden;
+	height: 3rem;
+	margin-top: 5px;
+	border-radius: var(--border-radius-1x);
+	width: 100%;
+	& > p {
+		width: 80%;
+		display: flex;
+		align-items: center;
+		padding-left: 0.5rem;
+		color: var(--white-smoke);
+		&::before {
+			content: "";
+			display: inline-block;
+			background: url("../icons/restaurant-sharp.svg") no-repeat center;
+			background-size: contain;
+			padding-left: 5px;
+			height: 1rem;
+			width: 1rem;
+		}
+	}
+	& > button {
+		justify-self: flex-end;
+		width: 3rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+		background: url("../icons/pen.svg") no-repeat center;
+		background-size: 50%;
+		background-color: var(--white-smoke);
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
+		}
+	}
+	& > button:last-of-type {
+		border-left: 2px solid var(--wine-color);
+		background-color: var(--raspberry);
+		background-image: url("../icons/trash.svg");
+	}
+}
+
+
+#newEventMenu > div > .newEventMenu-item-editing {
+	background-color: var(--blackberry);
+	border-color: var(--blackberry);
+}
+
+#newEventMenu-footer {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	position: fixed;
+	bottom: 0;
+	padding-bottom: 1rem;
+	padding-right: 2rem;
+	& > a {
+		border: none;
+		cursor: pointer;
+		background-color: var(--raspberry);
+		font-size: 1rem;
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+		color: var(--white-smoke);
+		text-decoration: none;
+		padding: 0.5rem 3rem;
+		border-radius: var(--border-radius-1x);
+		&::after {
+			content: "";
+			background: url("../icons/arrow-rigth.svg") no-repeat center;
+			background-size: contain;
+			width: 1rem;
+			height: 1rem;
+			margin-left: 5px;
+			display: inline-block;
+		}
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
+		}
+	}
+}

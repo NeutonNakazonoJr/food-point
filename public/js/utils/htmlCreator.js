@@ -4,15 +4,47 @@ const htmlCreator = {
     createDiv: (divId) => {
         const div = document.createElement('div');
     
-        if (divId.includes('.')) {
-            div.classList.add(divId.substring(1));
-            return div;
+        if (divId) {
+            if (divId.includes('.')) {
+                div.classList.add(divId.substring(1));
+                return div;
+            }    
+
+            div.id = divId;
         }
-    
-        div.id = divId;
+      
         return div;
     },
 
+    
+    createInput: (inputOptions = { type, id, placeholder, className, value, pattern, labelText, classNameDiv }) => {
+        const input = document.createElement('input');
+    
+        inputOptions.type ? input.type = inputOptions.type : null;
+        inputOptions.id ? input.id = inputOptions.id : null;
+        inputOptions.placeholder ? input.placeholder = inputOptions.placeholder : null;
+        inputOptions.className ? input.classList.add = inputOptions.className : null;
+        inputOptions.value ? input.value = inputOptions.value : null;
+        inputOptions.pattern ? input.pattern = inputOptions.pattern : null;
+
+        if (inputOptions.labelText) {
+            const label = document.createElement('label');
+            label.innerText = inputOptions.labelText;
+            label.setAttribute('for', inputOptions.id);
+            
+            const divInput = htmlCreator.createDiv();
+            divInput.appendChild(label)
+            divInput.appendChild(input);
+
+            if (inputOptions.classNameDiv) {
+                divInput.classList.add(inputOptions.classNameDiv);
+            }
+            return divInput;
+        }
+    
+        return input;
+    },
+        
     createSection: (sectionId) => {
         const section = document.createElement('section');
         sectionId ? section.id = sectionId : null;
@@ -22,7 +54,11 @@ const htmlCreator = {
     createTitle: (titleType, innerText, titleId) => {
         const title = document.createElement(titleType);
         title.innerText = innerText;
-        titleId ? title.id = titleId : null;
+
+        if (titleId) {
+            titleId.includes('.') ? title.classList.add(titleId) : title.id = titleId;
+        }
+        
         return title;
     },
 
@@ -44,46 +80,23 @@ const htmlCreator = {
     },
 
 
-    createInput: (type, id, placeholder, className) => {
-        const input = document.createElement('input');
-    
-        type ? input.type = type : null;
-        id ? input.id = id : null;
-        placeholder ? input.placeholder = placeholder : null;
-        className ? input.classList.add = className : null;
-    
-        return input;
-    },
-
-    createForm: (formTitle = "", formInputs = [{ type: '', id: '', placeholder: '', className: '', labelName: '' }], submitBtnName = '') => {
+    createForm: (formId = '', formTitle = "", inputOptions = [{type, id, placeholder, className, value, pattern, labelText, classNameDiv}], submitBtnName = '') => {
         const form = document.createElement('form');
-    
+        
+        formId ? form.id = formId : null;
+
         if (formTitle) {
-            formTitle = createTitle('h2', formTitle);
+            formTitle = htmlCreator.createTitle('h2', formTitle);
             form.appendChild(formTitle);
         }
-    
-        formInputs.forEach(input => {
-            const { type, id, placeholder, className, labelName } = input;
-            const newInput = createInput(type, id, placeholder, className);
-    
-            if (labelName) {
-    
-                const divInput = createDiv('.div-input-form');
-    
-                const label = document.createElement('label');
-                label.innerText = labelName;
-                label.setAttribute('for', id);
-                divInput.appendChild(label)
-                divInput.appendChild(newInput);
-                form.appendChild(divInput);
-            } else {
-                form.appendChild(newInput);
-            }
+        
+        inputOptions.forEach(inputInfos => {
+            const newInput = htmlCreator.createInput(inputInfos);
+            form.appendChild(newInput);
         })
     
         if (submitBtnName) {
-            submitBtnName = createButton(submitBtnName, 'submit-btn');
+            submitBtnName = htmlCreator.createButton(submitBtnName, 'submit-btn');
             form.appendChild(submitBtnName)
         }
     
@@ -115,17 +128,13 @@ const htmlCreator = {
         return list;
     },
 
-    createButton: (innerTextButton, buttonId, buttonClass, eventType, eventFunction) => {
+    createButton: (innerTextButton ='', buttonId = '', buttonClass = '') => {
         const btn = document.createElement('button');
         btn.innerText = innerTextButton;
 
         buttonId ? btn.id = buttonId : null;
-        buttonClass ? btn.classList.add(buttonClass) : null;
-
-        if (eventType) {
-            btn.addEventListener(eventType, eventFunction)
-        }
-
+        buttonClass ? btn.classList = buttonClass : null;
+        
         return btn;
     },
 

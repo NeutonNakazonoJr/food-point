@@ -8,12 +8,17 @@ const goToIndexHTML = (req, res) => {
 pagesRoutes.use(express.static(path.join(__dirname, "../../public")));
 
 pagesRoutes.get("/", goToIndexHTML);
+pagesRoutes.get("/error", goToIndexHTML);
 pagesRoutes.get("/login", goToIndexHTML);
 pagesRoutes.get("/register", goToIndexHTML);
 
 pagesRoutes.get("/home", goToIndexHTML);
 pagesRoutes.get("/home/create", goToIndexHTML);
 pagesRoutes.get("/home/create/guest", goToIndexHTML);
+pagesRoutes.get("/home/create/menu", goToIndexHTML);
+
+pagesRoutes.get("/event", goToIndexHTML);
+pagesRoutes.get("/profile", goToIndexHTML);
 
 
 module.exports = pagesRoutes;

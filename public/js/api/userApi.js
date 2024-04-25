@@ -19,3 +19,18 @@ export async function getLogged(
 	const result = res.json();
 	return result;
 }
+
+export async function getMyLogin() {
+	try {
+		const url = "/api/user";
+		const res = await fetch(url);
+		if (!res.ok) {
+			const err = await res.json();
+			throw err;
+		}
+		const data = await res.json();
+		return data;
+	} catch (error) {
+		return error;
+	}
+}
