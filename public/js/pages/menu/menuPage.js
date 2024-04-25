@@ -5,170 +5,121 @@ import getAsideForMenu from "./components/aside.js";
 import getDisplay from "./components/display.js";
 import getForm from "./components/form.js";
 
-const menu = {
-	stater: {
-		name: "Entrada",
-		controller: new DishController(),
-	},
-	salad: {
-		name: "Salada",
-		controller: new DishController(),
-	},
-	main: {
-		name: "Principal",
-		controller: new DishController(),
-	},
-	side: {
-		name: "Acompanhamento",
-		controller: new DishController(),
-	},
-	dessert: {
-		name: "Sobremesa",
-		controller: new DishController(),
-	},
-	drink: {
-		name: "Drink",
-		controller: new DishController(),
-	},
-};
-
-function dispatchIngredientChange() {
-	console.log("--dispatchIngredientChange--");
-	const event = new CustomEvent("dispatchIngredientChange");
-	window.dispatchEvent(event);
+function getMenu(eventID) {
+	return {
+		stater: {
+			name: "Entrada",
+			controller: new DishController(eventID),
+		},
+		salad: {
+			name: "Salada",
+			controller: new DishController(eventID),
+		},
+		main: {
+			name: "Principal",
+			controller: new DishController(eventID),
+		},
+		side: {
+			name: "Acompanhamento",
+			controller: new DishController(eventID),
+		},
+		dessert: {
+			name: "Sobremesa",
+			controller: new DishController(eventID),
+		},
+		drink: {
+			name: "Drink",
+			controller: new DishController(eventID),
+		},
+	};
 }
 
-export default function menuPage(constructorInfo) {
+function dispatchIngredientChange() {
+	if (!ingredientChangeHasBeenDispatched) {
+		ingredientChangeHasBeenDispatched = true;
+		console.log("--dispatchIngredientChange--");
+		const event = new CustomEvent("dispatchIngredientChange");
+		window.dispatchEvent(event);
+		ingredientChangeHasBeenDispatched = false;
+	}
+}
+let ingredientChangeHasBeenDispatched = false;
+
+export default async function menuPage(constructorInfo) {
+	const tempEventID = "9136f3da-09ec-4c82-94be-b01d5df98156";
+	const menu = getMenu(tempEventID);
+
 	let currentType = "stater";
-	let ingredientChangeHasBeenDispatched = false;
 
 	const header = getHeader(false, true);
 	const progressBar = eventProgressBar(true, true, 0, 1);
 	const main = document.createElement("main");
 	main.id = "newEventMenu";
-	menu.stater.controller.addDish(Date.now(), "", "Entrada");
+	await menu.stater.controller.addDish(null, null, "Entrada");
 
-	window.addEventListener("selectDishType", (e) => {
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
+	window.addEventListener("selectDishType", async (e) => {
+		dispatchIngredientChange();
 		currentType = e.detail.key;
-		if (menu[currentType].controller.getLengthOfDishes() <= 0) {
-			menu[currentType].controller.addDish(Date.now(), "", e.detail.type);
-		}
-		const dishes = menu[currentType].controller.getDishes();
-		const newForm = getForm(dishes[dishes.length - 1]);
-		main.replaceChild(newForm, form);
-		form = newForm;
-		ingredientChangeHasBeenDispatched = false;
+		form.dispatchEvent(new CustomEvent("selectDishType", e));
+		display.dispatchEvent(new CustomEvent("selectDishType", e));
 	});
 
-	window.addEventListener("updateDish", (e) => {
+	window.addEventListener("updateDish", async (e) => {
 		if (menu[currentType].name === e.detail.type) {
-			if (!ingredientChangeHasBeenDispatched) {
-				ingredientChangeHasBeenDispatched = true;
-				dispatchIngredientChange();
-			}
-			menu[currentType].controller.updateDish(
-				e.detail.ID,
-				e.detail.newDishId,
-				e.detail.name,
-				e.detail.type
+			dispatchIngredientChange();
+			await menu[currentType].controller.updateDish(
+				e.detail.dishId,
+				e.detail.dishName,
+				e.detail.addNewDish
 			);
-			let dish = menu[currentType].controller.getOneDish(
-				e.detail.newDishId
-			);
-			if (e.detail.addNewDish) {
-				menu[currentType].controller.addDish(
-					Date.now(),
-					"",
-					menu[currentType].name
-				);
-				const dishes = menu[currentType].controller.getDishes();
-				dish = dishes[dishes.length - 1];
-			}
-			const newForm = getForm(dish);
-			main.replaceChild(newForm, form);
-			form = newForm;
-			ingredientChangeHasBeenDispatched = false;
+			form.dispatchEvent(new CustomEvent("updateDish", e));
+			display.dispatchEvent(new CustomEvent("updateDish", e));
 		}
 	});
 
-	window.addEventListener("updateIngredient", (e) => {
+	window.addEventListener("updateIngredient", async (e) => {
 		const ingredient = {
-			ingredientId: e.detail.ingredientId,
+			id: e.detail.ingredientId,
 			name: e.detail.name,
 			unityMeasure: e.detail.unityMeasure,
 			quantity: e.detail.quantity,
 		};
-		menu[currentType].controller.pushIngredient(
+		await menu[currentType].controller.pushIngredient(
 			e.detail.dishId,
 			ingredient
 		);
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
-		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
-		const newForm = getForm(dish);
-		main.replaceChild(newForm, form);
-		form = newForm;
-		ingredientChangeHasBeenDispatched = false;
+		form.dispatchEvent(new CustomEvent("updateIngredient", e));
+		display.dispatchEvent(new CustomEvent("updateIngredient", e));
 	});
 
-	window.addEventListener("deleteIngredient", (e) => {
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
-		menu[currentType].controller.deleteIngredient(
+	window.addEventListener("deleteIngredient", async (e) => {
+		await menu[currentType].controller.deleteIngredient(
 			e.detail.dishId,
 			e.detail.ingredientId
 		);
-		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
-		const newForm = getForm(dish);
-		main.replaceChild(newForm, form);
-		form = newForm;
-		ingredientChangeHasBeenDispatched = false;
+		form.dispatchEvent(new CustomEvent("deleteIngredient", e));
+		display.dispatchEvent(new CustomEvent("deleteIngredient", e));
 	});
 
-	window.addEventListener("dishSelectedToDelete", (e) => {
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
-		menu[currentType].controller.removeDish(e.detail.dishId);
-		if (menu[currentType].controller.getLengthOfDishes() <= 0) {
-			menu[currentType].controller.addDish(Date.now(), "", e.detail.type);
-		}
-		const dishes = menu[currentType].controller.getDishes();
-		const newForm = getForm(dishes[dishes.length - 1]);
-		main.replaceChild(newForm, form);
-		form = newForm;
-		ingredientChangeHasBeenDispatched = false;
-	});
-
-	window.addEventListener("dishSelectedToEdit", (e) => {
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
-		const dish = menu[currentType].controller.getOneDish(e.detail);
-		const newForm = getForm(dish);
-		main.replaceChild(newForm, form);
-		form = newForm;
-		ingredientChangeHasBeenDispatched = false;
+	window.addEventListener("dishSelectedToDelete", async (e) => {
+		await menu[currentType].controller.removeDish(e.detail.dishId);
+		form.dispatchEvent(new CustomEvent("dishSelectedToDelete", e));
+		display.dispatchEvent(new CustomEvent("dishSelectedToDelete", e));
 	});
 
 	const aside = getAsideForMenu(menu);
-	let form = getForm(menu.stater.controller.getDishes()[0]);
-	const display = getDisplay(menu, currentType);
+	const form = await getForm(menu, currentType);
+	const display = await getDisplay(menu, currentType);
 
 	main.appendChild(aside);
 	main.appendChild(form);
 	main.appendChild(display);
 
+	/*
+		<footer id="newEventMenu-footer">
+			<a href="#">Decidir mais tarde</a>
+		</footer>
+	*/
 	const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);
 	wrapper.appendChild(progressBar);

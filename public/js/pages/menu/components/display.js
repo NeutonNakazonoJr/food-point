@@ -1,17 +1,17 @@
 import stringLimiter from "../../../utils/stringLimiter.js";
 
-function editThisDish(dishId) {
+function editThisDish(btn, dishId) {
 	const event = new CustomEvent("dishSelectedToEdit", {
 		detail: dishId,
 	});
-	window.dispatchEvent(event);
+	btn.dispatchEvent(event);
 }
 
-function deleteThisDish(dishId, type) {
+function deleteThisDish(btn, dishId, type) {
 	const event = new CustomEvent("dishSelectedToDelete", {
 		detail: { dishId, type },
 	});
-	window.dispatchEvent(event);
+	btn.dispatchEvent(event);
 }
 
 function generateCard(dish, editing) {
@@ -19,7 +19,7 @@ function generateCard(dish, editing) {
 	const p = document.createElement("p");
 	const editBtn = document.createElement("button");
 	const deleteBtn = document.createElement("button");
-	const dishName = dish.name === "" ? "Prato vazio" : dish.name;
+	const dishName = dish.dishName === "" ? "Prato vazio" : dish.dishName;
 
 	p.textContent = stringLimiter(dishName, 12, true);
 	div.classList.add("newEventMenu-item");
@@ -31,16 +31,16 @@ function generateCard(dish, editing) {
 	}
 	editBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		editThisDish(dish.ID);
+		editThisDish(editBtn, dish.dishId);
 	});
 
 	deleteBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		deleteThisDish(dish.ID, dish.type);
+		deleteThisDish(deleteBtn, dish.dishId, dish.type);
 	});
 
-	window.addEventListener("dishSelectedToEdit", (e) => {
-		if (e.detail === dish.ID) {
+	div.addEventListener("dishSelectedToEdit", (e) => {
+		if (e.detail === dish.dishId) {
 			div.classList.add("newEventMenu-item-editing");
 			const text = p.textContent;
 			p.textContent = stringLimiter(text, 12, true) + "(editando)";
@@ -63,7 +63,7 @@ function generateCard(dish, editing) {
 	return div;
 }
 
-export default function getDisplay(menu, currentType) {
+export default async function getDisplay(menu, currentType) {
 	function renderDiv(dishes) {
 		dishes.forEach((dish, index, arr) => {
 			const isFirstDish = index === 0;
@@ -74,8 +74,8 @@ export default function getDisplay(menu, currentType) {
 		});
 		isFirstLoad = false;
 	}
-	function rebootDiv() {
-		const dishes = menu[currentType].controller.getDishes();
+	async function rebootDiv() {
+		const dishes = await menu[currentType].controller.getDishes();
 
 		div.innerHTML = "";
 		renderDiv(dishes);
@@ -84,7 +84,7 @@ export default function getDisplay(menu, currentType) {
 		div.prepend(h6);
 	}
 
-	const dishes = menu[currentType].controller.getDishes();
+	const dishes = await menu[currentType].controller.getDishes();
 	let isFirstLoad = true;
 
 	const div = document.createElement("div");
@@ -99,12 +99,12 @@ export default function getDisplay(menu, currentType) {
 	h6.appendChild(span);
 	div.prepend(h6);
 
-	window.addEventListener("selectDishType", (e) => {
+	div.addEventListener("selectDishType", (e) => {
 		currentType = e.detail.key;
 		rebootDiv();
 	});
-	window.addEventListener("updateDish", rebootDiv);
-	window.addEventListener("dishSelectedToDelete", rebootDiv);
+	div.addEventListener("updateDish", rebootDiv);
+	div.addEventListener("dishSelectedToDelete", rebootDiv);
 
 	return div;
 }

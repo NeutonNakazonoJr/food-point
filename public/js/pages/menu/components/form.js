@@ -1,12 +1,11 @@
-function saveDish(dishId, newDishId, dishName, dishType, addNewDish = true) {
+function saveDish(dishId, dishName, dishType, addNewDish = true) {
 	const event = new CustomEvent("updateDish", {
 		detail: {
-			ID: dishId,
-			newDishId: newDishId,
-			name: dishName,
+			dishId,
+			dishName,
 			type: dishType,
-			addNewDish: addNewDish
-		},
+			addNewDish: addNewDish,
+		}
 	});
 	window.dispatchEvent(event);
 }
@@ -19,7 +18,7 @@ function saveIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
 			name,
 			unityMeasure,
 			quantity,
-		},
+		}
 	});
 	window.dispatchEvent(event);
 }
@@ -29,7 +28,7 @@ function deleteIngredient(dishId, ingredientId) {
 		detail: {
 			dishId,
 			ingredientId,
-		},
+		}
 	});
 	window.dispatchEvent(event);
 }
@@ -41,7 +40,7 @@ function getDishField(dishId, dishName, dishType) {
 	const input = document.createElement("input");
 	const btn = document.createElement("button");
 	const inputID = "newEventMenu-form-dishName";
-	
+
 	let lastInputValue = dishName;
 	let saved = true;
 
@@ -55,14 +54,14 @@ function getDishField(dishId, dishName, dishType) {
 	btn.type = "button";
 	btn.textContent = "Salvar prato";
 
-	if(!dishName || dishName.trim() === '') {
+	if (!dishName || dishName.trim() === "") {
 		btn.disabled = true;
 		btn.style.cursor = "not-allowed";
 	}
 
 	input.addEventListener("input", () => {
 		if (input.reportValidity()) {
-			if(lastInputValue !== input.value) {
+			if (lastInputValue !== input.value) {
 				saved = false;
 				lastInputValue = input.value.trim();
 			}
@@ -79,16 +78,16 @@ function getDishField(dishId, dishName, dishType) {
 	btn.addEventListener("click", () => {
 		if (input.reportValidity()) {
 			saved = true;
-			saveDish(dishId, dishId, input.value.trim(), dishType, true);
+			saveDish(dishId, input.value.trim(), dishType, true);
 		}
 	});
-	
+
 	window.addEventListener("dispatchIngredientChange", () => {
-		if(!saved && input.checkValidity()) {
+		if (!saved && input.checkValidity()) {
 			saved = true;
-			saveDish(dishId, dishId, input.value.trim(), dishType, false);
+			saveDish(dishId, input.value.trim(), dishType, false);
 		}
-	})
+	});
 
 	fieldset.appendChild(label);
 	fieldset.appendChild(input);
@@ -121,7 +120,7 @@ function createIngredientFieldset(
 					saved = true;
 					saveIngredient(
 						dishId,
-						ingredient.ingredientId,
+						ingredient.id,
 						ingredient.name,
 						ingredient.unityMeasure,
 						ingredient.quantity
@@ -135,7 +134,7 @@ function createIngredientFieldset(
 	let saved = true;
 	const defaultAwait = 4000;
 	const ingredient = {
-		ingredientId: ingredientId,
+		id: ingredientId,
 		name: name,
 		unityMeasure: unityMeasure,
 		quantity: quantity,
@@ -166,27 +165,25 @@ function createIngredientFieldset(
 	unitSelect.dataset.ingredient = "unityMeasure";
 	const options = [
 		"Selecione uma unidade de medida",
-		"Quilogramas",
-		"Gramas",
-		"Mililitros",
-		"Litros",
-		"Unidades",
+		"Quilogramas (kg)",
+		"Gramas (g)",
+		"Mililitros (ml)",
+		"Litros (L)",
+		"Unidades (u)",
 	];
 
 	options.forEach((option, index) => {
 		const opt = document.createElement("option");
 		opt.value = index === 0 ? "0" : option;
 		opt.text = option;
-		if (!unityMeasure && typeof unityMeasure !== "string") {
-			if (index === 0) {
+		if (index === 0) {
+			opt.disabled = true;
+			if (!unityMeasure) {
 				opt.selected = true;
-				opt.disabled = true;
 			}
-		} else {
-			if (unityMeasure === option) {
-				opt.selected = true;
-				opt.disabled = true;
-			}
+		}
+		if (unityMeasure && unityMeasure === option) {
+			opt.selected = true;
 		}
 		unitSelect.appendChild(opt);
 	});
@@ -199,9 +196,9 @@ function createIngredientFieldset(
 	fieldset.appendChild(quantityInput);
 	fieldset.appendChild(unitSelect);
 
-	if (ingredient.ingredientId) {
+	if (ingredient.id) {
 		const deleteButton = document.createElement("button");
-		deleteButton.dataset.ingredientId = ingredient.ingredientId;
+		deleteButton.dataset.id = ingredient.id;
 		deleteButton.dataset.dishId = dishId;
 		deleteButton.addEventListener("click", deleteThisIngredient);
 		fieldset.appendChild(deleteButton);
@@ -213,7 +210,7 @@ function createIngredientFieldset(
 			saved = true;
 			saveIngredient(
 				dishId,
-				ingredient.ingredientId,
+				ingredient.id,
 				ingredient.name,
 				ingredient.unityMeasure,
 				ingredient.quantity
@@ -226,9 +223,9 @@ function createIngredientFieldset(
 
 function deleteThisIngredient(e) {
 	if (e instanceof Event && e.target instanceof HTMLButtonElement) {
-		const ingredientId = parseInt(e.target.dataset.ingredientId);
-		const dishId = parseInt(e.target.dataset.dishId);
-		if(isNaN(ingredientId) || isNaN(dishId)) {
+		const ingredientId = e.target.dataset.id;
+		const dishId = e.target.dataset.dishId;
+		if (!ingredientId || !dishId) {
 			return;
 		}
 		deleteIngredient(dishId, ingredientId);
@@ -249,7 +246,7 @@ function getIngredientsField(dishId, ingredients) {
 			fieldset.appendChild(
 				createIngredientFieldset(
 					dishID,
-					ingredient.ingredientId,
+					ingredient.id,
 					ingredient.name,
 					ingredient.unityMeasure,
 					ingredient.quantity
@@ -269,8 +266,20 @@ function getIngredientsField(dishId, ingredients) {
 	return fieldset;
 }
 
-export default function getForm(dish) {
+function bootForm(form, h1, p, dish) {
+	form.innerHTML = "";
+	const dishFieldset = getDishField(dish.dishId, dish.dishName, dish.type);
+	const ingredientsField = getIngredientsField(dish.dishId, dish.ingredients);
+
+	form.appendChild(h1);
+	form.appendChild(p);
+	form.appendChild(dishFieldset);
+	form.appendChild(ingredientsField);
+}
+
+export default async function getForm(menu, currentType) {
 	console.log("get FORM - " + Date.now());
+
 	const form = document.createElement("form");
 	form.id = "newEventMenu-form";
 	form.addEventListener("submit", (e) => e.preventDefault());
@@ -281,14 +290,52 @@ export default function getForm(dish) {
 	p.textContent =
 		"Organize as comidas servidas durante o evento gastronômico";
 
-	let dishFieldset = getDishField(dish.ID, dish.name, dish.type);
+	const dish = await menu[currentType].controller.getLastDish(menu[currentType].name);
+	bootForm(form, h1, p, dish);
 
-	let ingredientsField = getIngredientsField(dish.ID, dish.ingredients);
+	form.addEventListener("selectDishType", async (e) => {
+		currentType = e.detail.key;
+		const dish = await menu[currentType].controller.getLastDish(e.detail.type);
+		bootForm(form, h1, p, dish);
+	});
 
-	form.appendChild(h1);
-	form.appendChild(p);
-	form.appendChild(dishFieldset);
-	form.appendChild(ingredientsField);
+	form.addEventListener("updateDish", async (e) => {
+		if (menu[currentType].name === e.detail.type) {
+			if (e.detail.addNewDish) {
+				const dish = await menu[currentType].controller.getLastDish(e.detail.type);
+				bootForm(form, h1, p, dish);
+			} else {
+				const dish = await menu[currentType].controller.getOneDish(
+					e.detail.dishId
+				);
+				bootForm(form, h1, p, dish);
+			}
+		}
+	});
 
+	form.addEventListener("updateIngredient", async (e) => {
+		console.log("form");
+		const dish = await menu[currentType].controller.getOneDish(e.detail.dishId);
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("deleteIngredient", async (e) => {
+		const dish = await menu[currentType].controller.getOneDish(e.detail.dishId);
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("dishSelectedToDelete", async (e) => {
+		const dish = await menu[currentType].controller.getLastDish(e.detail.type);
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("dishSelectedToEdit", async (e) => {
+		if (!ingredientChangeHasBeenDispatched) {
+			ingredientChangeHasBeenDispatched = true;
+			dispatchIngredientChange();
+		}
+		const dish = await menu[currentType].controller.getOneDish(e.detail);
+		bootForm(form, h1, p, dish);
+	});
 	return form;
 }

@@ -2,77 +2,27 @@
 <html lang="pt-br">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<meta name="description" content=""/>
-		<link rel="shortcut icon" href="/assets/images/Fav icon.png"/>
-		<link rel="stylesheet" href="/assets/styles/style.css"/>
-		<link rel="stylesheet" href="/assets/styles/animations.css"/>
-		<link rel="stylesheet" href="/assets/styles/main-header.css"/>
-		<link rel="stylesheet" href="/assets/styles/homePage.css"/>
-		<link rel="stylesheet" href="/assets/styles/login.css"/>
-		<link rel="stylesheet" href="/assets/styles/registerPage.css"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="" />
+		<link rel="shortcut icon" href="/assets/images/Fav icon.png" />
+		<link rel="stylesheet" href="/assets/styles/style.css" />
+		<link rel="stylesheet" href="/assets/styles/animations.css" />
+		<link rel="stylesheet" href="/assets/styles/main-header.css" />
+		<link rel="stylesheet" href="/assets/styles/homePage.css" />
+		<link rel="stylesheet" href="/assets/styles/login.css" />
+		<link rel="stylesheet" href="/assets/styles/registerPage.css" />
 
-		<link rel="stylesheet" href="/assets/styles/timeline.css"/>
-		<link rel="stylesheet" href="/assets/styles/newEventBasic.css"/>
+		<link rel="stylesheet" href="/assets/styles/timeline.css" />
+		<link rel="stylesheet" href="/assets/styles/newEventBasic.css" />
 		<link rel="stylesheet" href="/assets/styles/newEventMenu.css" />
-		<link rel="stylesheet" href="/assets/styles/errorPage.css"/>
-		<link rel="stylesheet" href="/assets/styles/guest.css"/>
-		<link rel="stylesheet" href="/assets/styles/profile.css">
-		<link rel="stylesheet" href="/assets/styles/eventPage.css">
+		<link rel="stylesheet" href="/assets/styles/errorPage.css" />
+		<link rel="stylesheet" href="/assets/styles/guest.css" />
+		<link rel="stylesheet" href="/assets/styles/profile.css" />
+		<link rel="stylesheet" href="/assets/styles/eventPage.css" />
 		<title>Food Point</title>
 	</head>
 	<body>
-		<div id="root">
-			<main id="newEventMenu">
-				<aside>
-					<button class="newEventMenu-selected">Entrada</button>
-					<button>Salada</button>
-					<button>Principal</button>
-					<button>Acompanhamento</button>
-					<button>Sobremesa</button>
-					<button>Drink</button>
-				</aside>
-				<form id="newEventMenu-form">
-					<h1>Menu</h1>
-					<p>Organize as comidas servidas durante o evento gastronômico</p>
-					<fieldset>
-						<label for="newEventMenu-form-dishName"
-							>Nome do prato</label
-						>
-						<input type="text" placeholder="Pão com gergelim" id="newEventMenu-form-dishName" />
-						<button disabled type="button">Salvar prato</button>
-					</fieldset>
-					<fieldset>
-						<legend>Ingredientes</legend>
-						<fieldset class="newEventMenu-ingredient">
-							<input type="text" placeholder="trigo">
-							<input type="number" min="0">
-							<select name="unity-of-measurement" id="newEventMenu-unityOfMeasurement-1">
-								<option value="0" selected disabled>Selecione uma unidade de medida</option>
-								<option value="1">Quilogramas</option>
-								<option value="2">Gramas</option>
-								<option value="3">Mililitros</option>
-								<option value="4">Litros</option>
-								<option value="5">Unidades</option>
-							</select>
-							<button></button>
-						</fieldset>
-						<button>adicionar ingrediente</button>
-					</fieldset>
-				</form>
-				<div>
-					<h6>Pratos criados <span>(Entrada)</span></h6>
-					<div class="newEventMenu-item">
-						<p>Hambúrguer de Siri</p>
-						<button></button>
-						<button></button>
-					</div>
-				</div>
-			</main>
-			<footer id="newEventMenu-footer">
-				<a href="#">Decidir mais tarde</a>
-			</footer>
-		</div>
+		<div id="root"></div>
 		<script type="module" src="/js/index.js"></script>
 	</body>
 </html>
