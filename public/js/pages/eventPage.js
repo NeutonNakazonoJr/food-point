@@ -15,7 +15,7 @@ const createEventMainTitleDiv = () => {
 } 
 
 
-export function createSectionBasicInfos(basicInfos, eventID) {
+export function createSectionBasicInfos(basicInfos, eventID, editMode) {
 
     const basicInfosSection = htmlCreator.createSection('basic-infos-section');
 
@@ -54,7 +54,6 @@ export function createSectionBasicInfos(basicInfos, eventID) {
         divCalendar.appendChild(divDate);
     }
 
-
     if (basicInfos.eventTime) {
         const clockIcon = htmlCreator.createImg('./assets/icons/clock.svg');
         const eventTime = htmlCreator.createSpan(basicInfos.eventTime);
@@ -63,7 +62,6 @@ export function createSectionBasicInfos(basicInfos, eventID) {
         divTime.appendChild(eventTime);        
         divCalendar.appendChild(divTime);
     }
-    
     
     const divPresentation = htmlCreator.createDiv('div-presentation');
     if (basicInfos.eventName) {
@@ -87,17 +85,22 @@ export function createSectionBasicInfos(basicInfos, eventID) {
     if (basicInfos.eventDescription) {
         const eventDescription = htmlCreator.createParagraph(basicInfos.eventDescription);
         divTextContent.appendChild(eventDescription);
+        basicInfosSection.appendChild(divTextContent);
     }
 
-    const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
+    const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg', 'edit-btn-basic');
     editBtn.classList.add('edit-event-btn');
-    editBtn.classList.add('edit-hidden');
 
+    if (!editMode) {
+        editBtn.classList.add('edit-hidden');
+    }
+    
     editBtn.addEventListener('click', () => {
         const modalUpdate = modalUpdateInfosComponent(basicInfos, eventID);
         const rootContainer = document.getElementById('root');
         rootContainer.appendChild(modalUpdate);
-    })
+    });
+
     basicInfosSection.appendChild(editBtn);
 
     return basicInfosSection;

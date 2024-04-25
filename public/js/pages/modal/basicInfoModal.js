@@ -44,6 +44,37 @@ const createAndValidateInputDate = (eventDate) => {
     return divInputDate;
 };
 
+const createAndValidateInputTime = (eventTime) => {
+
+    const divInputTime = htmlCreator.createInput({
+        type: 'time',
+        id: 'time-input-edit',
+        classNameDiv: 'div-input-form',
+        labelText: 'Horário do Evento',
+        value: eventTime || null
+    });
+
+    let blurListenerAdded = false;
+    divInputTime.addEventListener('click', () => {
+        if (!blurListenerAdded) {
+            const input = document.getElementById('time-input-edit');
+            input.addEventListener('blur', () => {
+                const sendBtn = document.getElementById('save-edit-btn');
+
+                if (!input.checkValidity()) {
+                    showToast('Horário inválido');
+                    sendBtn.disabled = true;
+                } else {
+                    sendBtn.disabled = false;
+                }
+            });
+            blurListenerAdded = true;
+        }
+    });
+
+    return divInputTime;
+};
+
 const createFormUpdateInfos = (basicInfos, eventID) => {
 
     const inputOptions = [
@@ -76,21 +107,21 @@ const createFormUpdateInfos = (basicInfos, eventID) => {
     const form = htmlCreator.createForm('form-update-basic-info', 'Editar Evento', inputOptions);
 
     const divInputDate = createAndValidateInputDate(basicInfos.eventDate);
-
-    const inputTime = htmlCreator.createInput({
-        type: 'time',
-        id: 'time-input-edit',
-        classNameDiv: 'div-input-form',
-        labelText: 'Data do Evento',
-        value: basicInfos.eventTime || null
-    });
+    const divInputTime = createAndValidateInputTime(basicInfos.eventTime);
 
     form.appendChild(divInputDate);
-    form.appendChild(inputTime);
+    form.appendChild(divInputTime);
 
     const cancelUpdateBtn = htmlCreator.createButton('Cancelar', 'cancel-edit-btn');
     const cancelIcon = htmlCreator.createImg('./assets/icons/x-icon.svg');
     cancelUpdateBtn.appendChild(cancelIcon);
+
+    cancelUpdateBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modal = document.getElementById('modal');
+
+        modal.remove();
+    })
 
     const sendUpdateBasicInfos = htmlCreator.createButton('Confirmar', 'save-edit-btn');
     const sendIcon = htmlCreator.createImg('./assets/icons/v-icon.svg');
@@ -129,7 +160,7 @@ const createFormUpdateInfos = (basicInfos, eventID) => {
             eventMainContainer.removeChild(basicInfosSection);
 
             const updatedBasicInfos = updateRequest.basicInfos;
-            const newBasicInfoSection = createSectionBasicInfos(updatedBasicInfos, eventID);
+            const newBasicInfoSection = createSectionBasicInfos(updatedBasicInfos, eventID, true);
 
             eventMainContainer.insertBefore(newBasicInfoSection, eventMainContainer.firstChild);
             const modal = document.getElementById('modal');
@@ -146,8 +177,6 @@ const createFormUpdateInfos = (basicInfos, eventID) => {
     return form;
 };
 
-// isolar as logicas
-// verificar logica de atualização de theme e description
 const modalUpdateInfosComponent = (basicInfos, eventID) => {
     const form = createFormUpdateInfos(basicInfos, eventID);
     const modal = createModal(form);

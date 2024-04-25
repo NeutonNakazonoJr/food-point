@@ -320,12 +320,12 @@
     cursor: pointer;
 }
 
-.edit-hidden {
-    display: none;
-}
-
 .edit-active {
     display: flex;
+}
+
+.edit-hidden {
+    display: none;
 }
 
 @media screen and (max-width: 900px) {
