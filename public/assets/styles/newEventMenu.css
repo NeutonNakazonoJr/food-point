@@ -241,6 +241,7 @@
 	padding-left: 3%;
 	border-left: 2px solid var(--raspberry);
 	width: 30%;
+	margin-bottom: 5rem;
 	display: flex;
 	flex-direction: column;
 	& > h6 {
@@ -298,7 +299,6 @@
 	}
 }
 
-
 #newEventMenu > div > .newEventMenu-item-editing {
 	background-color: var(--blackberry);
 	border-color: var(--blackberry);
@@ -313,7 +313,7 @@
 	padding-bottom: 1rem;
 	padding-right: 2rem;
 	& > a {
-		border: none;
+		border: 3px solid var(--white-smoke);
 		cursor: pointer;
 		background-color: var(--raspberry);
 		font-size: 1rem;
@@ -340,5 +340,132 @@
 		&:active {
 			filter: brightness(0.8);
 		}
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	#newEventMenu {
+		flex-wrap: wrap;
+	}
+	#newEventMenu > aside {
+		flex-direction: row;
+		justify-content: flex-start;
+		margin-bottom: 1.5rem;
+		height: 3rem;
+		width: 100%;
+		& > button {
+			height: 100%;
+			padding: 0 0.5rem;
+			border-bottom: 0;
+			width: calc(100% - 1rem / 6);
+		}
+		& > button:nth-of-type(4) {
+			width: fit-content;
+		}
+	}
+	#newEventMenu > #newEventMenu-form {
+		width: 60%;
+	}
+}
+
+@media screen and (max-width: 770px) {
+	#newEventMenu {
+		flex-flow: column nowrap;
+	}
+	#newEventMenu > aside {
+		margin-bottom: 1rem;
+		height: 3rem;
+		width: 100%;
+		& > button {
+			height: 100%;
+			border-bottom: 0;
+			width: calc(100% / 6);
+			font-size: 0;
+		}
+		& > button:nth-of-type(4) {
+			width: calc(100% / 6);
+		}
+	}
+
+	#newEventMenu > #newEventMenu-form {
+		width: 100%;
+		padding-bottom: 1rem;
+	}
+
+	#newEventMenu > div {
+		padding-left: 0;
+		border-left: 0;
+		margin-bottom: 5rem;
+		width: 100%;
+	}
+
+	#newEventMenu > div > .newEventMenu-item {
+		height: 2.5rem;
+		margin-top: 5px;
+		width: 100%;
+		& > p {
+			width: 88%;
+			display: flex;
+			align-items: center;
+			padding-left: 0.5rem;
+		}
+		& > button {
+			width: 2.5rem;
+			height: 2.5rem;
+			cursor: pointer;
+		}
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#newEventMenu {
+		margin-top: 5rem;
+		width: 100%;
+		padding: 1rem;
+	}
+
+	#newEventMenu
+		> #newEventMenu-form
+		> fieldset:nth-of-type(2)
+		> .newEventMenu-ingredient {
+		width: 90%;
+
+		& > input[type="text"] {
+			width: 55%;
+		}
+		& > input[type="number"] {
+			width: 20%;
+		}
+		& > select {
+			width: 25%;
+		}
+		& > button:last-of-type {
+			right: -3.35rem;
+		}
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#newEventMenu {
+		margin-top: 3rem;
+	}
+}
+
+@media screen and (min-width: 1440px) {
+	#newEventMenu {
+		width: 90%;
+		margin: 0 auto;
+	}
+}
+
+@media screen and (min-width: 1700px) {
+	#newEventMenu {
+		width: 80%;
+	}
+}
+
+@media screen and (min-width: 2100px) {
+	#newEventMenu {
+		width: 65%;
 	}
 }
