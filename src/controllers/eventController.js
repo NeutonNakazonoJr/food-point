@@ -1,4 +1,5 @@
 const eventRepository = require("../repositories/eventRepository");
+const createAndOrganizePurchaseList = require("../services/purchaseList.js");
 
 const eventController = {
 
@@ -64,7 +65,7 @@ const eventController = {
 
     getEventPurchaseList: async (req, res) => {
         try {
-            const purchaseList = await eventRepository.getPurchaseList(req.params.id);
+            const purchaseList = await createAndOrganizePurchaseList(req.params.id);
             return res.status(200).json({
                 list: purchaseList
             })
