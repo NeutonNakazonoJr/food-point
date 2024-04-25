@@ -107,6 +107,21 @@ const eventRepository = {
         const query = 'DELETE FROM "event" WHERE event_id = $1 RETURNING event_id';
         const { rows } = await dbConnection.query(query, [eventId]);
         return rows;
+    },
+
+    getPurchaseList: async (eventId) => {
+        const query = 
+        `SELECT name, SUM(quantity) AS total_quantity, purchased, unity_measure
+        FROM (
+            SELECT i.name, SUM(i.quantity) AS quantity, i.purchased, i.unity_measure
+            FROM "event" e
+            JOIN ingredient i ON e.event_id = i.event_id
+            WHERE e.event_id = $1
+            GROUP BY e.event_id, i.name, i.purchased, i.unity_measure
+        ) AS aggregated
+        GROUP BY name, unity_measure, purchased;`
+        const { rows } = await dbConnection.query(query, [eventId]);
+        return rows;
     }
 }
 
