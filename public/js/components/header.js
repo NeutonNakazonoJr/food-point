@@ -40,7 +40,7 @@ function setANimationForAnchor(anchor, animation) {
 export default function getHeader(
 	animation = true,
 	userIsLogged = true,
-	profilePageUrl = "#",
+	profilePageUrl = "/profile",
 	userImg = "/assets/icons/profile-placeholder.svg"
 ) {
 	const header = document.createElement("header");
@@ -59,10 +59,14 @@ export default function getHeader(
 		const span = document.createElement("span");
 
 		redirectToHome(h1);
-		
+
 		a.href = profilePageUrl;
 		img.src = userImg;
 		setANimationForAnchor(a, animation);
+		a.addEventListener("click", (e) => {
+			e.preventDefault();
+			dispatchOnStateChange(a.href, { animation: false });
+		});
 
 		a.appendChild(img);
 		a.appendChild(span);

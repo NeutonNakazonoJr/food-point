@@ -1,8 +1,11 @@
 import eventProgressBar from "../../components/eventProgressBar.js";
 import getHeader from "../../components/header.js";
+import showToast from "../../components/toast.js";
+import dispatchOnStateChange from "../../events/onStateChange.js";
 import DishController from "./DishController.js";
 import getAsideForMenu from "./components/aside.js";
 import getDisplay from "./components/display.js";
+import getFooter from "./components/footer.js";
 import getForm from "./components/form.js";
 
 function getMenu(eventID) {
@@ -75,15 +78,31 @@ function callFnWithDelay(delayMs, fn) {
 }
 
 export default async function menuPage(constructorInfo) {
-	const tempEventID = "9136f3da-09ec-4c82-94be-b01d5df98156";
+	if (
+		!constructorInfo ||
+		!constructorInfo.event ||
+		!constructorInfo.event.id
+	) {
+		showToast("Houve um erro no processamento do ID do evento");
+		dispatchOnStateChange("/home", { animation: true });
+		return document.createDocumentFragment();
+	}
+	const stage = constructorInfo.stage || {
+		current: 1,
+		last: 0,
+	};
+	const tempEventID =
+		constructorInfo.event?.id || "3eab2a9d-ffb6-4e2e-96d0-e001eb0f5590";
 	const menu = getMenu(tempEventID);
 
 	let currentType = "stater";
 	const delay = 50;
 
-	const header = getHeader(false, true);
-	const progressBar = eventProgressBar(true, true, 0, 1);
+	const header = getHeader(false, false);
+	const progressBar = eventProgressBar(true, true, stage.last, stage.current);
 	const main = document.createElement("main");
+	const footer = getFooter(tempEventID);
+
 	main.id = "newEventMenu";
 	await menu.stater.controller.addDish(null, null, "Entrada");
 
@@ -121,7 +140,7 @@ export default async function menuPage(constructorInfo) {
 
 	window.addEventListener("updateIngredient", async (e) => {
 		await dispatchIngredientChange();
-		console.log('window.addEventListener("updateIngredient"')
+		console.log('window.addEventListener("updateIngredient"');
 		const ingredient = {
 			id: e.detail.ingredientId,
 			name: e.detail.name,
@@ -132,9 +151,9 @@ export default async function menuPage(constructorInfo) {
 			e.detail.dishId,
 			ingredient
 		);
-		console.log("finished controller.pushIngredient")
+		console.log("finished controller.pushIngredient");
 		callFnWithDelay(delay, async () => {
-			console.log("dispatchThisEventForElements")
+			console.log("dispatchThisEventForElements");
 			await dispatchThisEventForElements(
 				form,
 				display,
@@ -187,6 +206,10 @@ export default async function menuPage(constructorInfo) {
 		});
 	});
 
+	window.addEventListener("resize", () =>
+		display.dispatchEvent(new CustomEvent("resize"))
+	);
+
 	const aside = getAsideForMenu(menu);
 	const form = await getForm(menu, currentType);
 	const display = await getDisplay(menu, currentType);
@@ -195,15 +218,11 @@ export default async function menuPage(constructorInfo) {
 	main.appendChild(form);
 	main.appendChild(display);
 
-	/*
-		<footer id="newEventMenu-footer">
-			<a href="#">Decidir mais tarde</a>
-		</footer>
-	*/
 	const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);
 	wrapper.appendChild(progressBar);
 	wrapper.appendChild(main);
+	wrapper.appendChild(footer);
 
 	return wrapper;
 }
