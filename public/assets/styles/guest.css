@@ -29,12 +29,12 @@ body{
 #guest-label{
     align-self: start;  
 }
-#input-div{
+.input-div{
     display: flex;
     align-items: center;
     width: 100%;
 }
-#add-input{
+.guest-input{
     height: 2.2rem;
     width: 80%;
     padding: .5rem;
@@ -43,7 +43,7 @@ body{
     border-radius: 8px 0 0 8px;
     background-color: transparent;
 }
-#add-button{
+.guest-button{
     height: 2.2rem;
     width: 20%;
     border: none;
@@ -108,6 +108,15 @@ body{
     border-radius: 0 8px 0px 8px;
     cursor: pointer; 
 }
+#edit-button{
+    position: absolute;
+    top: 11rem;
+    right: 0;
+    background: var(--raspberry);
+    padding: .5rem;
+    border-radius: 8px 0 8px;
+    cursor: pointer;
+}
 #end-page{
     margin-top: 2rem;
     padding-bottom: 2rem;
@@ -169,8 +178,36 @@ background: var(--cherry);
 #finish:hover{
     background: var(--cherry);
 }
+#guest-modal{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+}
+#edit-guest-modal{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white-smoke);
+    color: var(--raspberry);
+    margin: 20% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 30%;
+
+}
+#close-div{
+    display: flex;
+    justify-content: flex-end;
+}
+#X:hover{
+    color: black;
+}
 @media screen and (max-width: 1199px) {  
-    #add-guest{
+    .guest-button{
         width: 45%;
     }
 }
@@ -178,10 +215,10 @@ background: var(--cherry);
     #add-guest{
         width: 50%;
     }
-    #add-input{
+    .guest-input{
         width: 78%;
     }
-    #add-button{
+    .guest-button{
         width: 22%;
     }
     #guest-card{
@@ -193,15 +230,21 @@ background: var(--cherry);
     #guest-name{
         height: 35%;
     }
+    #edit-button{
+        top: 9.3rem;
+    }
+    #edit-guest-modal{
+        width: 40%;
+    }
 }
 @media screen and (max-width: 766px) {
-    #add-guest{
+    .guest-button{
         width: 55%;
     }
-    #add-input{
+    .guest-input{
         width: 75%;
     }
-    #add-button{
+    .guest-button{
         width: 25%;
     }
     #guest-img{
@@ -209,6 +252,9 @@ background: var(--cherry);
     }
     #guest-name{
         height: 40%;
+    }
+    #edit-guest-modal{
+        width: 50%;
     }
 }
 @media screen and (max-width: 600px) {
@@ -218,10 +264,10 @@ background: var(--cherry);
     #add-guest{
         width: 60%;
     }
-    #add-input{
+    .guest-input{
         width: 72%;
     }
-    #add-button{
+    .guest-button{
         width: 28%;
     }
     #guest-img{
@@ -230,15 +276,18 @@ background: var(--cherry);
     #guest-name{
         height: 45%;
     }
+    #edit-guest-modal{
+        width: 60%;
+    }
 }
 @media screen and (max-width: 575px) {
     #add-guest{
         width: 65%;
     }
-    #add-input{
+    .guest-input{
         width: 72%;
     }
-    #add-button{
+    .guest-button{
         width: 28%;
     }
     #guest-img{
@@ -258,6 +307,12 @@ background: var(--cherry);
     }
     #guest-box{
         width: 85%;
+    }
+    #edit-button{
+        top: 8.6rem;
+    }
+    #edit-guest-modal{
+        width: 70%;
     }
 }
 @media screen and (max-width: 425px) {
@@ -281,19 +336,31 @@ background: var(--cherry);
     #finish{
         margin-top: 2rem;
     }
+    #edit-button{
+        top: 7.9rem;
+    }
+    #skip{
+        margin-bottom: 2rem;
+    }
 }
 @media screen and (max-width: 350px) {
     #add-guest{
         width: 85%;
     }
-    #add-input{
+    .guest-input{
         width: 62%;
     }
-    #add-button{
+    .guest-button{
         width: 38%;
     }
     #guest-card{
         width: 7rem;
         padding: .5rem;
+    }
+    #edit-guest-modal{
+        width: 80%;
+    }
+    #edit-button{
+        top: 7.6rem;
     }
 }

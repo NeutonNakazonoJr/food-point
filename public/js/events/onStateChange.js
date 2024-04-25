@@ -4,7 +4,6 @@
  * @param {Object} constructorInfo optional param
  */
 export default function dispatchOnStateChange(path, constructorInfo) {
-    console.log(constructorInfo);
     const event = new CustomEvent("onstatechange", {
         detail: {
             path: path,

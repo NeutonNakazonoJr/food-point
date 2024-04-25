@@ -29,11 +29,13 @@ export async function putEvent(eventId, eventInfo) {
 			body: JSON.stringify(eventInfo),
 		};
 		const res = await fetch(url, requestOptions);
-		const result = await res.json();
-		if (res.status !== 200 || result.error) {
-			throw new Error(result.error);
+	
+		if (res.status !== 200) {
+			const error = await res.json();
+			throw error;
 		}
-
+		
+		const result = await res.json();
 		return result;
 	} catch (error) {
 		return error;
@@ -44,9 +46,10 @@ export async function getEventById(eventId) {
 	try {
 		const url = `/api/event/${eventId}`;
 		const res = await fetch(url);
-		if (!res.ok) {
+
+		if(!res.ok) {
 			const error = await res.json();
-			throw new Error(error.message);
+			throw error;
 		}
 
 		const data = await res.json();

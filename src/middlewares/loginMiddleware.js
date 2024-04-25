@@ -28,6 +28,7 @@ const loginValidation = async (req, res, next) => {
 const userAuthorization = async (req, res, next) => {
     try {
         const token = req.cookies.session_token;
+        
         if (!token) {
             return res.status(401).json({ error: 'Token Ausente' });
         }
