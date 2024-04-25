@@ -1,4 +1,5 @@
 const eventRepository = require("../repositories/eventRepository");
+const createAndOrganizePurchaseList = require("../services/purchaseList.js");
 
 const eventController = {
 
@@ -60,7 +61,19 @@ const eventController = {
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
+    },
+
+    getEventPurchaseList: async (req, res) => {
+        try {
+            const purchaseList = await createAndOrganizePurchaseList(req.params.id);
+            return res.status(200).json({
+                list: purchaseList
+            })
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
     }
+
 }
 
 module.exports = eventController;
