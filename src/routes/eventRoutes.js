@@ -21,8 +21,8 @@ eventRoutes.use('/event/:id', eventMiddleware.validateEventId);
 eventRoutes.get('/event/:id', eventController.getAllEventInfos);
 eventRoutes.delete('/event/:id', eventController.deleteEvent);
 
-
 eventRoutes.put('/event/:id/basic-infos', validateRequestBody(eventSchema.eventBasicInfos), eventController.updateEventBasicInfos);
+eventRoutes.get('/event/:id/purchase-list', eventController.getEventPurchaseList);
 
 eventRoutes.post('/event/:id/dish', validateRequestBody(eventSchema.dish), eventController.createNewDish);
 eventRoutes.use('/event/:id/dish/:dishId', validateDishId);
