@@ -14,7 +14,7 @@ const eventController = {
     updateEventBasicInfos: async (req, res) => {
         try {
             const eventId = req.params.id;
-            const [ basicInfos ] = await eventRepository.updateBasicInfos(req.body, eventId);
+            const basicInfos = await eventRepository.updateBasicInfos(req.body, eventId);
             return res.status(200).json({ basicInfos });
         } catch (error) {
             return res.status(500).json({ error: 'Erro interno no servidor' });
@@ -43,7 +43,6 @@ const eventController = {
     getAllEventInfos: async (req, res) => {
         try {
             const eventInfos = await eventRepository.findCompleteEventInfos(req.params.id);
-            console.log(eventInfos);
             return res.status(200).json({ eventInfos })
         } catch (error) {
             console.log(error.message);

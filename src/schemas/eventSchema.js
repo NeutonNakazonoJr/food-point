@@ -13,15 +13,15 @@ const eventSchema = {
     eventBasicInfos: joi.object({
         name: joi.string().regex(rgxText).allow('').messages({
             'string.base': 'O nome deve ser uma string',
-            'string.pattern.base': 'O nome deve conter apenas letras e [^ ` ~ : . , ? ! -]',
+            'string.pattern.base': 'O nome deve conter apenas letras e (^ ` ~ : . , ? ! -)',
         }),
         theme: joi.string().regex(rgxText).allow('').messages({
             'string.base': 'O tema deve ser uma string',
-            'string.pattern.base': 'O tema deve conter apenas letras e [^ ` ~ : . , ? ! -]',
+            'string.pattern.base': 'O tema deve conter apenas letras e (^ ` ~ : . , ? ! -)',
         }),
         eventDescription: joi.string().regex(rgxText).allow('').messages({
             'string.base': 'A descrição deve ser uma string',
-            'string.pattern.base': 'A descrição deve conter apenas letras e [^ ` ~ : . , ? ! -]',
+            'string.pattern.base': 'A descrição deve conter apenas letras e (^ ` ~ : . , ? ! -)',
         }),
         eventDate: joi.string().allow('').custom((value, helpers) => {
             if (!rgxDate.test(value)) {
