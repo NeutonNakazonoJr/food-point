@@ -1,49 +1,9 @@
 import getHeader from "../components/header.js";
 import { getEventById } from '../api/eventApi.js';
-
-const eventInfosMock =  {
-    "eventName": "Sabores da Diáspora: Uma Jornada Gastronômica Afro-brasileira",
-    // "theme": "Junte-se a nós nesta jornada culinária enquanto exploramos os segredos, os aromas e os sabores da culinária afro-brasileira",
-    // "eventDate": "26/04/2024",
-    // "eventTime": "20:30",
-    "eventLocation": null,
-    "eventDescription": " O evento Sabores da Diáspora é uma oportunidade única para os participantes mergulharem na rica diversidade gastronômica dos afro-brasileiros. Desde os pratos tradicionais passados de geração em geração até interpretações modernas, este evento oferece uma imersão completa na cultura e na história por trás da comida que define parte da identidade brasileira. Junte-se a nós nesta jornada culinária enquanto exploramos os segredos, os aromas e os sabores da culinária afro-brasileira",
-    "dishes": [
-        {
-            "dishId": "f6dc7aee-d2bc-4649-8ca5-5321386ff2df",
-            "type": "Entrada",
-            "dishName": "Pastel de Angu com Carne-Seca"
-        },
-        {
-            "dishId": "7eb9de73-eb22-406a-9e19-561bddd05909",
-            "type": "Principal",
-            "dishName": "Moqueca de Peixe"
-        },
-        {
-            "dishId": "fa407efb-d452-4a2c-b7cf-e9b505a1d584",
-            "type": "Principal",
-            "dishName": "Feijoada Completa"
-        },
-        {
-            "dishId": "39cad7ec-46c5-4e89-a70b-6ce6e7ef7e4e",
-            "type": "Sobremesa",
-            "dishName": "Bolo de Fubá Cremoso"
-        },
-        {
-            "dishId": "4267ec20-36de-4fb0-b3e9-bc99dec63997",
-            "type": "Acompanhamento",
-            "dishName": "Farofa de Dendê"
-        },
-        {
-            "dishId": "4267ec20-36de-4fb0-b3e9-bc99dec63997",
-            "type": "Salada",
-            "dishName": "Farofa de Dendê"
-        },
-    ]
-}
-
-
 import htmlCreator from '../utils/htmlCreator.js';
+import dispatchOnStateChange from "../events/onStateChange.js";
+import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
+import showToast from "../components/toast.js";
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -51,60 +11,104 @@ const createEventMainTitleDiv = () => {
     const divInitial = htmlCreator.createDiv('initial-div-events');
     divInitial.appendChild(mainTitle);
     divInitial.appendChild(eventIcon);
-
     return divInitial;
 } 
 
 
-const createSectionBasicInfos = (basicInfos) => {
+export function createSectionBasicInfos(basicInfos, eventID, editMode) {
 
-    const calendarIcon = htmlCreator.createImg('./assets/icons/calendar-red.svg');
-    const eventDate = htmlCreator.createSpan(eventInfosMock.eventDate || 'Data a definir');
-    const divDate = htmlCreator.createDiv('div-date');
-    divDate.appendChild(calendarIcon);
-    divDate.appendChild(eventDate);
-    
+    const basicInfosSection = htmlCreator.createSection('basic-infos-section');
 
-    const clockIcon = htmlCreator.createImg('./assets/icons/clock.svg');
-    const eventTime = htmlCreator.createSpan(eventInfosMock.eventTime || 'Horário a definir');
-    const divTime = htmlCreator.createDiv('div-time');
-    divTime.appendChild(clockIcon);
-    divTime.appendChild(eventTime);
+    if (Object.values(basicInfos).every(value => value === null)) {
+        const divUndefinedBasicInfos = htmlCreator.createDiv('div-undefined-basic-infos');
+        const undefinedInfoImg = htmlCreator.createImg('./assets/images/undefined-basic-info.svg');
+        const titleUndefinedBasicInfos = htmlCreator.createTitle('h3', 'Aguardando a definição das informações do evento ...');
+        
+        divUndefinedBasicInfos.appendChild(titleUndefinedBasicInfos);
+        divUndefinedBasicInfos.appendChild(undefinedInfoImg);
 
-    
+        basicInfosSection.classList.add('menu-undefined');
+        basicInfosSection.appendChild(divUndefinedBasicInfos);
+
+        const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
+        editBtn.classList.add('edit-event-btn');
+        editBtn.classList.add('edit-hidden');
+
+        editBtn.addEventListener('click', () => {
+            const modalUpdate = modalUpdateInfosComponent(basicInfos, eventID);
+            const mainContainer = document.getElementById('event-main-container');
+            mainContainer.appendChild(modalUpdate);
+        })
+
+        basicInfosSection.appendChild(editBtn);
+        return basicInfosSection;
+    }
+
     const divCalendar = htmlCreator.createDiv('div-calendar');
-    divCalendar.appendChild(divDate);
-    divCalendar.appendChild(divTime);
-    
-    const eventName = htmlCreator.createTitle('h1', eventInfosMock.eventName || 'Nome do Evento a definir.');
+    if (basicInfos.eventDate) {
+        const calendarIcon = htmlCreator.createImg('./assets/icons/calendar-red.svg');
+        const eventDate = htmlCreator.createSpan(basicInfos.eventDate);
+        const divDate = htmlCreator.createDiv('div-date');
+        divDate.appendChild(calendarIcon);
+        divDate.appendChild(eventDate);
+        divCalendar.appendChild(divDate);
+    }
 
-    const divPresentation = htmlCreator.createDiv('div-presentation');
-    divPresentation.appendChild(eventName);
-    divPresentation.appendChild(divCalendar);
-    
-
-    let eventTheme = document.createElement('p');
-    if (eventInfosMock.theme) {
-        eventTheme.innerText = `Tema: ${eventInfosMock.theme}`;
-    } else {
-        eventTheme.innerText = 'Tema: A definir.';
+    if (basicInfos.eventTime) {
+        const clockIcon = htmlCreator.createImg('./assets/icons/clock.svg');
+        const eventTime = htmlCreator.createSpan(basicInfos.eventTime);
+        const divTime = htmlCreator.createDiv('div-time');
+        divTime.appendChild(clockIcon);
+        divTime.appendChild(eventTime);        
+        divCalendar.appendChild(divTime);
     }
     
-    const eventDescription = htmlCreator.createParagraph(eventInfosMock.eventDescription);
+    const divPresentation = htmlCreator.createDiv('div-presentation');
+    if (basicInfos.eventName) {
+        const eventName = htmlCreator.createTitle('h1', basicInfos.eventName);
+        divPresentation.appendChild(eventName);
+        basicInfosSection.appendChild(divPresentation);
+    }
+    
+    if (basicInfos.eventDate || basicInfos.eventTime ) {
+        divPresentation.appendChild(divCalendar);
+        basicInfosSection.appendChild(divPresentation);
+    }
+    
     const divTextContent = htmlCreator.createDiv('div-text-content-event');
-    divTextContent.appendChild(eventTheme);
-    divTextContent.appendChild(eventDescription);
+    if (basicInfos.eventTheme) {
+        const eventTheme = htmlCreator.createParagraph(`Tema: ${basicInfos.eventTheme}`)
+        divTextContent.appendChild(eventTheme);
+        basicInfosSection.appendChild(divTextContent);
+    }
     
+    if (basicInfos.eventDescription) {
+        const eventDescription = htmlCreator.createParagraph(basicInfos.eventDescription);
+        divTextContent.appendChild(eventDescription);
+        basicInfosSection.appendChild(divTextContent);
+    }
+
+    const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg', 'edit-btn-basic');
+    editBtn.classList.add('edit-event-btn');
+
+    if (!editMode) {
+        editBtn.classList.add('edit-hidden');
+    }
     
-    const basicInfosSection = htmlCreator.createSection('basic-infos-section');
-    basicInfosSection.appendChild(divPresentation);
-    basicInfosSection.appendChild(divTextContent);
+    editBtn.addEventListener('click', () => {
+        const modalUpdate = modalUpdateInfosComponent(basicInfos, eventID);
+        const rootContainer = document.getElementById('root');
+        rootContainer.appendChild(modalUpdate);
+    });
+
+    basicInfosSection.appendChild(editBtn);
 
     return basicInfosSection;
 }
 
- // substituir por eventDishes do fetch
+
 const createMenuSection = (dishInfos) => {
+
     const menuIcon = htmlCreator.createImg('./assets/icons/menu-icon.svg');
     const menuTitle = htmlCreator.createTitle('h1', 'Cardápio');
     
@@ -113,7 +117,7 @@ const createMenuSection = (dishInfos) => {
     divTitle.appendChild(menuIcon);
     divTitle.appendChild(menuTitle);
 
-    const divDishesCard = createCardDiv(eventInfosMock.dishes);
+    const divDishesCard = createCardDiv(dishInfos);
 
     const menuSection = htmlCreator.createSection('menu-event-section');
     menuSection.appendChild(divTitle);
@@ -121,11 +125,11 @@ const createMenuSection = (dishInfos) => {
     
     return menuSection;
 }
+  
 
 function groupDishesByType(dishes) {
     const groupedDishes = {};
 
-     // substituir por eventDishes do fetch
     dishes.forEach(dish => {
         if (!groupedDishes[dish.type]) {
             groupedDishes[dish.type] = [];
@@ -135,48 +139,65 @@ function groupDishesByType(dishes) {
     return groupedDishes;
 }
 
-const createCardDiv = (eventDishes) => {
-    const icons = {
-        'Entrada': './assets/icons/enter-type-icon.svg',
-        'Salada': './assets/icons/salad-type-icons.svg',
-        'Acompanhamento': './assets/icons/accompaniment-type-icon.svg',
-        'Principal': './assets/icons/main-type-icon.svg',
-        'Sobremesa': './assets/icons/dessert-type-icon.svg'
+
+const createCardDiv = (dishInfos) => {
+    
+    const menuSection = htmlCreator.createSection('menu-section');
+    
+    if (dishInfos.length === 0) {
+        const imgMenu = htmlCreator.createImg('./assets/images/big-menu-img.svg', 'img-menu-event');
+        const text = htmlCreator.createTitle('h3', 'Aguardando definição do cardápio ...');
+
+        const divWaitingMenu = htmlCreator.createDiv('wait-menu-event');
+        divWaitingMenu.appendChild(text);
+        divWaitingMenu.appendChild(imgMenu);
+
+        const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
+        editBtn.classList.add('edit-event-btn');
+        editBtn.classList.add('edit-hidden');
+        divWaitingMenu.appendChild(editBtn);
+
+        menuSection.classList.add('menu-undefined')
+        menuSection.appendChild(divWaitingMenu);
+
+        return menuSection;
     }
 
+    const icons = {
+        'entrada': './assets/icons/enter-type-icon.svg',
+        'salada': './assets/icons/salad-type-icons.svg',
+        'acompanhamento': './assets/icons/accompaniment-type-icon.svg',
+        'principal': './assets/icons/main-type-icon.svg',
+        'sobremesa': './assets/icons/dessert-type-icon.svg',
+        'drink': './assets/icons/drink.svg'
+    }
 
-    const menuSection = htmlCreator.createSection('menu-section');
-    // substituir por eventDishes do fetch
-    const dishList = groupDishesByType(eventDishes);
-
+    const dishList = groupDishesByType(dishInfos);
     for (const [ dishType, dishGroup ] of Object.entries(dishList)) {
         
-        const divTitle = htmlCreator.createDiv();
         const cardTitle = htmlCreator.createTitle('h3',dishType);
-
         const icon = htmlCreator.createImg(icons[dishType]);
-        const divIcon = htmlCreator.createDiv('.div-icon');
-        divIcon.appendChild(icon);
-
-        divTitle.appendChild(cardTitle);
-        divTitle.appendChild(divIcon);
-
+    
         const card = htmlCreator.createDiv('.card-dishes');
-        card.appendChild(divTitle);
-
+        card.appendChild(cardTitle);
+        card.appendChild(icon)
+        
         dishGroup.forEach(dish => {
             const dishName = htmlCreator.createTitle('h4', `. ${dish.dishName}`, dish.dishId);
             card.appendChild(dishName);
         });
 
+        const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
+        editBtn.classList.add('edit-event-dishes', 'edit-hidden');
+        card.appendChild(editBtn);
         menuSection.appendChild(card);
     }
 
     return menuSection;
 }
 
-// substituir pela localização do fetch
-const createLocationSection = () => {
+
+const createLocationSection = (eventLocation) => {
     const locationIcon = htmlCreator.createImg('./assets/icons/location-event-page-icon.svg');
     const locationTitle = htmlCreator.createTitle('h1', 'Localização');
     
@@ -186,11 +207,16 @@ const createLocationSection = () => {
     divTitle.appendChild(locationTitle);
 
     const locationSecondIcon = htmlCreator.createImg('./assets/icons/location-event.svg');
-
-    const textContent = htmlCreator.createParagraph(eventInfosMock.eventLocation || 'Localização a definir');
+    const textContent = htmlCreator.createParagraph(eventLocation || 'Aguardando definição ...');
     const divLocation = htmlCreator.createDiv('div-location');
+
     divLocation.appendChild(locationSecondIcon);
     divLocation.appendChild(textContent);
+
+    const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
+    editBtn.classList.add('edit-event-btn');
+    editBtn.classList.add('edit-hidden');
+    divLocation.appendChild(editBtn);
 
     const locationSection = htmlCreator.createSection('location-section');
     locationSection.appendChild(divTitle);
@@ -205,37 +231,90 @@ const createButtonSection = () => {
     guestButton.appendChild(guestIcon);
 
     const homeButton = htmlCreator.createButton('Página inicial', null, 'btn-section');
+    homeButton.addEventListener('click', () => {
+        dispatchOnStateChange('/home');
+    });
+
     const homeIcon = htmlCreator.createImg('./assets/icons/home-icon.svg');
     homeButton.appendChild(homeIcon);
 
     const buttonSection = htmlCreator.createSection('btn-section');
     buttonSection.appendChild(guestButton);
     buttonSection.appendChild(homeButton);
-    // dispatchOnStateChange(href, {});
     return buttonSection;
+}
+
+const createHeaderEvent = () => {
+
+    const toggleContainer = htmlCreator.createDiv('toggle-container'); 
+    const toggleBtn = htmlCreator.createDiv('toggle-edit-btn');
+
+    toggleContainer.addEventListener('click', () => {
+        toggleContainer.classList.toggle('active-toggle-btn');
+
+        const editDishesBtn = document.querySelectorAll('.edit-event-dishes');
+        const editInfosEvent = document.querySelectorAll('.edit-event-btn');
+    
+        if (toggleContainer.classList.contains('active-toggle-btn')) {
+            editDishesBtn.forEach(btn => btn.classList.remove('edit-hidden'));
+            editInfosEvent.forEach(btn => btn.classList.remove('edit-hidden'));
+        } else {
+            editDishesBtn.forEach(btn => btn.classList.add('edit-hidden'));
+            editInfosEvent.forEach(btn => btn.classList.add('edit-hidden'));
+        }
+    })
+
+    toggleContainer.appendChild(toggleBtn);
+    
+    const toggleText = htmlCreator.createSpan('Modo Edição');
+    const divToggleBtn = htmlCreator.createDiv('div-toggle-btn');
+    divToggleBtn.appendChild(toggleText);
+    divToggleBtn.appendChild(toggleContainer);
+    
+    const header = getHeader(false, true);
+    const profileIcon = header.children[1]
+    header.removeChild(profileIcon);
+
+    header.appendChild(divToggleBtn);
+    return header;
 }
 
 
 const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
 
-    const eventInfos = await getEventById(constructorInfo.eventID);
+    const eventID = constructorInfo.eventID;
+
+    if (eventID) {
+        localStorage.setItem('eventInfo', JSON.stringify({ eventID }));        
+    }
+
+    const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
+
+    const requestEventInfos = await getEventById(eventID || storageEventID.eventID);
     
-    const header = getHeader(false, true);
-    // set evento_id localstorage;
+    if (requestEventInfos.error) {
+        showToast(requestEventInfos.error);        
+        dispatchOnStateChange('/home', { animation: false });
+        return document.createDocumentFragment();
+    } 
 
+    const { eventInfos } = requestEventInfos;
+
+    const header = createHeaderEvent();
     const initialDiv = createEventMainTitleDiv();
-    const basicInfosSection = createSectionBasicInfos();
-    const menuSection = createMenuSection();
-    const locationSection = createLocationSection();
+    const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
+    const menuSection = createMenuSection(eventInfos.dishes);
+    const locationSection = createLocationSection(eventInfos.eventLocation);
     const buttonSection = createButtonSection();
-
-    const mainContainer = htmlCreator.createSection('main-event-container');
+    
+    const mainContainer = htmlCreator.createSection('event-main-container');
     mainContainer.appendChild(basicInfosSection);
     mainContainer.appendChild(menuSection);
     mainContainer.appendChild(locationSection);
     mainContainer.appendChild(buttonSection);
-
+    
     const main = document.createElement('main');
+    main.id = 'main-page-event'
     main.appendChild(initialDiv);
     main.appendChild(mainContainer);
     
