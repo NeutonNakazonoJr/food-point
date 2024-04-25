@@ -91,9 +91,8 @@ export default async function menuPage(constructorInfo) {
 		current: 1,
 		last: 0,
 	};
-	const tempEventID =
-		constructorInfo.event?.id || "3eab2a9d-ffb6-4e2e-96d0-e001eb0f5590";
-	const menu = getMenu(tempEventID);
+	const eventID = constructorInfo.event.id;
+	const menu = getMenu(eventID);
 
 	let currentType = "stater";
 	const delay = 50;
@@ -101,7 +100,7 @@ export default async function menuPage(constructorInfo) {
 	const header = getHeader(false, false);
 	const progressBar = eventProgressBar(true, true, stage.last, stage.current);
 	const main = document.createElement("main");
-	const footer = getFooter(tempEventID);
+	const footer = getFooter(eventID);
 
 	main.id = "newEventMenu";
 	await menu.stater.controller.addDish(null, null, "Entrada");
