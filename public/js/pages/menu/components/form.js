@@ -20,6 +20,7 @@ function saveIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
 			quantity,
 		}
 	});
+	console.log("about to window.dispatchEvent('updateIngredient')")
 	window.dispatchEvent(event);
 }
 
@@ -123,7 +124,7 @@ function createIngredientFieldset(
 						ingredient.id,
 						ingredient.name,
 						ingredient.unityMeasure,
-						ingredient.quantity
+						parseInt(ingredient.quantity)
 					);
 				}
 			}, defaultAwait);
@@ -213,7 +214,7 @@ function createIngredientFieldset(
 				ingredient.id,
 				ingredient.name,
 				ingredient.unityMeasure,
-				ingredient.quantity
+				parseInt(ingredient.quantity)
 			);
 		}
 	});
@@ -267,6 +268,7 @@ function getIngredientsField(dishId, ingredients) {
 }
 
 function bootForm(form, h1, p, dish) {
+	console.log("fn bootform called!");
 	form.innerHTML = "";
 	const dishFieldset = getDishField(dish.dishId, dish.dishName, dish.type);
 	const ingredientsField = getIngredientsField(dish.dishId, dish.ingredients);
@@ -314,7 +316,7 @@ export default async function getForm(menu, currentType) {
 	});
 
 	form.addEventListener("updateIngredient", async (e) => {
-		console.log("form");
+		console.log('form.addEventListener("updateIngredient"');
 		const dish = await menu[currentType].controller.getOneDish(e.detail.dishId);
 		bootForm(form, h1, p, dish);
 	});
@@ -330,10 +332,6 @@ export default async function getForm(menu, currentType) {
 	});
 
 	form.addEventListener("dishSelectedToEdit", async (e) => {
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
 		const dish = await menu[currentType].controller.getOneDish(e.detail);
 		bootForm(form, h1, p, dish);
 	});
