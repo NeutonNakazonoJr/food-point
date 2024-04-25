@@ -12,7 +12,7 @@ const eventMiddleware = {
             }
 
             const [ registeredEvent ] = await eventRepository.findEventById(eventId);
-
+            
             if (!registeredEvent || registeredEvent.user_id !== req.userId) {
                 return res.status(404).json({ error: 'Evento não encontrado' });
             }

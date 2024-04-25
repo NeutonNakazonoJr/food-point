@@ -9,26 +9,14 @@ const { userAuthorization } = require('../middlewares/loginMiddleware.js')
 
 const userRoutes = express();
 
-userRoutes.post('/user', 
-    validateRequestBody(usersSchemas.userInsertSchema), 
-    userMiddleware.validateUserEmail, 
-    userController.createNewUser
-);
+userRoutes.post('/user', validateRequestBody(usersSchemas.userInsertSchema), userMiddleware.validateUserEmail, userController.createNewUser);
 
 userRoutes.use(userAuthorization);
 userRoutes.use(userMiddleware.validateUserId);
 
 userRoutes.get('/user', userController.getUsersInfosById);
-
-userRoutes.patch('/user', 
-    validateRequestBody(usersSchemas.userUpdateSchema),
-    userMiddleware.validateUserEmail,
-    userController.updateUsersInfos
-);
-
-userRoutes.put('/user', 
-    userMiddleware.validatePasswordUpdate,
-    userController.updateUsersPassword
-);
+userRoutes.patch('/user', validateRequestBody(usersSchemas.userUpdateSchema), userMiddleware.validateUserEmail, userController.updateUsersInfos);
+userRoutes.put('/user', userMiddleware.validatePasswordUpdate, userController.updateUsersPassword);
+userRoutes.delete('/user', userController.deleteUserAccount);
 
 module.exports = userRoutes;

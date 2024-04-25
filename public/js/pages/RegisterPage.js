@@ -9,9 +9,9 @@ const createRegisterForm = () => {
     const headerRegister = getHeader(true, false);
     bodyRegister.appendChild(headerRegister);
 
-    const blackOverlay = document.createElement('div');
-    blackOverlay.id = 'black-overlay';
-    bodyRegister.appendChild(blackOverlay);
+    const blackOverlayRegister = document.createElement('div');
+    blackOverlayRegister.classList.add('black-overlay');
+    bodyRegister.appendChild(blackOverlayRegister);
 
     const registerScreen = document.createElement('section');
     registerScreen.id = 'register-screen';
@@ -71,6 +71,8 @@ const createRegisterForm = () => {
     dataRegisterDiv.appendChild(fullNameLabel);
     dataRegisterDiv.appendChild(fullNameInput);
 
+    const passwordDiv = document.createElement('div');
+    passwordDiv.id = 'password-div';
     const passwordImg = document.createElement('img');
     passwordImg.src = './assets/icons/password-symbol.svg';
     const passwordLabel = document.createElement('label');
@@ -80,10 +82,13 @@ const createRegisterForm = () => {
     passwordInput.type = 'password';
     passwordInput.placeholder = 'Digite sua senha';
     passwordInput.alt = 'Digite sua senha';
-    dataRegisterDiv.appendChild(passwordImg);
-    dataRegisterDiv.appendChild(passwordLabel);
-    dataRegisterDiv.appendChild(passwordInput);
+    passwordDiv.appendChild(passwordImg);
+    passwordDiv.appendChild(passwordLabel);
+    passwordDiv.appendChild(passwordInput);
+    dataRegisterDiv.appendChild(passwordDiv);
 
+    const confirmPasswordDiv = document.createElement('div');
+    confirmPasswordDiv.id = 'confirm-password-div';
     const confirmPasswordImg = document.createElement('img');
     confirmPasswordImg.src = './assets/icons/password-symbol.svg';
     const confirmPasswordLabel = document.createElement('label');
@@ -93,9 +98,36 @@ const createRegisterForm = () => {
     confirmPasswordInput.type = 'password';
     confirmPasswordInput.placeholder = 'Digite novamente sua senha';
     confirmPasswordInput.alt = 'Digite novamente sua senha';
-    dataRegisterDiv.appendChild(confirmPasswordImg);
-    dataRegisterDiv.appendChild(confirmPasswordLabel);
-    dataRegisterDiv.appendChild(confirmPasswordInput);
+    confirmPasswordDiv.appendChild(confirmPasswordImg);
+    confirmPasswordDiv.appendChild(confirmPasswordLabel);
+    confirmPasswordDiv.appendChild(confirmPasswordInput);
+    dataRegisterDiv.appendChild(confirmPasswordDiv);
+
+
+    function createPasswordToggleBtn(passwordField) {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Mostrar Senha">';
+        toggleBtn.type = 'button';
+        toggleBtn.classList.add('toggle-password-btn');
+
+        toggleBtn.addEventListener('click', function () {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Ocultar Senha">';
+            } else {
+                passwordField.type = 'password';
+                toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Mostrar Senha">';
+            }
+        });
+
+        return toggleBtn;
+    }
+
+    const toggleBtn = createPasswordToggleBtn(passwordInput);
+    passwordDiv.appendChild(toggleBtn);
+
+    const toggleBtnConfirmPassword = createPasswordToggleBtn(confirmPasswordInput);
+    confirmPasswordDiv.appendChild(toggleBtnConfirmPassword);
 
     const acceptTermsDiv = document.createElement('div');
     acceptTermsDiv.id = 'acceptTerms';
@@ -110,17 +142,21 @@ const createRegisterForm = () => {
     acceptTermsInput.id = 'accept-terms-input';
     acceptTermsInput.name = 'accept-terms-input';
     const acceptTermsLabel = document.createElement('label');
-    acceptTermsLabel.textContent = 'Eu aceito os termos e condições';
+    const acceptAllTermsSpan = document.createElement('span');
+    acceptAllTermsSpan.id = 'accept-all-terms-span';
+    acceptTermsLabel.textContent = 'Li e aceito os ';
+    acceptAllTermsSpan.textContent = 'termos de uso e condições';
+    acceptTermsLabel.appendChild(acceptAllTermsSpan)
     acceptAllTermsDiv.appendChild(acceptTermsInput);
     acceptAllTermsDiv.appendChild(acceptTermsLabel);
 
-    acceptTermsLabel.addEventListener("click", function () {
+
+    acceptAllTermsSpan.addEventListener("click", function () {
         const modal = document.createElement('div');
         modal.classList.add('modal');
 
         const modalContent = document.createElement('div');
         modalContent.classList.add('modal-content');
-
 
         const termsContent = `Bem-vindo ao Food Point! Antes de utilizar nosso aplicativo, por favor, leia atentamente estes Termos e Condições. Ao utilizar o Food Point, você concorda com estes termos.
     
@@ -189,18 +225,17 @@ const createRegisterForm = () => {
             if (modal) {
                 modal.style.display = 'none';
             }
-            console.log('Clicou')
         });
     });
 
     const registerButton = document.createElement('button');
-    registerButton.type = 'button';
+    registerButton.type = 'submit';
     registerButton.id = 'registerPage-btn';
     registerButton.alt = 'Cadastrar';
     registerButton.textContent = 'Cadastrar';
     registerButton.disabled = true;
     registerButton.style.backgroundColor = "gray";
-    registerButton.style.cursor = "default";
+    registerButton.style.cursor = "not-allowed";
 
     acceptTermsInput.addEventListener('change', function () {
         if (this.checked) {
@@ -213,15 +248,6 @@ const createRegisterForm = () => {
             registerButton.style.cursor = 'default';
         }
     });
-
-    registerButton.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (validateFields()) {
-            submitRegistrationForm();
-        }
-    });
-
-    registerFormDiv.appendChild(registerButton);
 
     function validateFields() {
         const email = document.getElementById("email-register").value;
@@ -247,7 +273,7 @@ const createRegisterForm = () => {
         const email = document.getElementById('email-register').value;
         const password = document.getElementById('password-register').value;
 
-        fetch('/api/user', {
+        fetch('http://localhost:3000/api/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -261,6 +287,7 @@ const createRegisterForm = () => {
             .then(response => {
                 if (response.ok) {
                     showToast('Usuário cadastrado com sucesso');
+                    dispatchOnStateChange('/login', !response.ok);
                 } else if (response.status === 400) {
                     return response.json().then(data => {
                         showToast(data.error);
@@ -273,6 +300,30 @@ const createRegisterForm = () => {
                 showToast(error.message);
             });
     }
+
+    bodyRegister.addEventListener("keypress", function (event) {
+        const confirmReadBtn = document.getElementById('confirmRead-btn');
+        
+        if (confirmReadBtn === true) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+            } else {
+                if (validateFields()) {
+                    submitRegistrationForm();
+                }
+            }
+        }
+
+    });
+
+    registerButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (validateFields()) {
+            submitRegistrationForm();
+        }
+    });
+
+    registerFormDiv.appendChild(registerButton);
 
     return bodyRegister;
 };
