@@ -1,6 +1,7 @@
 import getHeader from "../components/header.js";
 import eventProgressBar from "../components/eventProgressBar.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
+import showToast from "../components/toast.js";
 import { getEvents } from "../api/eventApi.js";
 import notification from "../components/notification.js";
 
@@ -22,17 +23,15 @@ const createGuestPage = (
 		!constructorInfo.event ||
 		constructorInfo.event.id === ""
 	) {
-		alert("O evento passado para essa página não é válido!");
-		setTimeout(() => {
-			dispatchOnStateChange("/home", { animation: true });
-		}, 200);
+		showToast("O evento passado para essa página não é válido!");
+		dispatchOnStateChange("/home", { animation: true });
 		return document.createDocumentFragment();
 	}
 
 	const body = document.createElement("div");
 	body.classList.add("guest-page");
 
-	const header = getHeader(true);
+	const header = getHeader(false, false);
 	body.appendChild(header);
 
 	const progress = eventProgressBar(
@@ -176,7 +175,7 @@ const createGuestPage = (
 		const guestId = id;
 
 		const guestImg = document.createElement("img");
-		guestImg.id = "guest-img"
+		guestImg.id = "guest-img";
 		guestImg.src = "/assets/icons/person.svg";
 		guestImg.alt = "imagem genérica de uma pessoa";
 
@@ -189,7 +188,7 @@ const createGuestPage = (
 
 		const trash = document.createElement("img");
 		trash.src = "/assets/icons/trash.svg";
-		trash.alt = "icone de lixeira"
+		trash.alt = "icone de lixeira";
 
 		const editButton = document.createElement("div");
 		editButton.id = "edit-button";

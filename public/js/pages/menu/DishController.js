@@ -104,7 +104,7 @@ export default class DishController {
 			dishName: dishName,
 		};
 		console.log("PUT", this.#dishes);
-		if(newDish) {
+		if (newDish) {
 			await this.addDish(null, null, this.#dishes[index].type);
 		}
 	}
@@ -145,6 +145,7 @@ export default class DishController {
 	}
 
 	async pushIngredient(dishId, ingredient) {
+		console.log("DishController.pushIngredient")
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
 			console.log("não encontramos esse prato (ID):" + dishId);
@@ -153,7 +154,7 @@ export default class DishController {
 		if (ingredient.id) {
 			const ingredientIndex = this.findIngredientIndex(index, ingredient);
 			if (ingredientIndex !== -1) {
-				this.updateIngredient(dishId, ingredient);
+				await this.updateIngredient(dishId, ingredient);
 				return;
 			}
 		}
@@ -164,7 +165,9 @@ export default class DishController {
 			!ingredient.unityMeasure ||
 			typeof ingredient.unityMeasure !== "string";
 		const invalidQuantity =
-			!ingredient.quantity || typeof ingredient.quantity !== "number";
+			!ingredient.quantity ||
+			typeof ingredient.quantity !== "number" ||
+			isNaN(ingredient.quantity);
 
 		if (invalidName) {
 			ingredient.name = "Ingrediente sem nome";
@@ -270,7 +273,7 @@ export default class DishController {
 		}
 
 		this.#dishes[index].ingredients.splice(ingredientIndex, 1);
-		console.log(`Ingredientes atualizados para o prato com ID ${dishId}.`);
-		console.log("PUT", this.#dishes);
+		console.log(`Ingrediente deletado para o prato com ID ${dishId}.`);
+		console.log("DELETE", this.#dishes);
 	}
 }

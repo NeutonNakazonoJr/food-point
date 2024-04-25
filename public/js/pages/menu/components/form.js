@@ -5,7 +5,7 @@ function saveDish(dishId, dishName, dishType, addNewDish = true) {
 			dishName,
 			type: dishType,
 			addNewDish: addNewDish,
-		}
+		},
 	});
 	window.dispatchEvent(event);
 }
@@ -18,8 +18,9 @@ function saveIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
 			name,
 			unityMeasure,
 			quantity,
-		}
+		},
 	});
+	console.log("about to window.dispatchEvent('updateIngredient')");
 	window.dispatchEvent(event);
 }
 
@@ -28,7 +29,7 @@ function deleteIngredient(dishId, ingredientId) {
 		detail: {
 			dishId,
 			ingredientId,
-		}
+		},
 	});
 	window.dispatchEvent(event);
 }
@@ -123,7 +124,7 @@ function createIngredientFieldset(
 						ingredient.id,
 						ingredient.name,
 						ingredient.unityMeasure,
-						ingredient.quantity
+						parseInt(ingredient.quantity)
 					);
 				}
 			}, defaultAwait);
@@ -213,7 +214,7 @@ function createIngredientFieldset(
 				ingredient.id,
 				ingredient.name,
 				ingredient.unityMeasure,
-				ingredient.quantity
+				parseInt(ingredient.quantity)
 			);
 		}
 	});
@@ -239,9 +240,9 @@ function getIngredientsField(dishId, ingredients) {
 	const addIngredient = document.createElement("button");
 	addIngredient.textContent = "Adicionar ingrediente";
 
-	fieldset.appendChild(legend);
-
-	if (ingredients && Array.isArray(ingredients)) {
+	if (ingredients && Array.isArray(ingredients) && ingredients.length > 0) {
+		legend.textContent = "Ingredientes";
+		fieldset.appendChild(legend);
 		ingredients.forEach((ingredient) => {
 			fieldset.appendChild(
 				createIngredientFieldset(
@@ -267,8 +268,14 @@ function getIngredientsField(dishId, ingredients) {
 }
 
 function bootForm(form, h1, p, dish) {
+	console.log("fn bootform called!");
 	form.innerHTML = "";
-	const dishFieldset = getDishField(dish.dishId, dish.dishName, dish.type);
+
+	const dishFieldset = getDishField(
+		dish.dishId,
+		dish.dishName,
+		dish.type
+	);
 	const ingredientsField = getIngredientsField(dish.dishId, dish.ingredients);
 
 	form.appendChild(h1);
@@ -287,22 +294,27 @@ export default async function getForm(menu, currentType) {
 	const h1 = document.createElement("h1");
 	const p = document.createElement("p");
 	h1.textContent = "Menu";
-	p.textContent =
-		"Organize as comidas servidas durante o evento gastronômico";
+	p.textContent = "Organize as refeições do evento.";
 
-	const dish = await menu[currentType].controller.getLastDish(menu[currentType].name);
+	const dish = await menu[currentType].controller.getLastDish(
+		menu[currentType].name
+	);
 	bootForm(form, h1, p, dish);
 
 	form.addEventListener("selectDishType", async (e) => {
 		currentType = e.detail.key;
-		const dish = await menu[currentType].controller.getLastDish(e.detail.type);
+		const dish = await menu[currentType].controller.getLastDish(
+			e.detail.type
+		);
 		bootForm(form, h1, p, dish);
 	});
 
 	form.addEventListener("updateDish", async (e) => {
 		if (menu[currentType].name === e.detail.type) {
 			if (e.detail.addNewDish) {
-				const dish = await menu[currentType].controller.getLastDish(e.detail.type);
+				const dish = await menu[currentType].controller.getLastDish(
+					e.detail.type
+				);
 				bootForm(form, h1, p, dish);
 			} else {
 				const dish = await menu[currentType].controller.getOneDish(
@@ -314,28 +326,31 @@ export default async function getForm(menu, currentType) {
 	});
 
 	form.addEventListener("updateIngredient", async (e) => {
-		console.log("form");
-		const dish = await menu[currentType].controller.getOneDish(e.detail.dishId);
+		console.log('form.addEventListener("updateIngredient"');
+		const dish = await menu[currentType].controller.getOneDish(
+			e.detail.dishId
+		);
 		bootForm(form, h1, p, dish);
 	});
 
 	form.addEventListener("deleteIngredient", async (e) => {
-		const dish = await menu[currentType].controller.getOneDish(e.detail.dishId);
+		const dish = await menu[currentType].controller.getOneDish(
+			e.detail.dishId
+		);
 		bootForm(form, h1, p, dish);
 	});
 
 	form.addEventListener("dishSelectedToDelete", async (e) => {
-		const dish = await menu[currentType].controller.getLastDish(e.detail.type);
+		const dish = await menu[currentType].controller.getLastDish(
+			e.detail.type
+		);
 		bootForm(form, h1, p, dish);
 	});
 
 	form.addEventListener("dishSelectedToEdit", async (e) => {
-		if (!ingredientChangeHasBeenDispatched) {
-			ingredientChangeHasBeenDispatched = true;
-			dispatchIngredientChange();
-		}
 		const dish = await menu[currentType].controller.getOneDish(e.detail);
 		bootForm(form, h1, p, dish);
 	});
+
 	return form;
 }

@@ -1,59 +1,60 @@
 import stringLimiter from "../../../utils/stringLimiter.js";
 
-function editThisDish(btn, dishId) {
+function editThisDish(dishId) {
 	const event = new CustomEvent("dishSelectedToEdit", {
 		detail: dishId,
 	});
-	btn.dispatchEvent(event);
+	window.dispatchEvent(event);
 }
 
-function deleteThisDish(btn, dishId, type) {
+function deleteThisDish(dishId, type) {
 	const event = new CustomEvent("dishSelectedToDelete", {
 		detail: { dishId, type },
 	});
-	btn.dispatchEvent(event);
+	window.dispatchEvent(event);
 }
 
-function generateCard(dish, editing) {
+function generateCard(
+	dish,
+	editing,
+	dishIdSelected = null,
+	isTablet,
+	isMobile,
+	isWideScreen
+) {
 	const div = document.createElement("div");
 	const p = document.createElement("p");
 	const editBtn = document.createElement("button");
 	const deleteBtn = document.createElement("button");
 	const dishName = dish.dishName === "" ? "Prato vazio" : dish.dishName;
 
-	p.textContent = stringLimiter(dishName, 12, true);
+	let stringLength = 12;
+	if (isTablet) {
+		stringLength = 6;
+	}
+	if (isMobile) {
+		stringLength = 40;
+	}
+	if (isWideScreen) {
+		stringLength = 16;
+	}
+	p.textContent = stringLimiter(dishName, stringLength, true);
 	div.classList.add("newEventMenu-item");
-	if (editing) {
+	if ((editing && !dishIdSelected) || dishIdSelected === dish.dishId) {
 		div.classList.add("newEventMenu-item-editing");
-		p.textContent += "(editando)";
+		p.textContent += "*";
 		editBtn.disabled = true;
 		editBtn.style.cursor = "not-allowed";
 	}
+
 	editBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		editThisDish(editBtn, dish.dishId);
+		editThisDish(dish.dishId);
 	});
 
 	deleteBtn.addEventListener("click", (e) => {
 		e.preventDefault();
-		deleteThisDish(deleteBtn, dish.dishId, dish.type);
-	});
-
-	div.addEventListener("dishSelectedToEdit", (e) => {
-		if (e.detail === dish.dishId) {
-			div.classList.add("newEventMenu-item-editing");
-			const text = p.textContent;
-			p.textContent = stringLimiter(text, 12, true) + "(editando)";
-			editBtn.disabled = true;
-			editBtn.style.cursor = "not-allowed";
-			return;
-		}
-		if (div.classList.contains("newEventMenu-item-editing")) {
-			div.classList.remove("newEventMenu-item-editing");
-		}
-		p.textContent = p.textContent.replace("(editando)", "");
-		editBtn.disabled = false;
-		editBtn.removeAttribute("style");
+		deleteThisDish(dish.dishId, dish.type);
 	});
 
 	div.appendChild(p);
@@ -64,28 +65,50 @@ function generateCard(dish, editing) {
 }
 
 export default async function getDisplay(menu, currentType) {
-	function renderDiv(dishes) {
+	function renderDiv(
+		dishes,
+		dishIdSelected,
+		isTablet,
+		isMobile,
+		isWideScreen
+	) {
 		dishes.forEach((dish, index, arr) => {
 			const isFirstDish = index === 0;
 			const isLastDish = index === arr.length - 1;
 			const isInEditingMode =
 				(isFirstDish && isFirstLoad) || (!isFirstLoad && isLastDish);
-			div.prepend(generateCard(dish, isInEditingMode));
+			div.prepend(
+				generateCard(
+					dish,
+					isInEditingMode,
+					dishIdSelected,
+					isTablet,
+					isMobile,
+					isWideScreen
+				)
+			);
 		});
 		isFirstLoad = false;
 	}
-	async function rebootDiv() {
-		const dishes = await menu[currentType].controller.getDishes();
+	async function rebootDiv(dishIdSelected = null) {
+		const dishes = await menu[currentType].controller.getDishes(
+			menu[currentType].name
+		);
 
 		div.innerHTML = "";
-		renderDiv(dishes);
+		renderDiv(dishes, dishIdSelected, isTablet, isMobile, isWideScreen);
 
 		span.textContent = `(${dishes[0].type})`;
 		div.prepend(h6);
 	}
 
-	const dishes = await menu[currentType].controller.getDishes();
+	const dishes = await menu[currentType].controller.getDishes(
+		menu[currentType].name
+	);
 	let isFirstLoad = true;
+	let isTablet;
+	let isMobile;
+	let isWideScreen;
 
 	const div = document.createElement("div");
 	const h6 = document.createElement("h6");
@@ -103,8 +126,29 @@ export default async function getDisplay(menu, currentType) {
 		currentType = e.detail.key;
 		rebootDiv();
 	});
-	div.addEventListener("updateDish", rebootDiv);
-	div.addEventListener("dishSelectedToDelete", rebootDiv);
+	div.addEventListener("updateDish", () => rebootDiv());
+	div.addEventListener("dishSelectedToDelete", () => rebootDiv());
+	div.addEventListener("dishSelectedToEdit", (e) => rebootDiv(e.detail));
+	div.addEventListener("resize", () => {
+		const currentWidth =
+			window.innerWidth ||
+			document.documentElement.clientWidth ||
+			document.body.clientWidth;
+		const newIsTablet = currentWidth < 1000;
+		const newIsMobile = currentWidth < 770;
+		const newIsWideScreen = currentWidth > 1300;
+
+		if (
+			isMobile !== newIsMobile ||
+			isTablet !== newIsTablet ||
+			isWideScreen !== newIsWideScreen
+		) {
+			rebootDiv();
+			isMobile = newIsMobile;
+			isTablet = newIsTablet;
+			isWideScreen = newIsWideScreen;
+		}
+	});
 
 	return div;
 }
