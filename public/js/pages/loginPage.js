@@ -143,7 +143,7 @@ const createLoginForm = () => {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
 
-        fetch('http://localhost:3000/api/login', {
+        fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
