@@ -1,0 +1,56 @@
+#newEventLocal {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 1rem 4rem;
+	color: var(--blackberry);
+	& > h1 {
+		font-size: 2rem;
+	}
+	& > div {
+		width: 100%;
+		border-radius: var(--border-radius-1x);
+		border: 3px solid var(--raspberry);
+		height: 45vh;
+	}
+}
+
+
+#newEventLocal-footer {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	position: fixed;
+	bottom: 0;
+	padding-bottom: 1rem;
+	padding-right: 2rem;
+	& > a {
+		border: none;
+		cursor: pointer;
+		background-color: var(--raspberry);
+		font-size: 1rem;
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+		color: var(--white-smoke);
+		text-decoration: none;
+		padding: 0.5rem 3rem;
+		border-radius: var(--border-radius-1x);
+		&::after {
+			content: "";
+			background: url("../icons/arrow-rigth.svg") no-repeat center;
+			background-size: contain;
+			width: 1rem;
+			height: 1rem;
+			margin-left: 5px;
+			display: inline-block;
+		}
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
+		}
+	}
+}
