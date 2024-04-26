@@ -23,10 +23,9 @@ const htmlCreator = {
         inputOptions.type ? input.type = inputOptions.type : null;
         inputOptions.id ? input.id = inputOptions.id : null;
         inputOptions.placeholder ? input.placeholder = inputOptions.placeholder : null;
-        inputOptions.className ? input.classList.add = inputOptions.className : null;
+        inputOptions.className ? input.classList.add(inputOptions.className) : null;
         inputOptions.value ? input.value = inputOptions.value : null;
         inputOptions.pattern ? input.pattern = inputOptions.pattern : null;
-
         if (inputOptions.labelText) {
             const label = document.createElement('label');
             label.innerText = inputOptions.labelText;

@@ -19,6 +19,7 @@ pagesRoutes.get("/home/create/menu", goToIndexHTML);
 
 pagesRoutes.get("/event", goToIndexHTML);
 pagesRoutes.get("/profile", goToIndexHTML);
+pagesRoutes.get("/list", goToIndexHTML);
 
 
 module.exports = pagesRoutes;

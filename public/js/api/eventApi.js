@@ -55,7 +55,23 @@ export async function getEventById(eventId) {
 		const data = await res.json();
 		return data;
 	} catch (error) {
-		return error.message;
+		return error;
+	}
+}
+
+export async function getPurchaseList(eventId) {
+	try {
+		const url = `/api/event/${eventId}/purchase-list`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			const error = await res.json();
+			throw error;
+		}
+
+		return await res.json();
+	} catch (error) {
+		return error;
 	}
 }
 
