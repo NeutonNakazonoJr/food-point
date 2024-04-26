@@ -73,7 +73,6 @@ const eventController = {
             return res.status(500).json({ error: 'Erro interno no servidor' });
         }
     }
-
 }
 
 module.exports = eventController;

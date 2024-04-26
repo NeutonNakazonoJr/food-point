@@ -164,12 +164,12 @@ const createCardDiv = (dishInfos) => {
     }
 
     const icons = {
-        'entrada': './assets/icons/enter-type-icon.svg',
+        'Entrada': './assets/icons/enter-type-icon.svg',
         'salada': './assets/icons/salad-type-icons.svg',
         'acompanhamento': './assets/icons/accompaniment-type-icon.svg',
         'principal': './assets/icons/main-type-icon.svg',
         'sobremesa': './assets/icons/dessert-type-icon.svg',
-        'drink': './assets/icons/drink.svg'
+        'drink': './assets/icons/drink-event.svg'
     }
 
     const dishList = groupDishesByType(dishInfos);
@@ -278,7 +278,6 @@ const createHeaderEvent = () => {
     header.appendChild(divToggleBtn);
     return header;
 }
-
 
 const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
 

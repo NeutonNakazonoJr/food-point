@@ -11,6 +11,7 @@ import createProfile from "../pages/profilePage.js";
 import { getMyLogin } from "../api/userApi.js";
 import showToast from "../components/toast.js";
 import newEventLocalPage from "../pages/newEventLocal.js";
+import createPurchaseListPage from "../pages/purchaseList.js";
 
 const title = "Food Point";
 
@@ -94,6 +95,12 @@ const routes = {
 		html: createProfile,
 		title: "Perfil | " + title,
 		description: "Edite seu perfil",
+		needLogin: true,
+	},
+	"/list": {
+		html: createPurchaseListPage,
+		title: "Lista de compras | " + title,
+		description: "Lista de compras de ingredientes relacionadas ao evento",
 		needLogin: true,
 	},
 };

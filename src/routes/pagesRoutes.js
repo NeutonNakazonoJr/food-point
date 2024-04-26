@@ -20,6 +20,7 @@ pagesRoutes.get("/home/create/local", goToIndexHTML);
 
 pagesRoutes.get("/event", goToIndexHTML);
 pagesRoutes.get("/profile", goToIndexHTML);
+pagesRoutes.get("/list", goToIndexHTML);
 
 
 module.exports = pagesRoutes;
