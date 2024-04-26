@@ -18,7 +18,7 @@ const createProfile = () => {
         }
     }
 
-    window.onload = updateProfile;
+    updateProfile();
     window.onresize = updateProfile;
 
     return page;

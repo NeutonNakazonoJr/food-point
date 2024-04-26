@@ -1,6 +1,6 @@
 import dispatchOnStateChange from "../../../events/onStateChange.js";
 
-export default function getFooter(eventId = null, href = "/home/create/guest") {
+export default function getFooter(eventId = null, href = "/home/create/local") {
 	const constructorInfo = {
 		animation: false,
 		event: {

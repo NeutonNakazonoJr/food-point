@@ -10,6 +10,7 @@ import createErrorPage from "../pages/errorPage.js";
 import createProfile from "../pages/profilePage.js";
 import { getMyLogin } from "../api/userApi.js";
 import showToast from "../components/toast.js";
+import newEventLocalPage from "../pages/newEventLocal.js";
 import createPurchaseListPage from "../pages/purchaseList.js";
 
 const title = "Food Point";
@@ -72,6 +73,12 @@ const routes = {
 		description: "Crie o seu cardápio.",
 		needLogin: true,
 	},
+	"/home/create/local": {
+		html: newEventLocalPage,
+		title: "Novo evento | " + title,
+		description: "Defina a localização do seu evento gastronômico.",
+		needLogin: true,
+	},
 	"/home/create/guest": {
 		html: createGuestPage,
 		title: "Guests | " + title,
@@ -115,7 +122,7 @@ async function router() {
 	const route = routes[currentPath] || routes["404"];
 	if (route.needLogin) {
 		const res = await getMyLogin();
-		if (res.error) {
+		if (res.error || res instanceof Error) {
 			showToast("Usuário não está logado.");
 			window.history.pushState(null, null, "/login");
 			return routes["/login"];
