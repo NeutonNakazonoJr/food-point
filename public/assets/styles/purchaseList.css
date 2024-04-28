@@ -76,7 +76,11 @@
         color: var(--white-smoke);
         font-weight: 400;
         border-radius: 4px;
-        padding: 0.3rem 0;
+        height: 2.5rem;
+
+        & img {
+            width: 1.6rem;
+        }
 
         & th {
             flex: 1;
@@ -147,31 +151,70 @@
     width: 1rem;
 }
 
-#download-btn {
-    background-color: var(--blackberry);
-    color: var(--white-smoke);
-    border-color: var(--blackberry);
-}
 
 #div-btn-purchase {
     display: flex;
     justify-content: space-between;
     padding: 4rem 0;
     width: 70%;
+    min-width: 52rem;
     margin: auto;
 }
 
 #div-empty {
-
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    
     & h2 {
         font-weight: 600;
         color: var(--blackberry);
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
+}
+
+#btn-save-list,  #download-btn {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--white-smoke);
+    border: none;
+    cursor: pointer; 
+    position: relative;
+    left: 0;
+    transition: opacity 0.5s ease;
+    
+    & img {
+        width: 1.2rem;
+    }
+}
+
+#download-btn {
+    z-index: 2;
+    background-color: var(--blackberry);
+    color: var(--white-smoke);
+    border-color: var(--blackberry);
+}
+
+#btn-save-list {
+    position: relative;
+    top: -3rem;
+    opacity: 0;
+    background-color: var(--raspberry);
+    z-index: 1;
+}
+
+.modified #btn-save-list {
+    opacity: 1;
+    z-index: 2;
+}
+
+.modified #download-btn {
+    opacity: 0;
+    z-index: 1;
 }
 
 #list-img-empty {
@@ -197,32 +240,35 @@
         width: 98%;
     }
     
-    #div-btn-purchase {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-
+    
     #table-purchase-list {
         padding: 2rem 0.2rem;
         font-size: 0.9rem;
     }
-
     
+    #div-btn-purchase {
+        min-width: 0
+    }
 }
 
 @media screen and (max-width: 600px) {
     #table-purchase-list td:nth-child(2) {
         flex: 1.7;
     }
-
+    
     #table-purchase-list  td:last-child,  th:last-child {
         margin-right: 0.5rem !important;
     }
-
+    
     #table-purchase-list  td:first-child,  th:first-child {
         margin-left: 0.5rem !important;
     }   
+    
+    #div-btn-purchase {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
 
     #div-empty  {
         text-align: center;

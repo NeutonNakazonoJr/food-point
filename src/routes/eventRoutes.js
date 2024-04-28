@@ -8,7 +8,7 @@ const eventMiddleware = require('../middlewares/eventMiddleware.js');
 
 const eventSchema = require('../schemas/eventSchema.js');
 const dishSchema = require('../schemas/dishSchema.js');
-const ingredientSchema = require('../schemas/ingredientSchema.js');
+const { ingredientSchema, purchaseListSchema } = require('../schemas/ingredientSchema.js');
 
 const eventController = require('../controllers/eventController.js');
 const dishController = require('../controllers/dishController.js');
@@ -23,6 +23,7 @@ eventRoutes.delete('/event/:id', eventController.deleteEvent);
 
 eventRoutes.put('/event/:id/basic-infos', validateRequestBody(eventSchema.eventBasicInfos), eventController.updateEventBasicInfos);
 eventRoutes.get('/event/:id/purchase-list', eventController.getEventPurchaseList);
+eventRoutes.put('/event/:id/purchase-list', validateRequestBody(purchaseListSchema),eventController.updateIngredientPurchaseList);
 
 eventRoutes.post('/event/:id/dish', validateRequestBody(eventSchema.dish), eventController.createNewDish);
 eventRoutes.use('/event/:id/dish/:dishId', validateDishId);

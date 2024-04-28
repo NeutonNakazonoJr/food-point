@@ -67,10 +67,27 @@ const eventController = {
         try {
             const purchaseList = await createAndOrganizePurchaseList(req.params.id);
             return res.status(200).json({
+                eventId: req.params.id,
                 list: purchaseList
             })
         } catch (error) {
             return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
+    },
+
+    updateIngredientPurchaseList: async (req, res) => {
+        try {
+            
+            const eventId = req.params.id;
+            const ingredientList = req.body.ingredientList;
+            
+            const updateRequested = await eventRepository.updatePurchaseList(eventId, ingredientList);
+            return res.status(200).json({
+                success: updateRequested.success, 
+                message: updateRequested.message 
+            });
+        } catch (error) {
+          return res.status(500).json({ error: 'Erro interno no servidor' });  
         }
     }
 }

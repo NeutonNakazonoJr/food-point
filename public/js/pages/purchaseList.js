@@ -1,8 +1,8 @@
-import { getPurchaseList } from "../api/eventApi.js";
+import { getPurchaseList, updatePurchaseList } from "../api/eventApi.js";
 import getHeader from "../components/header.js";
 import htmlCreator from "../utils/htmlCreator.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
-// import jsPDF from 'jspdf';
+import showToast from "../components/toast.js";
 
 
 const createDivLogo = () => {
@@ -52,7 +52,7 @@ const createListTable = (listInfos) => {
         const tr = createListRow(ingredientInfo, index);
         tbody.appendChild(tr);
     });
-    
+
     table.appendChild(tbody);
     return table;
 }
@@ -60,6 +60,7 @@ const createListTable = (listInfos) => {
 const createListRow = (ingredientInfo, ingredientIndex) => {
 
     const tr = document.createElement('tr');
+    tr.classList.add('row-ingredient');
 
     const tdIndex = document.createElement('td');
     tdIndex.textContent = ingredientIndex + 1;
@@ -74,8 +75,15 @@ const createListRow = (ingredientInfo, ingredientIndex) => {
     tdQuantity.textContent = `${ingredientInfo.total_quantity} ${unityMeasureAbreviation}`;
 
     const tdCheckbox = document.createElement('td');
+    tdCheckbox.id = 'td-checkbox';
     const checkInput = htmlCreator.createInput({ type: 'checkbox', id: ingredientInfo.name, className: 'check-input-purchase-list'});
+    checkInput.checked = ingredientInfo.purchased;
     tdCheckbox.appendChild(checkInput);
+
+    checkInput.addEventListener('click', () => {
+        const divBtnList = document.getElementById('div-btn-list');
+        divBtnList.classList.add('modified');
+    });
 
     tr.appendChild(tdIndex);
     tr.appendChild(tdName);
@@ -96,7 +104,7 @@ const createCentralContainer = (listInfos) => {
     return centralContainer;
 }
 
-const createDivBtn = () => {
+const createDivBtn = async (igredientsToDownload, eventID) => {
     const divBtn = htmlCreator.createDiv('div-btn-purchase');
 
     const homeButton = htmlCreator.createButton('Página inicial', null, 'btn-section');
@@ -106,18 +114,59 @@ const createDivBtn = () => {
 
     const homeIcon = htmlCreator.createImg('./assets/icons/home-icon.svg');
     homeButton.appendChild(homeIcon);
-
-    const downloadBtn  = htmlCreator.createButton('Download', 'download-btn', 'btn-section');
-    const downloadIcon = htmlCreator.createImg('./assets/icons/download-icon.svg');
-
-    downloadBtn.appendChild(downloadIcon);
-
-    downloadBtn.addEventListener('click', () => {
-        generatePDF();
-    })
-
     divBtn.appendChild(homeButton);
-    divBtn.appendChild(downloadBtn);
+
+    if (igredientsToDownload) {
+        const divBtnSaveDownload = htmlCreator.createDiv('div-btn-list');
+
+        const saveIcon = htmlCreator.createImg('./assets/icons/save-purchase-icon.svg');
+        const buttonUpdateList = htmlCreator.createButton('Salvar lista', 'btn-save-list', 'btn-section');
+        buttonUpdateList.appendChild(saveIcon);
+
+        const downloadBtn  = htmlCreator.createButton('Download', 'download-btn', 'btn-section');
+        const downloadIcon = htmlCreator.createImg('./assets/icons/download-icon.svg');
+        downloadBtn.appendChild(downloadIcon);
+    
+        downloadBtn.addEventListener('click', () => {
+            generatePDF();
+        });
+
+        buttonUpdateList.addEventListener('click', async () => {
+
+            const ingredientList = [];
+
+            const checkboxIngredient = document.querySelectorAll('.check-input-purchase-list');
+            checkboxIngredient.forEach(input => {
+
+                const ingredientInfo = {
+                    name: input.id,
+                    purchased: input.checked
+                }
+                
+                ingredientList.push(ingredientInfo);
+            })
+            
+            const requestBody = {
+                ingredientList
+            }
+
+            const updateRequested = await updatePurchaseList(eventID, requestBody);
+
+            if (updateRequested.success) {
+                showToast(updateRequested.message)
+            } else {
+                showToast(updateRequested.error.message)
+            }
+
+            divBtnSaveDownload.classList.remove('modified');
+        })
+        
+        divBtnSaveDownload.appendChild(downloadBtn);
+        divBtnSaveDownload.appendChild(buttonUpdateList);
+        divBtn.appendChild(divBtnSaveDownload);
+    } else {
+        divBtn.style.justifyContent = 'center';
+    }
 
     return divBtn;
 }
@@ -134,8 +183,11 @@ const createEmptyContentDiv = () => {
 }
 
 function generatePDF() {
+    
     const table = document.getElementById('table-purchase-list');
-    table.querySelectorAll('img').forEach(img => img.remove());
+
+    const cartIcon = table.querySelector('img')
+    cartIcon.style.display = 'none';
 
     const pdf = new jsPDF({
         orientation: 'l',
@@ -150,7 +202,9 @@ function generatePDF() {
         }
     });
 
-
+    setInterval(() => {
+        cartIcon.style.display = 'block'
+    },100)
 }
 
 const createPurchaseListPage = async (constructorInfo =  { eventID: '' }) => {
@@ -161,15 +215,16 @@ const createPurchaseListPage = async (constructorInfo =  { eventID: '' }) => {
     }
 
     const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
-    
+    const { list } = await getPurchaseList(eventID || storageEventID.eventID);
+
     const main = document.createElement('main');
     const header = getHeader();
     const divLogo = createDivLogo();
-    const divBtn = createDivBtn();
     main.appendChild(divLogo);
     
-    const { list } = await getPurchaseList(eventID || storageEventID.eventID);
-    
+    const haveIngredientsList = list.length > 0;
+    const divBtn = await createDivBtn(haveIngredientsList, eventID || storageEventID.eventID);
+
     let centalContainer;
     if (list.length !== 0) {
         centalContainer = createCentralContainer(list);

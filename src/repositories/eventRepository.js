@@ -1,4 +1,5 @@
 const dbConnection = require('../database/db-connection.js');
+const uuid = require('uuid')
 
 const eventRepository = {
 
@@ -128,7 +129,40 @@ const eventRepository = {
         GROUP BY name, unity_measure, purchased;`
         const { rows } = await dbConnection.query(query, [eventId]);
         return rows;
+    },
+
+    updatePurchaseList: async (eventId, ingredientList) => {
+
+        try {
+            await dbConnection.query('BEGIN');
+    
+            let valuesClause = '';
+            let params = [];
+            let index = 1;
+    
+            for (const ingredient of ingredientList) {
+                const { name, purchased } = ingredient;
+                valuesClause += `($${index++}, $${index++}, $${index++}::uuid), `;
+                params.push(purchased, name, eventId);
+            }
+    
+            valuesClause = valuesClause.slice(0, -2);
+            
+            const query = `
+                UPDATE ingredient AS i
+                SET purchased = v.purchased::boolean
+                FROM (VALUES ${valuesClause}) AS v(purchased, name, eventId)
+                WHERE i.name = v.name AND i.event_id = v.eventId
+            `;
+    
+            await dbConnection.query(query, params); 
+            await dbConnection.query('COMMIT'); 
+    
+            return { success: true, message: 'Atualização bem sucedida' }; 
+        } catch (error) {
+            await dbConnection.query('ROLLBACK'); 
+            throw error; 
+        } 
     }
 }
-
 module.exports = eventRepository;

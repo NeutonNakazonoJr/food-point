@@ -45,7 +45,8 @@ const createAndOrganizePurchaseList = async (eventId) => {
                 group[`${ingredient.name} formatted`] = {
                     name: ingredient.name,
                     total_quantity: quantity,
-                    unity_measure: unityMeasure
+                    unity_measure: unityMeasure,
+                    purchased: ingredient.purchased
                 };
             }
             else if (group[ingredient.name] && group[ingredient.name].unity_measure !== unitTypes.unity) {
@@ -58,16 +59,27 @@ const createAndOrganizePurchaseList = async (eventId) => {
                 }
                 
                 group[ingredient.name].unity_measure = unityMeasure;
+                group[ingredient.name].purchased = ingredient.purchased;
             } else {
                 group[ingredient.name] = {
                     name: ingredient.name,
                     total_quantity: quantity,
-                    unity_measure: unityMeasure
+                    unity_measure: unityMeasure,
+                    purchased: ingredient.purchased
                 };
             }
-        })
+        })    
+         
+        return Object.values(group);  
+}
 
-    return  Object.values(group);
+const queryConstructorToUpdatePurchaseList = (purchaseList) => {
+    // UPDATE "event" SET 
+    // event_name = $1, theme = $2, event_description = $3,  event_date = $4, event_time = $5, event_location = $6  WHERE event_id = $7 
+    // RETURNING event_name, theme, event_description, event_date, event_date, event_time, event_location`;
+    const query = purchaseList.forEach(ingredient => {
+
+    })
 }
 
 module.exports = createAndOrganizePurchaseList;
