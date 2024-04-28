@@ -1,6 +1,7 @@
-import getHeader from "../components/header.js";
-import dispatchOnStateChange from "../events/onStateChange.js";
-
+import getHeader from "../../components/header.js";
+import dispatchOnStateChange from "../../events/onStateChange.js";
+import notification from "../../components/notification.js";
+import { getMyLogin } from "../../api/userApi.js";
 
 const createProfileMobile = () => {
     const page = document.createElement("div");
@@ -38,7 +39,11 @@ const createProfileMobile = () => {
     const textarea = document.createElement("div");
     textarea.className = "name-area";
     const name = document.createElement("h2");
-    name.textContent = "Name Complete of the user selected";
+    async function userName() {
+        const data = await getMyLogin();
+        name.textContent = data.fullname;
+    }
+    userName()
     const inputImg = document.createElement("input");
     inputImg.type = "file";
     inputImg.id = "image-input";
@@ -192,6 +197,93 @@ const createProfileMobile = () => {
     helpMenu.appendChild(helpText);
     menu.appendChild(helpMenu);
 
+    //logic to change pictures and send to api
+    anchor.addEventListener("click", (event) => {
+        event.preventDefault();
+        inputImg.click()
+    })
+    inputImg.addEventListener("change", async (event) => {
+        const picture = event.target.files[0];
+        if (picture) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const newPicture = e.target.result;
+                const formData = new FormData();
+                formData.append("image", picture);
+
+                fetch("/api/upload", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error();
+                        }
+                        profileImage.style.backgroundImage = `url("${newPicture}")`;
+                        notification("Imagem Atualizada!")
+                    })
+                    .catch(error => {
+                        notification("Erro ao enviar imagem", error)
+                    })
+            }
+            reader.readAsDataURL(picture);
+        }
+    })
+
+    //edit profile informations
+    save.addEventListener("click", () => {
+        if (validateEmail()) {
+            submitUserInfo();
+        };
+    })
+    nameInput.addEventListener("input", () => {
+        let name = nameInput.value;
+        nameInput.value = name.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '')
+    });
+
+    function validateEmail() {
+        const email = emailInput.value.trim().toLowerCase();
+        const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+        const emailValid = regex.test(email);
+
+        if (emailValid === false && email !== "") {
+            notification("Insira um endereço de email valido!");
+            return false;
+        }
+        return true;
+    }
+    function submitUserInfo(){
+        const fullName = nameInput.value.trim().toLowerCase();
+        const email = emailInput.value.trim().toLowerCase();
+
+        fetch("/api/user", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                fullname: fullName,
+                email: email
+            }),
+        })
+        .then(response => {
+            if(response.ok){
+                notification("Dados Atualizados com Sucesso!");
+                userName()
+            }else if(response.status === 400){
+                return response.json().then(data => {
+                    console.error(data.error);
+                });
+            } else {
+                throw new Error();
+            }
+        })
+        .catch(error => {
+            notification("Erro ao atualizar os dados!");
+            console.error(error.message)
+        });
+    }
+    
     //logic to navegate in menu tabs
     homeButton.addEventListener("click", () => {
         dispatchOnStateChange("/home");
@@ -257,6 +349,7 @@ const createProfileMobile = () => {
     formSecurity.className = "form";
     formSecurity.id = "form-mobile";
     editSecurity.appendChild(formSecurity)
+
     //user password input
     const passwordForm = document.createElement("div");
     passwordForm.className = "div-form";
@@ -315,6 +408,56 @@ const createProfileMobile = () => {
     buttonIcon.alt = "Icone de disquete"
     savePassword.appendChild(buttonIcon);
     securityEndpage.appendChild(savePassword)
+
+    //send new password to database
+    savePassword.addEventListener("click", () => {
+        if (validatePassword()) {
+            submitNewPassword();
+        }
+    })
+    function validatePassword() {
+        const password = passwordInput.value;
+        const confirmation = confirmInput.value;
+
+        if (password !== confirmation) {
+            notification("As senhas não conferem!");
+            return false;
+        } else if (password === "") {
+            notification("O campo senha não pode estar vazio!")
+            return false
+        }
+        return true
+    }
+
+    function submitNewPassword() {
+        const password = passwordInput.value;
+
+        fetch("/api/user", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                password: password
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    notification("Senha Atualizada com sucesso!");
+                } else if (response.status === 400) {
+                    return response.json().then(data => {
+                        notification(data.error);
+                    });
+                } else {
+                    throw new Error("Erro ao atualizar a nova senha!")
+                }
+            })
+            .catch(error => {
+                notification("Erro ao atualizar a senha! Tente Novamente mais tarde!");
+                console.error(error.message)
+            });
+    }
+    //back to menu page
 
     backMenu.addEventListener("click", () => {
         page.appendChild(menuContent);
@@ -389,124 +532,6 @@ const createProfileMobile = () => {
         }, 50);
         page.removeChild(helpTab)
     })
-    //logic to change pictures and send to api
-    anchor.addEventListener("click", (event) => {
-        event.preventDefault();
-        inputImg.click()
-    })
-    inputImg.addEventListener("change", (event) => {
-        const picture = event.target.files[0];
-  
-        if(picture){
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const newPicture = e.target.result;
-                profileImage.style.backgroundImage = `url("${newPicture}")`;
-                
-            };
-            reader.readAsDataURL(picture);
-        }
-    })
-    //edit profile informations
-    save.addEventListener("click", () => {
-        if(validateEmail()){
-            submitUserInfo();
-        };
-    })
-    nameInput.addEventListener("input", () => {
-        let name = nameInput.value;
-        nameInput.value = name.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '')
-    });
-    
-    function validateEmail(){
-        const email = emailInput.value.trim().toLowerCase();
-        const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-        const emailValid = regex.test(email);
-
-        if (emailValid === false && email !== ""){
-            notification("Insira um endereço de email valido!");
-            return false;
-        }
-        return true;
-    }
-    function submitUserInfo(){
-        const fullName = nameInput.value.trim().toLowerCase();
-        const email = emailInput.value.trim().toLowerCase();
-
-        fetch("/api/user", {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                fullname: fullName,
-                email: email
-            }),
-        })
-        .then(response => {
-            if(response.ok){
-                notification("Dados Atualizados com Sucesso!");
-            }else if(response.status === 400){
-                return response.json().then(data => {
-                    notification(data.error);
-                });
-            } else {
-                throw new Error("Erro ao atualizar os dados!");
-            }
-        })
-        .catch(error => {
-            notification("Erro ao atualizar os dados!");
-            console.error(error.message)
-        });
-    }
-
-    savePassword.addEventListener("click", () => {
-        if(validatePassword()){
-           submitNewPassword();
-        }
-    })
-    function validatePassword(){
-        const password = passwordInput.value;
-        const confirmation = confirmInput.value;
-
-        if(password !== confirmation){
-            notification("As senhas não conferem!");
-            return false;
-        }else if(password === ""){
-            notification("O campo senha não pode estar vazio!")
-            return false
-        }
-        return true
-    }
-
-    function submitNewPassword() {
-        const password = passwordInput.value;
-
-        fetch("/api/user", {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                password: password
-            })
-        })
-        .then(response => {
-            if(response.ok){
-                notification("Senha Atualizada com sucesso!");
-            } else if (response.status === 400){
-                return response.json().then(data => {
-                    notification(data.error);
-                });
-            }else{
-                throw new Error("Erro ao atualizar a nova senha!")
-            }
-        })
-        .catch(error => {
-            notification("Erro ao atualizar a senha! Tente Novamente mais tarde!");
-            console.error(error.message)
-        });
-    }
-    return page
+ return page
 }
 export default createProfileMobile
