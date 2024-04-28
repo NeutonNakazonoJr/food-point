@@ -16,6 +16,7 @@ pagesRoutes.get("/home", goToIndexHTML);
 pagesRoutes.get("/home/create", goToIndexHTML);
 pagesRoutes.get("/home/create/guest", goToIndexHTML);
 pagesRoutes.get("/home/create/menu", goToIndexHTML);
+pagesRoutes.get("/home/create/local", goToIndexHTML);
 
 pagesRoutes.get("/event", goToIndexHTML);
 pagesRoutes.get("/profile", goToIndexHTML);

@@ -42,6 +42,28 @@ export async function putEvent(eventId, eventInfo) {
 	}
 }
 
+export async function updateEventLocation(eventId, eventLocation) {
+	try {
+		const url = `/api/event/${eventId}/location`;
+		const requestOptions = {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(eventLocation),
+		};
+		const res = await fetch(url, requestOptions);
+	
+		if (res.status !== 200) {
+			const error = await res.json();
+			throw error;
+		}
+		
+		const result = await res.json();
+		return result;
+	} catch (error) {
+		return error;
+	}
+}
+
 export async function getEventById(eventId) {
 	try {
 		const url = `/api/event/${eventId}`;
