@@ -1,17 +1,23 @@
 import stringLimiter from "../../../utils/stringLimiter.js";
 
 function editThisDish(dishId) {
-	const event = new CustomEvent("dishSelectedToEdit", {
-		detail: dishId,
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main && main instanceof HTMLElement) {
+		const event = new CustomEvent("dishSelectedToEdit", {
+			detail: dishId,
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function deleteThisDish(dishId, type) {
-	const event = new CustomEvent("dishSelectedToDelete", {
-		detail: { dishId, type },
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main && main instanceof HTMLElement) {
+		const event = new CustomEvent("dishSelectedToDelete", {
+			detail: { dishId, type },
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function generateCard(
