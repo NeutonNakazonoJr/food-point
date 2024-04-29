@@ -73,21 +73,20 @@ async function dispatchThisEventForElements(form, display, eventName, event) {
 }
 
 export default async function menuPage(constructorInfo) {
-	// if (
-	// 	!constructorInfo ||
-	// 	!constructorInfo.event ||
-	// 	!constructorInfo.event.id
-	// ) {
-	// 	showToast("Houve um erro no processamento do ID do evento");
-	// 	dispatchOnStateChange("/home", { animation: true });
-	// 	return document.createDocumentFragment();
-	// }
+	if (
+		!constructorInfo ||
+		!constructorInfo.event ||
+		!constructorInfo.event.id
+	) {
+		showToast("Houve um erro no processamento do ID do evento");
+		dispatchOnStateChange("/home", { animation: true });
+		return document.createDocumentFragment();
+	}
 	const stage = constructorInfo.stage || {
 		current: 1,
 		last: 0,
 	};
-	// const eventID = constructorInfo.event.id;
-	const eventID = "5e1bd1f2-3079-47ae-8517-b3b56569bfc1";
+	const eventID = constructorInfo.event.id;
 	const menu = getMenu(eventID);
 
 	let currentType = "stater";
@@ -115,13 +114,13 @@ export default async function menuPage(constructorInfo) {
 
 	main.id = "newEventMenu";
 
-	window.addEventListener("selectDishType", async (e) => {
+	main.addEventListener("selectDishType", async (e) => {
 		await dispatchIngredientChange(form);
 		currentType = e.detail.key;
 		await dispatchThisEventForElements(form, display, "selectDishType", e);
 	});
 
-	window.addEventListener("postDish", async (e) => {
+	main.addEventListener("postDish", async (e) => {
 		await menu[currentType].controller.addDish(
 			null,
 			e.detail.dishName,
@@ -132,7 +131,7 @@ export default async function menuPage(constructorInfo) {
 		allowUserContinue();
 	});
 
-	window.addEventListener("updateDish", async (e) => {
+	main.addEventListener("updateDish", async (e) => {
 		await dispatchIngredientChange(form);
 		await menu[currentType].controller.updateDish(
 			e.detail.dishId,
@@ -141,7 +140,7 @@ export default async function menuPage(constructorInfo) {
 		await dispatchThisEventForElements(form, display, "updateDish", e);
 	});
 
-	window.addEventListener("updateIngredient", async (e) => {
+	main.addEventListener("updateIngredient", async (e) => {
 		await dispatchIngredientChange(form);
 		const ingredient = {
 			id: e.detail.ingredientId,
@@ -161,7 +160,7 @@ export default async function menuPage(constructorInfo) {
 		);
 	});
 
-	window.addEventListener("deleteIngredient", async (e) => {
+	main.addEventListener("deleteIngredient", async (e) => {
 		await dispatchIngredientChange(form);
 		await menu[currentType].controller.deleteIngredient(
 			e.detail.dishId,
@@ -175,7 +174,7 @@ export default async function menuPage(constructorInfo) {
 		);
 	});
 
-	window.addEventListener("dishSelectedToDelete", async (e) => {
+	main.addEventListener("dishSelectedToDelete", async (e) => {
 		await dispatchIngredientChange(form);
 		await menu[currentType].controller.removeDish(e.detail.dishId);
 
@@ -188,7 +187,7 @@ export default async function menuPage(constructorInfo) {
 		allowUserContinue();
 	});
 
-	window.addEventListener("dishSelectedToEdit", async (e) => {
+	main.addEventListener("dishSelectedToEdit", async (e) => {
 		await dispatchIngredientChange(form);
 
 		await dispatchThisEventForElements(
@@ -199,7 +198,7 @@ export default async function menuPage(constructorInfo) {
 		);
 	});
 
-	window.addEventListener("resize", () =>
+	main.addEventListener("resize", () =>
 		display.dispatchEvent(new CustomEvent("resize"))
 	);
 

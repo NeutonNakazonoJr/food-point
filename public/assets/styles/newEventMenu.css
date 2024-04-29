@@ -64,7 +64,7 @@
 		background-image: url("../icons/icecream.svg");
 	}
 	& > button:nth-of-type(6)::before {
-		background-image: url("../icons/drink.svg");
+		background-image: url("../icons/drink-event.svg");
 	}
 	& > button:last-child {
 		border: none;

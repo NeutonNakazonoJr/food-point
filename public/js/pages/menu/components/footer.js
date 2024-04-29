@@ -7,7 +7,7 @@ export default function getFooter(eventId = null, href = "/home/create/local") {
 			id: eventId,
 		},
 		stage: {
-			current: 3,
+			current: 2,
 			last: 1,
 		},
 	};

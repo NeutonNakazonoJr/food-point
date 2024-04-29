@@ -1,45 +1,57 @@
 function saveDish(dishName, ingredients) {
-	const event = new CustomEvent("postDish", {
-		detail: {
-			dishName,
-			ingredients,
-		},
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("postDish", {
+			detail: {
+				dishName,
+				ingredients,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function updateDish(dishId, dishName, addDish) {
-	const event = new CustomEvent("updateDish", {
-		detail: {
-			dishId,
-			dishName,
-			addDish,
-		},
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("updateDish", {
+			detail: {
+				dishId,
+				dishName,
+				addDish,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function postIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
-	const event = new CustomEvent("updateIngredient", {
-		detail: {
-			dishId,
-			ingredientId,
-			name,
-			unityMeasure,
-			quantity,
-		},
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("updateIngredient", {
+			detail: {
+				dishId,
+				ingredientId,
+				name,
+				unityMeasure,
+				quantity,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function deleteIngredient(dishId, ingredientId) {
-	const event = new CustomEvent("deleteIngredient", {
-		detail: {
-			dishId,
-			ingredientId,
-		},
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("deleteIngredient", {
+			detail: {
+				dishId,
+				ingredientId,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function getDishField(dishId, dishName) {
@@ -278,7 +290,7 @@ function getIngredientsField(dishId, ingredients) {
 		await new Promise((resolve, reject) => {
 			fieldset.dispatchEvent(new CustomEvent("dispatchIngredientChange"));
 			resolve();
-		})
+		});
 		postIngredient(dishID, null, null, null, null);
 	});
 
