@@ -202,9 +202,9 @@ export default async function menuPage(constructorInfo) {
 		display.dispatchEvent(new CustomEvent("resize"))
 	);
 
-	const aside = getAsideForMenu(menu);
-	const form = await getForm(menu, currentType);
-	const display = await getDisplay(menu, currentType);
+	const aside = getAsideForMenu(menu, main);
+	const form = await getForm(menu, currentType, main);
+	const display = await getDisplay(menu, currentType, main);
 
 	main.appendChild(aside);
 	main.appendChild(form);
