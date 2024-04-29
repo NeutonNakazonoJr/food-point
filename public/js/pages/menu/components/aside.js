@@ -1,3 +1,4 @@
+let main = null;
 function selectThisButton(button, parent) {
 	if (button instanceof HTMLButtonElement && parent instanceof HTMLElement) {
 		if (parent.hasChildNodes()) {
@@ -16,17 +17,20 @@ function selectThisButton(button, parent) {
 }
 
 function dispatchSelectDishType(key, dishTypeName, controller) {
-	const event = new CustomEvent("selectDishType", {
-		detail: {
-			key: key,
-			type: dishTypeName,
-			controller: controller,
-		},
-	});
-	window.dispatchEvent(event);
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("selectDishType", {
+			detail: {
+				key: key,
+				type: dishTypeName,
+				controller: controller,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
-export default function getAsideForMenu(menu) {
+export default function getAsideForMenu(menu, mainComponent) {
+	main = mainComponent;
 	const aside = document.createElement("aside");
 	aside.classList.remove;
 	const menuKeys = Object.keys(menu);

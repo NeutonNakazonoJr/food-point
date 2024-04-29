@@ -1,5 +1,5 @@
+let main = null;
 function saveDish(dishName, ingredients) {
-	const main = document.getElementById("newEventMenu");
 	if (main instanceof HTMLElement) {
 		const event = new CustomEvent("postDish", {
 			detail: {
@@ -12,7 +12,6 @@ function saveDish(dishName, ingredients) {
 }
 
 function updateDish(dishId, dishName, addDish) {
-	const main = document.getElementById("newEventMenu");
 	if (main instanceof HTMLElement) {
 		const event = new CustomEvent("updateDish", {
 			detail: {
@@ -26,7 +25,6 @@ function updateDish(dishId, dishName, addDish) {
 }
 
 function postIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
-	const main = document.getElementById("newEventMenu");
 	if (main instanceof HTMLElement) {
 		const event = new CustomEvent("updateIngredient", {
 			detail: {
@@ -42,7 +40,6 @@ function postIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
 }
 
 function deleteIngredient(dishId, ingredientId) {
-	const main = document.getElementById("newEventMenu");
 	if (main instanceof HTMLElement) {
 		const event = new CustomEvent("deleteIngredient", {
 			detail: {
@@ -520,9 +517,10 @@ function bootForm(form, h1, p, dish) {
 	form.appendChild(ingredientsField);
 }
 
-export default async function getForm(menu, currentType) {
+export default async function getForm(menu, currentType, mainComponent) {
 	console.log("get FORM - " + Date.now());
 
+	main = mainComponent
 	const form = document.createElement("form");
 	form.id = "newEventMenu-form";
 	form.addEventListener("submit", (e) => e.preventDefault());

@@ -1,7 +1,8 @@
 import stringLimiter from "../../../utils/stringLimiter.js";
 
+let main = null;
+
 function editThisDish(dishId) {
-	const main = document.getElementById("newEventMenu");
 	if (main && main instanceof HTMLElement) {
 		const event = new CustomEvent("dishSelectedToEdit", {
 			detail: dishId,
@@ -11,7 +12,6 @@ function editThisDish(dishId) {
 }
 
 function deleteThisDish(dishId, type) {
-	const main = document.getElementById("newEventMenu");
 	if (main && main instanceof HTMLElement) {
 		const event = new CustomEvent("dishSelectedToDelete", {
 			detail: { dishId, type },
@@ -69,7 +69,8 @@ function generateCard(
 	return div;
 }
 
-export default async function getDisplay(menu, currentType) {
+export default async function getDisplay(menu, currentType, mainComponent) {
+	main = mainComponent;
 	function renderDiv(
 		dishes,
 		dishIdSelected,
