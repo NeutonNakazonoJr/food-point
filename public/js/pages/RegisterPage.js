@@ -273,7 +273,7 @@ const createRegisterForm = () => {
         const email = document.getElementById('email-register').value;
         const password = document.getElementById('password-register').value;
 
-        fetch('http://localhost:3000/api/user', {
+        fetch('/api/user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
