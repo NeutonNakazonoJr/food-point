@@ -10,7 +10,7 @@ const createInsertDishSection = async (eventID, dishType) => {
     const divInputDishName = await createDivDishName(eventID, dishType);
 
     const ingredientSection = createIngredientSection();
-    
+
     insertSection.appendChild(sectionTitle);
     insertSection.appendChild(divInputDishName);
     insertSection.appendChild(ingredientSection);
@@ -95,7 +95,7 @@ const createDivDishName = async (eventID, dishType) => {
 
         dishName.value = '';
         const sectionIngredient = document.getElementById('ingredient-section-modal');
-        sectionIngredient.innerHTML = '';
+        // sectionIngredient.innerHTML = '';
     })
 
 
@@ -115,14 +115,16 @@ const createIngredientSection = (ingredientList) => {
     // adicionar lógica para renderizar ingredientes já registrados
     const ingredientTitle = htmlCreator.createTitle('h5', 'Ingredientes');
     const addNewIngredientBtn = htmlCreator.createButton('adicionar ingrediente', 'add-new-ingredient-modal');
+    const divNewIngredientInput = createDivNewIngredientInput();
     
     
     const ingredientSection = htmlCreator.createSection('ingredient-section-modal');
     ingredientSection.appendChild(ingredientTitle);
-    ingredientSection.appendChild(addNewIngredientBtn); 
-    
+    ingredientSection.appendChild(addNewIngredientBtn);
+
     addNewIngredientBtn.addEventListener('click', () => {
-        const divNewIngredientInput = createDivNewIngredientInput();
+        ingredientSection.appendChild(ingredientTitle);
+        ingredientSection.appendChild(addNewIngredientBtn); 
         ingredientSection.insertBefore(divNewIngredientInput, addNewIngredientBtn);
     });
 
@@ -130,7 +132,7 @@ const createIngredientSection = (ingredientList) => {
     return ingredientSection;
 }
 
-const createDivNewIngredientInput = (ingredientInfo) => {
+const createDivNewIngredientInput = (registeredIngredient) => {
     const divNewIngredientInput = htmlCreator.createDiv();
     divNewIngredientInput.classList.add('div-new-ingredient-input');
 
@@ -139,19 +141,21 @@ const createDivNewIngredientInput = (ingredientInfo) => {
         placeholder: 'ingrediente sem nome',
         className: 'input-ingredient-modal'
     }
+ 
     const newIngredientNameInput = htmlCreator.createInput(inputIngredientNameOptions);
     newIngredientNameInput.classList.add('input-name-ingredient-modal');
+    registeredIngredient ? newIngredientNameInput.value = registeredIngredient.name : null;
 
     const inputIngredientQuantityOptions = {
         type: 'number',
         className: 'input-ingredient-modal',
-        value: 1
+        value: 1 || registeredIngredient.quantity
     }
     const newIngredientQuantityInput = htmlCreator.createInput(inputIngredientQuantityOptions);
     newIngredientQuantityInput.classList.add('input-quantity-ingredient-modal')
     newIngredientQuantityInput.min = 1;
 
-    const unityMeasureSelect = createUnityMeasureSelect();
+    const unityMeasureSelect = createUnityMeasureSelect(registeredIngredient);
     const deleteBtn = htmlCreator.createButton('', 'delete-ingredient-btn-modal');
     const deleteIcon = htmlCreator.createImg('./assets/icons/trash.svg');
     deleteBtn.appendChild(deleteIcon);
@@ -169,7 +173,7 @@ const createDivNewIngredientInput = (ingredientInfo) => {
 }
 
 
-const createUnityMeasureSelect = () => {
+const createUnityMeasureSelect = (registeredIngredient) => {
     const firstOption = document.createElement('option');
     firstOption.value = 0;
     firstOption.innerText = 'selecione uma unidade de medida';
@@ -205,17 +209,18 @@ const createUnityMeasureSelect = () => {
     unityMeasureSelectModal.appendChild(fifthOption);
     unityMeasureSelectModal.appendChild(sixthOption);
 
+    registeredIngredient ? unityMeasureSelectModal.value = registeredIngredient.unity_measure : null;
     return unityMeasureSelectModal;
 }
 
-const createRegisteredDishesSection = (dishList, dishType) => {
+const createRegisteredDishesSection = (dishList, dishType, eventID) => {
 
     const sectionTitle = htmlCreator.createTitle('h3', `Pratos criados (${dishType})`);
     const registeredDishesDiv = htmlCreator.createDiv('div-registered-dishes');
     registeredDishesDiv.appendChild(sectionTitle);
 
     dishList.forEach(dishInfo => {
-        const card = createCardDish(dishInfo);
+        const card = createCardDish(dishInfo, eventID);
         registeredDishesDiv.appendChild(card);
     });
 
@@ -236,8 +241,26 @@ const createCardDish = (dishInfo, eventID) => {
     const editBtn = htmlCreator.createButton('', 'edit-dish-modal');
 
     editBtn.addEventListener('click', async () => {
-        const ingredients = await getIngredientsByDishID() 
+        const { ingredientList } = await getIngredientsByDishID(eventID, dishInfo.dishId)
+        
+        if (ingredientList.error) {
+            showToast(ingredientList.error.message);
+            return 
+        }
 
+        const renderedIngredients = document.querySelectorAll('.div-new-ingredient-input');
+
+        if (renderedIngredients.length > 0) {
+            renderedIngredients.forEach(ingredient => ingredient.remove());
+        }
+
+        const ingredientSection = document.getElementById('ingredient-section-modal'); 
+        const addNewIngredientBtn = document.getElementById('add-new-ingredient-modal');
+        
+        ingredientList.forEach(ingredient => {
+            const registeredIngredient = createDivNewIngredientInput(ingredient);
+            ingredientSection.insertBefore(registeredIngredient, addNewIngredientBtn);
+        });
     })
 
     const editIcon = htmlCreator.createImg('./assets/icons/pen.svg');
@@ -274,7 +297,7 @@ async function menuUpdateModalComponent (eventID, dishType, dishes) {
     divTitle.appendChild(title);
 
     const insertDishSection = await createInsertDishSection(eventID, dishType);
-    const registeredDishesSection = createRegisteredDishesSection(dishes, dishType);
+    const registeredDishesSection = createRegisteredDishesSection(dishes, dishType, eventID);
     const innerContainer = htmlCreator.createDiv('inner-container-dish-modal');
     innerContainer.appendChild(insertDishSection);
     innerContainer.appendChild(registeredDishesSection);

@@ -31,7 +31,7 @@ eventRoutes.put('/event/:id/dish/:dishId', validateRequestBody(dishSchema), dish
 eventRoutes.delete('/event/:id/dish/:dishId', dishController.deleteDish);
 
 
-eventRoutes.get('/event/:id/dish/:dishId/ingredient', ingredientController.getIngredientsName);
+eventRoutes.get('/event/:id/dish/:dishId/ingredient', ingredientController.getIngredientsInfo);
 eventRoutes.use('/event/:id/dish/:dishId/ingredient/:ingredientId', validateIngredientId);
 eventRoutes.delete('/event/:id/dish/:dishId/ingredient/:ingredientId', ingredientController.deleteIngredient);
 eventRoutes.use('/event/:id/dish/:dishId/ingredient', validateRequestBody(ingredientSchema));

@@ -259,10 +259,8 @@ export async function deleteIngredient(eventID, dishID, ingredientID) {
 }
 
 export async function getIngredientsByDishID(eventID, dishID) {
-	 // /event/:id/dish/:dishId/ingredient
-
 	try {
-		const url = `/event/${eventID}/dish/${dishID}/ingredient`;
+		const url = `/api/event/${eventID}/dish/${dishID}/ingredient`;
 		const res = await fetch(url);
 
 		if (!res.ok) {
