@@ -1,5 +1,5 @@
 
-import { getIngredientsByDishID, postDish } from "../../api/eventApi.js";
+import { deleteDish, getIngredientsByDishID, postDish } from "../../api/eventApi.js";
 import showToast from "../../components/toast.js";
 import htmlCreator from "../../utils/htmlCreator.js";
 import createModal from "./createModal.js";
@@ -18,7 +18,7 @@ const createInsertDishSection = async (eventID, dishType) => {
     return insertSection;
 }
 
-const createDivDishName = async (eventID, dishType) => {
+const createDivDishName = async (eventID, dishType, dishName) => {
     // lógica para colocar o nome no input no modo edit;
     const inputDishNameOptions = {
         type: 'text',
@@ -141,19 +141,21 @@ const createDivNewIngredientInput = (registeredIngredient) => {
         placeholder: 'ingrediente sem nome',
         className: 'input-ingredient-modal'
     }
- 
     const newIngredientNameInput = htmlCreator.createInput(inputIngredientNameOptions);
     newIngredientNameInput.classList.add('input-name-ingredient-modal');
     registeredIngredient ? newIngredientNameInput.value = registeredIngredient.name : null;
 
+
     const inputIngredientQuantityOptions = {
         type: 'number',
         className: 'input-ingredient-modal',
-        value: 1 || registeredIngredient.quantity
+        value: 1
     }
     const newIngredientQuantityInput = htmlCreator.createInput(inputIngredientQuantityOptions);
     newIngredientQuantityInput.classList.add('input-quantity-ingredient-modal')
     newIngredientQuantityInput.min = 1;
+    registeredIngredient ? newIngredientQuantityInput.value = registeredIngredient.quantity : null;
+
 
     const unityMeasureSelect = createUnityMeasureSelect(registeredIngredient);
     const deleteBtn = htmlCreator.createButton('', 'delete-ingredient-btn-modal');
@@ -248,6 +250,9 @@ const createCardDish = (dishInfo, eventID) => {
             return 
         }
 
+        const inputDishName = document.getElementById('input-dish-Name');
+        inputDishName.value = cardTitle.innerText;
+
         const renderedIngredients = document.querySelectorAll('.div-new-ingredient-input');
 
         if (renderedIngredients.length > 0) {
@@ -269,6 +274,17 @@ const createCardDish = (dishInfo, eventID) => {
     const deleteBtn = htmlCreator.createButton('', 'delete-dish-btn-modal');
     const deleteIcon = htmlCreator.createImg('./assets/icons/trash.svg');
     deleteBtn.appendChild(deleteIcon);
+
+    deleteBtn.addEventListener('click', async function () {
+        const deletedDish = await deleteDish(eventID, dishInfo.dishId);
+
+        if (deletedDish.error) {
+            showToast(deletedDish.error.message);
+        } else {
+            showToast('Prato deletado com sucesso');
+            cardDish.remove();
+        }
+    })
     
     const divBtn = htmlCreator.createDiv('div-button-update-modal');
     divBtn.appendChild(editBtn);
