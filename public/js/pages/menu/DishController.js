@@ -18,18 +18,14 @@ export default class DishController {
 
 	//-----------------DISH GETTERS-----------------
 
-	async getDishes(type) {
+	getDishes() {
 		const dishes = this.#dishes;
 		console.log("GET", this.#dishes);
-		if (dishes.length <= 0) {
-			await this.addDish(null, null, type);
-			return this.#dishes;
-		} else {
-			return dishes;
-		}
+
+		return dishes;
 	}
 
-	async getOneDish(dishId) {
+	getOneDish(dishId) {
 		const index = this.#dishes.findIndex((dish) => dish.dishId === dishId);
 		if (index === -1) {
 			console.log(`Prato com ID ${dishId} não existe.`);
@@ -40,15 +36,15 @@ export default class DishController {
 		return dish;
 	}
 
-	async getLastDish(type) {
-		const dishes = await this.getDishes(type);
+	getLastDish() {
+		const dishes = this.getDishes();
 		const dish = dishes[dishes.length - 1];
 		return dish;
 	}
 
 	//-----------------DISH CONTROLLER-----------------
 
-	async addDish(dishId, dishName, type) {
+	async addDish(dishId, dishName, type, ingredients) {
 		const dishAlreadyExists = this.#dishes.find(
 			(dish) => dish.dishId === dishId
 		);
@@ -62,16 +58,54 @@ export default class DishController {
 			return;
 		}
 
+		const newIngredients = [];
+		if (Array.isArray(ingredients)) {
+			for (const ingredient of ingredients) {
+				const invalidName =
+					!ingredient.name || typeof ingredient.name !== "string";
+				const invalidMeasure =
+					!ingredient.unityMeasure ||
+					typeof ingredient.unityMeasure !== "string";
+				const invalidQuantity =
+					!ingredient.quantity ||
+					typeof parseInt(ingredient.quantity) !== "number" ||
+					isNaN(parseInt(ingredient.quantity));
+
+				if (invalidName) {
+					ingredient.name = "Ingrediente sem nome";
+				}
+				if (invalidMeasure) {
+					ingredient.unityMeasure = "Unidades (u)";
+				}
+				if (invalidQuantity) {
+					ingredient.quantity = 1;
+				}
+				const newIngredient = {
+					name: ingredient.name,
+					unityMeasure: ingredient.unityMeasure,
+					quantity: parseInt(ingredient.quantity),
+				};
+				newIngredients.push(newIngredient);
+			}
+		}
+
 		const dish = {
 			dishName: dishName ?? "Prato vazio",
 			type: type,
-			ingredients: [],
+			ingredients: newIngredients,
 		};
 		const res = await postDish(this.#eventID, dish);
 		if (res.error) {
 			console.error(res.error);
 			showToast(JSON.parse(res.error));
 			return;
+		}
+		
+		const ingredientsIds = res.ingredientsIds;
+		if (Array.isArray(ingredientsIds)) {
+			ingredientsIds.forEach((id, index) => {
+				dish.ingredients[index].id = id;
+			});
 		}
 		dish.dishId = res.dishId;
 		this.#dishes.push(dish);
@@ -80,7 +114,7 @@ export default class DishController {
 		console.log("POST", this.#dishes);
 	}
 
-	async updateDish(dishId, dishName, newDish = true) {
+	async updateDish(dishId, dishName) {
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
 			console.log(`Prato com ID ${dishId} não existe.`);
@@ -104,9 +138,6 @@ export default class DishController {
 			dishName: dishName,
 		};
 		console.log("PUT", this.#dishes);
-		if (newDish) {
-			await this.addDish(null, null, this.#dishes[index].type);
-		}
 	}
 
 	async removeDish(dishId) {
@@ -145,7 +176,7 @@ export default class DishController {
 	}
 
 	async pushIngredient(dishId, ingredient) {
-		console.log("DishController.pushIngredient")
+		console.log("DishController.pushIngredient");
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
 			console.log("não encontramos esse prato (ID):" + dishId);

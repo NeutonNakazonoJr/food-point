@@ -37,17 +37,16 @@ function getMenu(eventID) {
 	};
 }
 
-async function dispatchIngredientChange() {
+async function dispatchIngredientChange(elementHTML) {
 	const newPromise = new Promise((resolve, reject) => {
-		if (!ingredientChangeHasBeenDispatched) {
+		if (!ingredientChangeHasBeenDispatched && elementHTML instanceof HTMLElement) {
 			ingredientChangeHasBeenDispatched = true;
-			console.log("--dispatchIngredientChange--");
 			const event = new CustomEvent("dispatchIngredientChange");
-			window.dispatchEvent(event);
-			ingredientChangeHasBeenDispatched = false;
+			elementHTML.dispatchEvent(event);
 			resolve();
 		}
 	});
+	ingredientChangeHasBeenDispatched = false;
 	return await newPromise;
 }
 let ingredientChangeHasBeenDispatched = false;
@@ -78,20 +77,21 @@ function callFnWithDelay(delayMs, fn) {
 }
 
 export default async function menuPage(constructorInfo) {
-	if (
-		!constructorInfo ||
-		!constructorInfo.event ||
-		!constructorInfo.event.id
-	) {
-		showToast("Houve um erro no processamento do ID do evento");
-		dispatchOnStateChange("/home", { animation: true });
-		return document.createDocumentFragment();
-	}
+	// if (
+	// 	!constructorInfo ||
+	// 	!constructorInfo.event ||
+	// 	!constructorInfo.event.id
+	// ) {
+	// 	showToast("Houve um erro no processamento do ID do evento");
+	// 	dispatchOnStateChange("/home", { animation: true });
+	// 	return document.createDocumentFragment();
+	// }
 	const stage = constructorInfo.stage || {
 		current: 1,
 		last: 0,
 	};
-	const eventID = constructorInfo.event.id;
+	// const eventID = constructorInfo.event.id;
+	const eventID = "5e1bd1f2-3079-47ae-8517-b3b56569bfc1";
 	const menu = getMenu(eventID);
 
 	let currentType = "stater";
@@ -103,43 +103,34 @@ export default async function menuPage(constructorInfo) {
 	const footer = getFooter(eventID);
 
 	main.id = "newEventMenu";
-	await menu.stater.controller.addDish(null, null, "Entrada");
 
 	window.addEventListener("selectDishType", async (e) => {
-		await dispatchIngredientChange();
+		await dispatchIngredientChange(form);
 		currentType = e.detail.key;
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"selectDishType",
-				e
-			);
-		});
+		await dispatchThisEventForElements(form, display, "selectDishType", e);
+	});
+
+	window.addEventListener("postDish", async (e) => {
+		await menu[currentType].controller.addDish(
+			null,
+			e.detail.dishName,
+			menu[currentType].name,
+			e.detail.ingredients
+		);
+		await dispatchThisEventForElements(form, display, "postDish", e);
 	});
 
 	window.addEventListener("updateDish", async (e) => {
-		if (menu[currentType].name === e.detail.type) {
-			await dispatchIngredientChange();
-			await menu[currentType].controller.updateDish(
-				e.detail.dishId,
-				e.detail.dishName,
-				e.detail.addNewDish
-			);
-			callFnWithDelay(delay, async () => {
-				await dispatchThisEventForElements(
-					form,
-					display,
-					"updateDish",
-					e
-				);
-			});
-		}
+		await dispatchIngredientChange(form);
+		await menu[currentType].controller.updateDish(
+			e.detail.dishId,
+			e.detail.dishName
+		);
+		await dispatchThisEventForElements(form, display, "updateDish", e);
 	});
 
 	window.addEventListener("updateIngredient", async (e) => {
-		await dispatchIngredientChange();
-		console.log('window.addEventListener("updateIngredient"');
+		await dispatchIngredientChange(form);
 		const ingredient = {
 			id: e.detail.ingredientId,
 			name: e.detail.name,
@@ -150,59 +141,49 @@ export default async function menuPage(constructorInfo) {
 			e.detail.dishId,
 			ingredient
 		);
-		console.log("finished controller.pushIngredient");
-		callFnWithDelay(delay, async () => {
-			console.log("dispatchThisEventForElements");
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"updateIngredient",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"updateIngredient",
+			e
+		);
 	});
 
 	window.addEventListener("deleteIngredient", async (e) => {
-		await dispatchIngredientChange();
+		await dispatchIngredientChange(form);
 		await menu[currentType].controller.deleteIngredient(
 			e.detail.dishId,
 			e.detail.ingredientId
 		);
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"deleteIngredient",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"deleteIngredient",
+			e
+		);
 	});
 
 	window.addEventListener("dishSelectedToDelete", async (e) => {
-		await dispatchIngredientChange();
+		await dispatchIngredientChange(form);
 		await menu[currentType].controller.removeDish(e.detail.dishId);
 
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"dishSelectedToDelete",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"dishSelectedToDelete",
+			e
+		);
 	});
 
 	window.addEventListener("dishSelectedToEdit", async (e) => {
-		await dispatchIngredientChange();
+		await dispatchIngredientChange(form);
 
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"dishSelectedToEdit",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"dishSelectedToEdit",
+			e
+		);
 	});
 
 	window.addEventListener("resize", () =>
