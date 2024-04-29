@@ -185,11 +185,15 @@ function getFooter(eventId, href) {
 			},
 		};
 		if (latLng.lat && latLng.lng) {
-			await updateEventLocation(constructorInfo.event.id)
-			// dispatchOnStateChange(href, constructorInfo);
+			const { lat, lng } = latLng;
+			const result = await updateEventLocation(eventId, {
+				location: `${lat},${lng}`,
+			});
+			console.log(result);
+			dispatchOnStateChange(href, constructorInfo);
 			return;
 		}
-		// dispatchOnStateChange(href, constructorInfo);
+		dispatchOnStateChange(href, constructorInfo);
 	});
 
 	footer.addEventListener("selectLatLng", (e) => {
@@ -204,11 +208,11 @@ function getFooter(eventId, href) {
 }
 
 export default function newEventLocalPage(constructorInfo) {
-	// if(!constructorInfo || !constructorInfo.event || !constructorInfo.event.id) {
-	// 	showToast("O ID do evento é inválido");
-	// 	dispatchOnStateChange("/home");
-	// }
-	const event = null || constructorInfo?.event?.id;
+	if(!constructorInfo || !constructorInfo.event || !constructorInfo.event.id) {
+		showToast("O ID do evento é inválido");
+		dispatchOnStateChange("/home");
+	}
+	const event = constructorInfo.event.id;
 	const stage = constructorInfo?.stage || {
 		current: 2,
 		last: 1,
