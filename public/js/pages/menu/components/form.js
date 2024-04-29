@@ -1,40 +1,60 @@
-function saveDish(dishId, dishName, dishType, addNewDish = true) {
-	const event = new CustomEvent("updateDish", {
-		detail: {
-			dishId,
-			dishName,
-			type: dishType,
-			addNewDish: addNewDish,
-		},
-	});
-	window.dispatchEvent(event);
+function saveDish(dishName, ingredients) {
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("postDish", {
+			detail: {
+				dishName,
+				ingredients,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
-function saveIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
-	const event = new CustomEvent("updateIngredient", {
-		detail: {
-			dishId,
-			ingredientId,
-			name,
-			unityMeasure,
-			quantity,
-		},
-	});
-	console.log("about to window.dispatchEvent('updateIngredient')");
-	window.dispatchEvent(event);
+function updateDish(dishId, dishName, addDish) {
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("updateDish", {
+			detail: {
+				dishId,
+				dishName,
+				addDish,
+			},
+		});
+		main.dispatchEvent(event);
+	}
+}
+
+function postIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("updateIngredient", {
+			detail: {
+				dishId,
+				ingredientId,
+				name,
+				unityMeasure,
+				quantity,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function deleteIngredient(dishId, ingredientId) {
-	const event = new CustomEvent("deleteIngredient", {
-		detail: {
-			dishId,
-			ingredientId,
-		},
-	});
-	window.dispatchEvent(event);
+	const main = document.getElementById("newEventMenu");
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("deleteIngredient", {
+			detail: {
+				dishId,
+				ingredientId,
+			},
+		});
+		main.dispatchEvent(event);
+	}
 }
 
-function getDishField(dishId, dishName, dishType) {
+function getDishField(dishId, dishName) {
 	const fieldset = document.createElement("fieldset");
 
 	const label = document.createElement("label");
@@ -79,14 +99,15 @@ function getDishField(dishId, dishName, dishType) {
 	btn.addEventListener("click", () => {
 		if (input.reportValidity()) {
 			saved = true;
-			saveDish(dishId, input.value.trim(), dishType, true);
+			updateDish(dishId, input.value.trim(), true);
 		}
 	});
 
-	window.addEventListener("dispatchIngredientChange", () => {
+	fieldset.addEventListener("dispatchIngredientChange", () => {
+		console.log("fieldset.addEventListener 94.js");
 		if (!saved && input.checkValidity()) {
 			saved = true;
-			saveDish(dishId, input.value.trim(), dishType, false);
+			updateDish(dishId, input.value.trim(), false);
 		}
 	});
 
@@ -104,7 +125,7 @@ function createIngredientFieldset(
 	unityMeasure,
 	quantity
 ) {
-	function saveIngrediente() {
+	function saveIngredient() {
 		clearTimeout(timeOut);
 		if (this instanceof HTMLElement) {
 			if (!this.reportValidity()) {
@@ -119,7 +140,7 @@ function createIngredientFieldset(
 			timeOut = setTimeout(() => {
 				if (!saved) {
 					saved = true;
-					saveIngredient(
+					postIngredient(
 						dishId,
 						ingredient.id,
 						ingredient.name,
@@ -189,9 +210,9 @@ function createIngredientFieldset(
 		unitSelect.appendChild(opt);
 	});
 
-	nameInput.addEventListener("input", saveIngrediente);
-	quantityInput.addEventListener("input", saveIngrediente);
-	unitSelect.addEventListener("input", saveIngrediente);
+	nameInput.addEventListener("input", saveIngredient);
+	quantityInput.addEventListener("input", saveIngredient);
+	unitSelect.addEventListener("input", saveIngredient);
 
 	fieldset.appendChild(nameInput);
 	fieldset.appendChild(quantityInput);
@@ -205,11 +226,12 @@ function createIngredientFieldset(
 		fieldset.appendChild(deleteButton);
 	}
 
-	window.addEventListener("dispatchIngredientChange", () => {
+	fieldset.addEventListener("dispatchIngredientChange", () => {
+		console.log("fieldset.addEventListener 218.js");
 		if (!saved) {
 			clearTimeout(timeOut);
 			saved = true;
-			saveIngredient(
+			postIngredient(
 				dishId,
 				ingredient.id,
 				ingredient.name,
@@ -244,22 +266,32 @@ function getIngredientsField(dishId, ingredients) {
 		legend.textContent = "Ingredientes";
 		fieldset.appendChild(legend);
 		ingredients.forEach((ingredient) => {
-			fieldset.appendChild(
-				createIngredientFieldset(
-					dishID,
-					ingredient.id,
-					ingredient.name,
-					ingredient.unityMeasure,
-					ingredient.quantity
-				)
+			const ingredientFieldset = createIngredientFieldset(
+				dishID,
+				ingredient.id,
+				ingredient.name,
+				ingredient.unityMeasure,
+				ingredient.quantity
 			);
+			const dispatchIngredientChange = () => {
+				ingredientFieldset.dispatchEvent(
+					new CustomEvent("dispatchIngredientChange")
+				);
+			};
+			fieldset.addEventListener(
+				"dispatchIngredientChange",
+				dispatchIngredientChange
+			);
+			fieldset.appendChild(ingredientFieldset);
 		});
 	}
-	addIngredient.addEventListener("click", (e) => {
-		console.log("addIngredient exec" + Date.now());
+	addIngredient.addEventListener("click", async (e) => {
 		e.preventDefault();
-		window.dispatchEvent(new CustomEvent("dispatchIngredientChange"));
-		saveIngredient(dishID, null, "", null, null);
+		await new Promise((resolve, reject) => {
+			fieldset.dispatchEvent(new CustomEvent("dispatchIngredientChange"));
+			resolve();
+		});
+		postIngredient(dishID, null, null, null, null);
 	});
 
 	fieldset.appendChild(addIngredient);
@@ -267,15 +299,219 @@ function getIngredientsField(dishId, ingredients) {
 	return fieldset;
 }
 
+function getEmptyDishField() {
+	const fieldset = document.createElement("fieldset");
+
+	const label = document.createElement("label");
+	const input = document.createElement("input");
+	const btn = document.createElement("button");
+	const inputID = "newEventMenu-form-dishName";
+
+	label.htmlFor = inputID;
+	input.id = inputID;
+	input.type = "text";
+	input.placeholder = "Pão com gergelim";
+	input.pattern = `^[a-zA-ZÀ-ÖØ-öø-ÿ\\s'\\-]+$`;
+	input.title = "O nome do prato deve conter apenas letras e hífen";
+	btn.type = "button";
+	btn.textContent = "Salvar prato";
+	btn.style.cursor = "not-allowed";
+	btn.disabled = true;
+
+	input.addEventListener("input", () => {
+		if (input.reportValidity()) {
+			btn.disabled = false;
+			input.removeAttribute("style");
+			btn.removeAttribute("style");
+			return;
+		}
+		input.style.outline = "2px solid red";
+		btn.style.cursor = "not-allowed";
+		btn.disabled = true;
+	});
+
+	btn.addEventListener("click", () => {
+		if (input.reportValidity()) {
+			const event = new CustomEvent("publishDish", {
+				detail: input.value.trim(),
+				bubbles: true,
+			});
+			fieldset.dispatchEvent(event);
+		}
+	});
+
+	fieldset.appendChild(label);
+	fieldset.appendChild(input);
+	fieldset.appendChild(btn);
+
+	return fieldset;
+}
+
+function createEmptyIngredientFieldset() {
+	function saveIngredient() {
+		if (this instanceof HTMLElement) {
+			if (!this.reportValidity()) {
+				this.style.outline = "2px solid red";
+				this.style.zIndex = "2";
+				this.style.border = "2px solid var(--blackberry)";
+				return;
+			}
+			this.removeAttribute("style");
+			ingredient[this.dataset.ingredient] = this.value;
+			const event = new CustomEvent("saveIngredient", {
+				detail: ingredient,
+				bubbles: true,
+			});
+			fieldset.dispatchEvent(event);
+		}
+	}
+	const ingredient = {
+		id: Date.now(),
+		name: null,
+		unityMeasure: null,
+		quantity: null,
+	};
+
+	const fieldset = document.createElement("fieldset");
+	fieldset.className = "newEventMenu-ingredient";
+
+	const nameInput = document.createElement("input");
+	nameInput.type = "text";
+	nameInput.placeholder = "trigo";
+	nameInput.pattern = `^[a-zA-ZÀ-ÖØ-öø-ÿ\\s'\\-]+$`;
+	nameInput.title = "O nome do prato deve conter apenas letras e hífen";
+	nameInput.dataset.ingredient = "name";
+
+	const quantityInput = document.createElement("input");
+	quantityInput.type = "number";
+	quantityInput.min = "0";
+	quantityInput.dataset.ingredient = "quantity";
+
+	const unitSelect = document.createElement("select");
+	unitSelect.name = "unity-of-measurement";
+	unitSelect.id = `newEventMenu-unityOfMeasurement-${Date.now()}`;
+	unitSelect.dataset.ingredient = "unityMeasure";
+	const options = [
+		"Selecione uma unidade de medida",
+		"Quilogramas (kg)",
+		"Gramas (g)",
+		"Mililitros (ml)",
+		"Litros (L)",
+		"Unidades (u)",
+	];
+
+	options.forEach((option, index) => {
+		const opt = document.createElement("option");
+		opt.value = index === 0 ? "0" : option;
+		opt.text = option;
+		if (index === 0) {
+			opt.disabled = true;
+			opt.selected = true;
+		}
+		unitSelect.appendChild(opt);
+	});
+
+	const deleteButton = document.createElement("button");
+	deleteButton.dataset.id = ingredient.id;
+	deleteButton.addEventListener("click", (e) => {
+		const event = new CustomEvent("removeIngredient", {
+			detail: ingredient.id,
+			bubbles: true,
+		});
+		fieldset.dispatchEvent(event);
+		fieldset.remove();
+	});
+
+	nameInput.addEventListener("input", saveIngredient);
+	quantityInput.addEventListener("input", saveIngredient);
+	unitSelect.addEventListener("input", saveIngredient);
+
+	fieldset.appendChild(nameInput);
+	fieldset.appendChild(quantityInput);
+	fieldset.appendChild(unitSelect);
+	fieldset.appendChild(deleteButton);
+
+	return fieldset;
+}
+
+function getEmptyIngredientField() {
+	const fieldset = document.createElement("fieldset");
+	const legend = document.createElement("legend");
+	const addIngredient = document.createElement("button");
+	addIngredient.textContent = "Adicionar ingrediente";
+
+	fieldset.appendChild(addIngredient);
+	addIngredient.addEventListener("click", (e) => {
+		e.preventDefault();
+		if (fieldset.childElementCount === 1) {
+			legend.textContent = "Ingredientes";
+			fieldset.insertBefore(legend, addIngredient);
+		}
+		fieldset.insertBefore(createEmptyIngredientFieldset(), addIngredient);
+	});
+
+	return fieldset;
+}
+
+function bootEmptyForm(form, h1, p) {
+	form.innerHTML = "";
+	const dish = {
+		dishName: "",
+		ingredients: [],
+	};
+	const emptyDishField = getEmptyDishField();
+	const emptyIngredientField = getEmptyIngredientField();
+
+	const saveIngredient = (e) => {
+		if (e.detail && typeof e.detail === "object") {
+			const index = dish.ingredients.findIndex(
+				(i) => i.id === e.detail.id
+			);
+			if (index === -1) {
+				dish.ingredients.push(e.detail);
+				console.log("soft push", dish);
+				return;
+			}
+			dish.ingredients[index] = e.detail;
+			console.log("soft update", dish);
+		}
+	};
+	const removeIngredient = (e) => {
+		if (e.detail) {
+			const index = dish.ingredients.findIndex((i) => i.id === e.detail);
+			if (index === -1) {
+				return;
+			}
+			dish.ingredients.splice(index, 1);
+			console.log("soft remove", dish);
+		}
+	};
+	const publishDish = (e) => {
+		console.log("publish", Date.now(), dish);
+		dish.dishName = e.detail;
+		saveDish(dish.dishName, dish.ingredients);
+	};
+
+	emptyIngredientField.addEventListener("saveIngredient", saveIngredient);
+	emptyIngredientField.addEventListener("removeIngredient", removeIngredient);
+	emptyDishField.addEventListener("publishDish", publishDish);
+
+	form.appendChild(h1);
+	form.appendChild(p);
+	form.appendChild(emptyDishField);
+	form.appendChild(emptyIngredientField);
+}
+
 function bootForm(form, h1, p, dish) {
 	console.log("fn bootform called!");
 	form.innerHTML = "";
 
-	const dishFieldset = getDishField(
-		dish.dishId,
-		dish.dishName,
-		dish.type
-	);
+	if (!dish) {
+		bootEmptyForm(form, h1, p);
+		return;
+	}
+
+	const dishFieldset = getDishField(dish.dishId, dish.dishName, dish.type);
 	const ingredientsField = getIngredientsField(dish.dishId, dish.ingredients);
 
 	form.appendChild(h1);
@@ -296,60 +532,61 @@ export default async function getForm(menu, currentType) {
 	h1.textContent = "Menu";
 	p.textContent = "Organize as refeições do evento.";
 
-	const dish = await menu[currentType].controller.getLastDish(
-		menu[currentType].name
-	);
+	const dish = undefined;
 	bootForm(form, h1, p, dish);
 
-	form.addEventListener("selectDishType", async (e) => {
+	form.addEventListener("selectDishType", (e) => {
 		currentType = e.detail.key;
-		const dish = await menu[currentType].controller.getLastDish(
-			e.detail.type
-		);
+		const dish = undefined;
 		bootForm(form, h1, p, dish);
 	});
 
-	form.addEventListener("updateDish", async (e) => {
-		if (menu[currentType].name === e.detail.type) {
-			if (e.detail.addNewDish) {
-				const dish = await menu[currentType].controller.getLastDish(
-					e.detail.type
-				);
-				bootForm(form, h1, p, dish);
-			} else {
-				const dish = await menu[currentType].controller.getOneDish(
-					e.detail.dishId
-				);
-				bootForm(form, h1, p, dish);
+	form.addEventListener("postDish", () => {
+		const dish = undefined;
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("updateDish", (e) => {
+		if (e.detail.addDish) {
+			bootForm(form, h1, p, undefined);
+			return;
+		}
+		const dish = menu[currentType].controller.getLastDish();
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("updateIngredient", (e) => {
+		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("deleteIngredient", (e) => {
+		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("dishSelectedToDelete", () => {
+		const dish = undefined;
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("dishSelectedToEdit", (e) => {
+		const dish = menu[currentType].controller.getOneDish(e.detail);
+		bootForm(form, h1, p, dish);
+	});
+
+	form.addEventListener("dispatchIngredientChange", async () => {
+		const children = form.childNodes;
+		for (const child of children) {
+			if (child instanceof HTMLFieldSetElement) {
+				await new Promise((resolve, reject) => {
+					child.dispatchEvent(
+						new CustomEvent("dispatchIngredientChange")
+					);
+					resolve();
+				});
 			}
 		}
-	});
-
-	form.addEventListener("updateIngredient", async (e) => {
-		console.log('form.addEventListener("updateIngredient"');
-		const dish = await menu[currentType].controller.getOneDish(
-			e.detail.dishId
-		);
-		bootForm(form, h1, p, dish);
-	});
-
-	form.addEventListener("deleteIngredient", async (e) => {
-		const dish = await menu[currentType].controller.getOneDish(
-			e.detail.dishId
-		);
-		bootForm(form, h1, p, dish);
-	});
-
-	form.addEventListener("dishSelectedToDelete", async (e) => {
-		const dish = await menu[currentType].controller.getLastDish(
-			e.detail.type
-		);
-		bootForm(form, h1, p, dish);
-	});
-
-	form.addEventListener("dishSelectedToEdit", async (e) => {
-		const dish = await menu[currentType].controller.getOneDish(e.detail);
-		bootForm(form, h1, p, dish);
 	});
 
 	return form;

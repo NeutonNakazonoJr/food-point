@@ -19,6 +19,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE FUNCTION is_valid_location(text_to_check TEXT) RETURNS BOOLEAN AS $$
+BEGIN
+    IF text_to_check = '' THEN
+        RETURN TRUE;
+    END IF;
+    RETURN text_to_check ~ '^-\d+(\.\d+)?,-\d+(\.\d+)?$';
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TABLE event (
     event_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REfERENCES "user" ON DELETE CASCADE NOT NULL,
@@ -27,7 +36,7 @@ CREATE TABLE event (
     event_description TEXT CHECK(is_valid_text(event_description)),
     event_date CHAR(10) CHECK(event_date ~ '^\d{2}\/\d{2}\/\d{4}$'),
     event_time CHAR(5),
-    event_location VARCHAR(300) CHECK(is_valid_text(event_location)),
+    event_location VARCHAR(300) CHECK(is_valid_location(event_location)),
     CONSTRAINT valid_time CHECK (event_time ~ '^(([01]\d|2[0-3]):([0-5]\d))$')
 );
 

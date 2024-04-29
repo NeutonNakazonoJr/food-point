@@ -258,7 +258,7 @@ async function saveInfoAndMoveOn(eventId, form) {
 					id: eventId,
 				},
 				stage: {
-					current: 3,
+					current: 1,
 					last: 0,
 				},
 			};
@@ -275,7 +275,7 @@ function skipThisStep(eventId) {
 			id: eventId,
 		},
 		stage: {
-			current: 3,
+			current: 1,
 			last: 0,
 		},
 	};
