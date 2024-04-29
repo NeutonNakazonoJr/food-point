@@ -192,8 +192,8 @@
 }
 
 .card-dishes {
-    width: 13rem;
-    height: 15rem;
+    width: 20rem;
+    min-height: 15rem;
     flex: 1 1 auto;
     padding: 1rem;
     border-radius: 0.3rem;

@@ -4,6 +4,7 @@ import htmlCreator from '../utils/htmlCreator.js';
 import dispatchOnStateChange from "../events/onStateChange.js";
 import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
 import showToast from "../components/toast.js";
+import  menuUpdateModalComponent from "./modal/menuModal.js"
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -107,7 +108,7 @@ export function createSectionBasicInfos(basicInfos, eventID, editMode) {
 }
 
 
-const createMenuSection = (dishInfos) => {
+const createMenuSection = async (dishInfos, eventID) => {
 
     const menuIcon = htmlCreator.createImg('./assets/icons/menu-icon.svg');
     const menuTitle = htmlCreator.createTitle('h1', 'Cardápio');
@@ -117,9 +118,13 @@ const createMenuSection = (dishInfos) => {
     divTitle.appendChild(menuIcon);
     divTitle.appendChild(menuTitle);
 
-    const divDishesCard = createCardDiv(dishInfos);
+    const divDishesCard = await createCardDiv(dishInfos, eventID);
+
+    const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
+    editBtn.classList.add('edit-btn', 'edit-hidden');
 
     const menuSection = htmlCreator.createSection('menu-event-section');
+    menuSection.appendChild(editBtn);
     menuSection.appendChild(divTitle);
     menuSection.appendChild(divDishesCard);
     
@@ -127,7 +132,7 @@ const createMenuSection = (dishInfos) => {
 }
   
 
-function groupDishesByType(dishes) {
+export function groupDishesByType(dishes) {
     const groupedDishes = {};
 
     dishes.forEach(dish => {
@@ -140,7 +145,7 @@ function groupDishesByType(dishes) {
 }
 
 
-const createCardDiv = (dishInfos) => {
+const createCardDiv = async (dishInfos, eventID) => {
     
     const menuSection = htmlCreator.createSection('menu-section');
     
@@ -165,11 +170,11 @@ const createCardDiv = (dishInfos) => {
 
     const icons = {
         'Entrada': './assets/icons/enter-type-icon.svg',
-        'salada': './assets/icons/salad-type-icons.svg',
-        'acompanhamento': './assets/icons/accompaniment-type-icon.svg',
-        'principal': './assets/icons/main-type-icon.svg',
-        'sobremesa': './assets/icons/dessert-type-icon.svg',
-        'drink': './assets/icons/drink-event.svg'
+        'Salada': './assets/icons/salad-type-icons.svg',
+        'Acompanhamento': './assets/icons/accompaniment-type-icon.svg',
+        'Principal': './assets/icons/main-type-icon.svg',
+        'Sobremesa': './assets/icons/dessert-type-icon.svg',
+        'Drink': './assets/icons/drink-event.svg'
     }
 
     const dishList = groupDishesByType(dishInfos);
@@ -179,6 +184,7 @@ const createCardDiv = (dishInfos) => {
         const icon = htmlCreator.createImg(icons[dishType]);
     
         const card = htmlCreator.createDiv('.card-dishes');
+        card.id = dishType;
         card.appendChild(cardTitle);
         card.appendChild(icon)
         
@@ -190,6 +196,16 @@ const createCardDiv = (dishInfos) => {
         const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
         editBtn.classList.add('edit-event-dishes', 'edit-hidden');
         card.appendChild(editBtn);
+
+        editBtn.addEventListener('click', async (e) => {
+
+            const dishType = e.target.parentNode.id;
+
+            const modalMenu = await menuUpdateModalComponent(eventID, dishType, dishGroup);
+            const rootContainer = document.getElementById('root');
+            rootContainer.appendChild(modalMenu);
+        })
+
         menuSection.appendChild(card);
     }
 
@@ -302,7 +318,7 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const header = createHeaderEvent();
     const initialDiv = createEventMainTitleDiv();
     const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
-    const menuSection = createMenuSection(eventInfos.dishes);
+    const menuSection = await createMenuSection(eventInfos.dishes, eventID || storageEventID.eventID);
     const locationSection = createLocationSection(eventInfos.eventLocation);
     const buttonSection = createButtonSection();
     

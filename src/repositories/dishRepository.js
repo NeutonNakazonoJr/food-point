@@ -18,7 +18,11 @@ const dishRepository = {
         const query = 'DELETE FROM "dish" WHERE id = $1 RETURNING id';
         const { rows } = await dbConnection.query(query, [dishId]);
         return rows;
-    }
+    },
+
+    // getDishesByType: async (dishType) => {
+    //     const query = 'SELECT "name", unity_measure, quantity FROM dish WHERE '
+    // }
 }
 
 module.exports = dishRepository;
