@@ -72,10 +72,6 @@ async function dispatchThisEventForElements(form, display, eventName, event) {
 	return await promise;
 }
 
-function callFnWithDelay(delayMs, fn) {
-	setTimeout(fn, delayMs);
-}
-
 export default async function menuPage(constructorInfo) {
 	// if (
 	// 	!constructorInfo ||
@@ -95,7 +91,22 @@ export default async function menuPage(constructorInfo) {
 	const menu = getMenu(eventID);
 
 	let currentType = "stater";
-	const delay = 50;
+	let ableToContinue = false;
+	const allowUserContinue = () => {
+		const menuKeys = Object.keys(menu);
+		const menuLength = menuKeys.map(key=> {
+			return menu[key].controller.getDishes().length;
+		}).reduce((acc, actual) => acc + actual);
+		if(menuLength > 0) {
+			if(!ableToContinue) {
+				footer.dispatchEvent(new CustomEvent("ableToContinue", {}));
+				ableToContinue = true;
+			}
+		} else {
+			footer.dispatchEvent(new CustomEvent("unableToContinue", {}));
+			ableToContinue = false;
+		}
+	}
 
 	const header = getHeader(false, false);
 	const progressBar = eventProgressBar(true, true, stage.last, stage.current);
@@ -118,6 +129,7 @@ export default async function menuPage(constructorInfo) {
 			e.detail.ingredients
 		);
 		await dispatchThisEventForElements(form, display, "postDish", e);
+		allowUserContinue();
 	});
 
 	window.addEventListener("updateDish", async (e) => {
@@ -173,6 +185,7 @@ export default async function menuPage(constructorInfo) {
 			"dishSelectedToDelete",
 			e
 		);
+		allowUserContinue();
 	});
 
 	window.addEventListener("dishSelectedToEdit", async (e) => {

@@ -313,6 +313,9 @@
 	bottom: 0;
 	padding-bottom: 1rem;
 	padding-right: 2rem;
+	& > .do__latter {
+		background-color: var(--blackberry);
+	}
 	& > a {
 		border: 3px solid var(--white-smoke);
 		cursor: pointer;
