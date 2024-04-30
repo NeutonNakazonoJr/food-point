@@ -254,16 +254,16 @@
 }
 
 #modal {
-    position: fixed;
+	position: fixed;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-    top: 0;
-    left: 0;
-    width: 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
 	height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); 
-    z-index: 10;
+	background-color: rgba(0, 0, 0, 0.4);
+	z-index: 10;
 }
 
 #apiLoadingScreen {
@@ -275,4 +275,18 @@
 	width: 100vw;
 	top: 0;
 	left: 0;
+}
+
+.button__loading-pseudoElements-fork-white {
+	&::after,
+	&::before {
+		background-image: url("../svg-animated/fork-white.svg") !important;
+	}
+}
+
+.button__loading-pseudoElements-spoon-white {
+	&::after,
+	&::before {
+		background-image: url("../svg-animated/spoon-white.svg") !important;
+	}
 }
