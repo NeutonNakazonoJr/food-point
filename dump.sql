@@ -71,4 +71,12 @@ CREATE TABLE guest (
     event_id UUID REFERENCES "event" ON DELETE CASCADE NOT NULL,
     "name" VARCHAR(100) CHECK(is_valid_guest_name("name")) NOT NULL,
     confirmed BOOLEAN DEFAULT false
-)
+);
+CREATE TABLE upload (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID REfERENCES "user" ON DELETE CASCADE NOT NULL,
+    original_name VARCHAR(255),
+    hash_name VARCHAR(255),
+    uploaded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    image_path VARCHAR(255)
+);

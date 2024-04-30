@@ -1,6 +1,7 @@
-import getHeader from "../components/header.js";
-import dispatchOnStateChange from "../events/onStateChange.js";
-import notification from "../components/notification.js";
+import getHeader from "../../components/header.js";
+import dispatchOnStateChange from "../../events/onStateChange.js";
+import notification from "../../components/notification.js";
+import { getMyLogin} from "../../api/userApi.js";
 
 const createProfileDesktop = () => {
     const page = document.createElement("div");
@@ -72,7 +73,8 @@ const createProfileDesktop = () => {
     editProfile.appendChild(headerProfile);
     const containerImage = document.createElement("div");
     const profileImage = document.createElement("div")
-    profileImage.id = "profile-image";
+    profileImage.className = "profile-image";
+    getImage();
     headerProfile.appendChild(containerImage);
     containerImage.appendChild(profileImage)
 
@@ -80,7 +82,11 @@ const createProfileDesktop = () => {
     const textarea = document.createElement("div");
     textarea.className = "name-area";
     const name = document.createElement("h2");
-    name.textContent = "Name Complete";
+    async function userName(){
+        const data = await getMyLogin();
+        name.textContent = data.fullname;
+    }
+    userName()
     const inputImg = document.createElement("input");
     inputImg.type = "file";
     inputImg.id = "image-input";
@@ -322,22 +328,62 @@ const createProfileDesktop = () => {
         rightSide.appendChild(helpTab)
     })
     
+    //logic to display the image on database
+    async function getImage() {   
+        fetch("/api/upload")
+        .then(response => {
+            if(!response.ok){
+                throw new Error()
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            if(data.length == 0){
+                return
+            } else{
+                const profileImg = data[0].hash_name;
+                profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
+            }           
+        })
+        .catch(error => {
+            notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
+            console.error('Erro ao solicitar a imagem:', error);
+        });
+    }
+    
+    
+
+    
     //input image logic and send to API
     anchor.addEventListener("click", (event) => {
         event.preventDefault();
         inputImg.click()
     })
-    
-    inputImg.addEventListener("change", (event) => {
+
+    inputImg.addEventListener("change", async (event) => {
         const picture = event.target.files[0];
-  
         if(picture){
             const reader = new FileReader();
             reader.onload = (e) => {
                 const newPicture = e.target.result;
-                profileImage.style.backgroundImage = `url("${newPicture}")`;
-               
-            };
+                const formData = new FormData();
+                formData.append("image", picture);
+                
+                fetch("/api/upload", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => {
+                    if(!response.ok){
+                        throw new Error();
+                    }
+                    profileImage.style.backgroundImage = `url("${newPicture}")`; 
+                    notification("Imagem Atualizada!")
+                })
+                .catch(error => {
+                    notification("Erro ao enviar imagem", error)
+                })
+            }
             reader.readAsDataURL(picture);
         }
     })
@@ -381,6 +427,7 @@ const createProfileDesktop = () => {
         .then(response => {
             if(response.ok){
                 notification("Dados Atualizados com Sucesso!");
+                userName()
             }else if(response.status === 400){
                 return response.json().then(data => {
                     console.error(data.error);
