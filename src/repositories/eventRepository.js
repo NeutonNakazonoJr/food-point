@@ -163,6 +163,12 @@ const eventRepository = {
             await dbConnection.query('ROLLBACK'); 
             throw error; 
         } 
-    }
+    },
+
+    getAllDishesByEventId: async (eventId) => {
+        const query = 'SELECT id as "dishId",  dish_name as "dishName", type FROM dish WHERE event_id = $1';
+        const { rows } = await dbConnection.query(query, [eventId]);
+        return rows;
+    } 
 }
 module.exports = eventRepository;

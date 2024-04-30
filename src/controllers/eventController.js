@@ -89,6 +89,15 @@ const eventController = {
         } catch (error) {
           return res.status(500).json({ error: 'Erro interno no servidor' });  
         }
+    },
+
+    getAllDishes: async (req, res) => {
+        try {
+            const dishes = await eventRepository.getAllDishesByEventId(req.params.id);
+            return res.status(200).json({ dishes });
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
     }
 }
 

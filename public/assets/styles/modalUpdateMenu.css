@@ -16,9 +16,11 @@
     border: none;
     background-color: inherit;
     cursor: pointer;
+    z-index: 0;
     
     & img {
         width: 1.5rem;
+        
     }
 }
 
@@ -36,6 +38,7 @@
     & h2 {
         font-weight: 700;
         color: var(--raspberry);
+        z-index: 2;
     }
 }
 
@@ -298,6 +301,10 @@
 @media screen and (max-width: 900px) {
     #insert-dish-section , #div-registered-dishes {
         width: 80%;
+    }
+
+    #menu-update-modal h2 {
+        font-weight: 600;
     }
 }
 

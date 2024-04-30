@@ -108,7 +108,7 @@ export function createSectionBasicInfos(basicInfos, eventID, editMode) {
 }
 
 
-const createMenuSection = async (dishInfos, eventID) => {
+export async function createMenuSection (dishInfos, eventID, editMode) {
 
     const menuIcon = htmlCreator.createImg('./assets/icons/menu-icon.svg');
     const menuTitle = htmlCreator.createTitle('h1', 'Cardápio');
@@ -118,7 +118,7 @@ const createMenuSection = async (dishInfos, eventID) => {
     divTitle.appendChild(menuIcon);
     divTitle.appendChild(menuTitle);
 
-    const divDishesCard = await createCardDiv(dishInfos, eventID);
+    const divDishesCard = await createCardDiv(dishInfos, eventID, editMode);
 
     const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
     editBtn.classList.add('edit-btn', 'edit-hidden');
@@ -136,16 +136,19 @@ export function groupDishesByType(dishes) {
     const groupedDishes = {};
 
     dishes.forEach(dish => {
+        
         if (!groupedDishes[dish.type]) {
             groupedDishes[dish.type] = [];
         }
         groupedDishes[dish.type].push(dish);
     });
+
+    console.log(groupedDishes);
     return groupedDishes;
 }
 
 
-const createCardDiv = async (dishInfos, eventID) => {
+const createCardDiv = async (dishInfos, eventID, editMode) => {
     
     const menuSection = htmlCreator.createSection('menu-section');
     
@@ -194,7 +197,12 @@ const createCardDiv = async (dishInfos, eventID) => {
         });
 
         const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
-        editBtn.classList.add('edit-event-dishes', 'edit-hidden');
+        editBtn.classList.add('edit-event-dishes');
+
+        if (!editMode) {
+            editBtn.classList.add('edit-hidden');
+        }
+
         card.appendChild(editBtn);
 
         editBtn.addEventListener('click', async (e) => {
@@ -306,7 +314,7 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
 
     const requestEventInfos = await getEventById(eventID || storageEventID.eventID);
-    
+
     if (requestEventInfos.error) {
         showToast(requestEventInfos.error);        
         dispatchOnStateChange('/home', { animation: false });

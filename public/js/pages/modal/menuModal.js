@@ -1,7 +1,8 @@
 
-import { deleteDish, getIngredientsByDishID, postDish } from "../../api/eventApi.js";
+import { deleteDish, getAllDishes, getIngredientsByDishID, postDish } from "../../api/eventApi.js";
 import showToast from "../../components/toast.js";
 import htmlCreator from "../../utils/htmlCreator.js";
+import { createMenuSection } from "../eventPage.js";
 import createModal from "./createModal.js";
 
 const createInsertDishSection = async (eventID, dishType) => {
@@ -327,6 +328,24 @@ const createCardDish = (dishInfo, eventID) => {
     return cardDish;
 };
 
+const updateMenuSection = async (eventID) => {
+    const getDishesRequest = await getAllDishes(eventID);
+    const modal = document.getElementById('modal');
+
+    if (getDishesRequest.error) {
+        modal.remove();
+        return
+    } else {
+        const menuSection = document.getElementById('menu-event-section');
+        menuSection.remove();
+ 
+        const basicInfosSection = document.getElementById('basic-infos-section');
+        const updatedMenuSection = await createMenuSection(getDishesRequest.dishes, eventID, true);
+        basicInfosSection.insertAdjacentElement('afterend', updatedMenuSection);
+        modal.remove();
+    }
+}
+
 
 
 async function menuUpdateModalComponent (eventID, dishType, dishes) {
@@ -368,8 +387,8 @@ async function menuUpdateModalComponent (eventID, dishType, dishes) {
         }
     });
 
-    closeModalBtn.addEventListener('click', () => {
-        modal.remove();
+    closeModalBtn.addEventListener('click', async () => {
+        await updateMenuSection(eventID);
     });
     
 
