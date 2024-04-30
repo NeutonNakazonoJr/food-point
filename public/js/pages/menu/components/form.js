@@ -1,4 +1,4 @@
-import buttonLoadState from "../../../utils/load/buttonLoadState.js";
+import { buttonLoadState } from "../../../utils/load/buttonLoadState.js";
 
 let main = null;
 function saveDish(dishName, ingredients) {
@@ -242,6 +242,7 @@ function createIngredientFieldset(
 
 function deleteThisIngredient(e) {
 	if (e instanceof Event && e.target instanceof HTMLButtonElement) {
+		buttonLoadState(e.target, true);
 		const ingredientId = e.target.dataset.id;
 		const dishId = e.target.dataset.dishId;
 		if (!ingredientId || !dishId) {
@@ -545,10 +546,10 @@ export default async function getForm(menu, currentType, mainComponent) {
 		bootForm(form, h1, p, dish);
 	});
 
-	// form.addEventListener("deleteIngredient", (e) => {
-	// 	const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
-	// 	bootForm(form, h1, p, dish);
-	// });
+	form.addEventListener("deleteIngredient", (e) => {
+		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
+		bootForm(form, h1, p, dish);
+	});
 
 	form.addEventListener("dishSelectedToDelete", () => {
 		const dish = undefined;

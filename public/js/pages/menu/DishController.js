@@ -12,7 +12,7 @@ export default class DishController {
 	#dishes = [];
 	#eventID;
 
-	#idDebounceForIngredientUpdate = null;
+	#idDebounceForIngredientUpdate = {};
 	#debounceDelay = 3000;
 
 	constructor(eventID) {
@@ -233,7 +233,7 @@ export default class DishController {
 	}
 
 	async updateIngredient(dishId, ingredient) {
-		clearTimeout(this.#idDebounceForIngredientUpdate);
+		clearTimeout(this.#idDebounceForIngredientUpdate[ingredient.id]);
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
 			console.log("não encontramos esse ID:" + dishId);
@@ -268,7 +268,7 @@ export default class DishController {
 			unityMeasure: ingredient.unityMeasure,
 			quantity: ingredient.quantity,
 		};
-		this.#idDebounceForIngredientUpdate = setTimeout(async () => {
+		this.#idDebounceForIngredientUpdate[ingredient.id] = setTimeout(async () => {
 			const res = await updateIngredient(
 				this.#eventID,
 				dishId,
@@ -295,6 +295,7 @@ export default class DishController {
 	}
 
 	async deleteIngredient(dishId, ingredientId) {
+		clearTimeout(this.#idDebounceForIngredientUpdate[ingredientId]);
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
 			console.log("não encontramos esse ID:" + dishId);
