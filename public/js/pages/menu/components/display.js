@@ -1,22 +1,27 @@
 import stringLimiter from "../../../utils/stringLimiter.js";
 
+let main = null;
+
 function editThisDish(dishId) {
-	const event = new CustomEvent("dishSelectedToEdit", {
-		detail: dishId,
-	});
-	window.dispatchEvent(event);
+	if (main && main instanceof HTMLElement) {
+		const event = new CustomEvent("dishSelectedToEdit", {
+			detail: dishId,
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function deleteThisDish(dishId, type) {
-	const event = new CustomEvent("dishSelectedToDelete", {
-		detail: { dishId, type },
-	});
-	window.dispatchEvent(event);
+	if (main && main instanceof HTMLElement) {
+		const event = new CustomEvent("dishSelectedToDelete", {
+			detail: { dishId, type },
+		});
+		main.dispatchEvent(event);
+	}
 }
 
 function generateCard(
 	dish,
-	editing,
 	dishIdSelected = null,
 	isTablet,
 	isMobile,
@@ -40,7 +45,7 @@ function generateCard(
 	}
 	p.textContent = stringLimiter(dishName, stringLength, true);
 	div.classList.add("newEventMenu-item");
-	if ((editing && !dishIdSelected) || dishIdSelected === dish.dishId) {
+	if (dishIdSelected === dish.dishId) {
 		div.classList.add("newEventMenu-item-editing");
 		p.textContent += "*";
 		editBtn.disabled = true;
@@ -64,7 +69,8 @@ function generateCard(
 	return div;
 }
 
-export default async function getDisplay(menu, currentType) {
+export default async function getDisplay(menu, currentType, mainComponent) {
+	main = mainComponent;
 	function renderDiv(
 		dishes,
 		dishIdSelected,
@@ -73,14 +79,9 @@ export default async function getDisplay(menu, currentType) {
 		isWideScreen
 	) {
 		dishes.forEach((dish, index, arr) => {
-			const isFirstDish = index === 0;
-			const isLastDish = index === arr.length - 1;
-			const isInEditingMode =
-				(isFirstDish && isFirstLoad) || (!isFirstLoad && isLastDish);
 			div.prepend(
 				generateCard(
 					dish,
-					isInEditingMode,
 					dishIdSelected,
 					isTablet,
 					isMobile,
@@ -98,7 +99,9 @@ export default async function getDisplay(menu, currentType) {
 		div.innerHTML = "";
 		renderDiv(dishes, dishIdSelected, isTablet, isMobile, isWideScreen);
 
-		span.textContent = `(${dishes[0].type})`;
+		if (dishes && dishes.length > 0) {
+			span.textContent = `(${dishes[0].type})`;
+		}
 		div.prepend(h6);
 	}
 
@@ -115,7 +118,9 @@ export default async function getDisplay(menu, currentType) {
 	const span = document.createElement("span");
 
 	h6.textContent = "Pratos criados ";
-	span.textContent = `(${dishes[0].type})`;
+	if (dishes && dishes.length > 0) {
+		span.textContent = `(${dishes[0].type})`;
+	}
 
 	renderDiv(dishes);
 
@@ -126,6 +131,7 @@ export default async function getDisplay(menu, currentType) {
 		currentType = e.detail.key;
 		rebootDiv();
 	});
+	div.addEventListener("postDish", () => rebootDiv());
 	div.addEventListener("updateDish", () => rebootDiv());
 	div.addEventListener("dishSelectedToDelete", () => rebootDiv());
 	div.addEventListener("dishSelectedToEdit", (e) => rebootDiv(e.detail));

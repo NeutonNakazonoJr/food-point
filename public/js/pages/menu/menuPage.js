@@ -37,17 +37,16 @@ function getMenu(eventID) {
 	};
 }
 
-async function dispatchIngredientChange() {
+async function dispatchIngredientChange(elementHTML) {
 	const newPromise = new Promise((resolve, reject) => {
-		if (!ingredientChangeHasBeenDispatched) {
+		if (!ingredientChangeHasBeenDispatched && elementHTML instanceof HTMLElement) {
 			ingredientChangeHasBeenDispatched = true;
-			console.log("--dispatchIngredientChange--");
 			const event = new CustomEvent("dispatchIngredientChange");
-			window.dispatchEvent(event);
-			ingredientChangeHasBeenDispatched = false;
+			elementHTML.dispatchEvent(event);
 			resolve();
 		}
 	});
+	ingredientChangeHasBeenDispatched = false;
 	return await newPromise;
 }
 let ingredientChangeHasBeenDispatched = false;
@@ -73,10 +72,6 @@ async function dispatchThisEventForElements(form, display, eventName, event) {
 	return await promise;
 }
 
-function callFnWithDelay(delayMs, fn) {
-	setTimeout(fn, delayMs);
-}
-
 export default async function menuPage(constructorInfo) {
 	if (
 		!constructorInfo ||
@@ -95,7 +90,22 @@ export default async function menuPage(constructorInfo) {
 	const menu = getMenu(eventID);
 
 	let currentType = "stater";
-	const delay = 50;
+	let ableToContinue = false;
+	const allowUserContinue = () => {
+		const menuKeys = Object.keys(menu);
+		const menuLength = menuKeys.map(key=> {
+			return menu[key].controller.getDishes().length;
+		}).reduce((acc, actual) => acc + actual);
+		if(menuLength > 0) {
+			if(!ableToContinue) {
+				footer.dispatchEvent(new CustomEvent("ableToContinue", {}));
+				ableToContinue = true;
+			}
+		} else {
+			footer.dispatchEvent(new CustomEvent("unableToContinue", {}));
+			ableToContinue = false;
+		}
+	}
 
 	const header = getHeader(false, false);
 	const progressBar = eventProgressBar(true, true, stage.last, stage.current);
@@ -103,43 +113,35 @@ export default async function menuPage(constructorInfo) {
 	const footer = getFooter(eventID);
 
 	main.id = "newEventMenu";
-	await menu.stater.controller.addDish(null, null, "Entrada");
 
-	window.addEventListener("selectDishType", async (e) => {
-		await dispatchIngredientChange();
+	main.addEventListener("selectDishType", async (e) => {
+		await dispatchIngredientChange(form);
 		currentType = e.detail.key;
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"selectDishType",
-				e
-			);
-		});
+		await dispatchThisEventForElements(form, display, "selectDishType", e);
 	});
 
-	window.addEventListener("updateDish", async (e) => {
-		if (menu[currentType].name === e.detail.type) {
-			await dispatchIngredientChange();
-			await menu[currentType].controller.updateDish(
-				e.detail.dishId,
-				e.detail.dishName,
-				e.detail.addNewDish
-			);
-			callFnWithDelay(delay, async () => {
-				await dispatchThisEventForElements(
-					form,
-					display,
-					"updateDish",
-					e
-				);
-			});
-		}
+	main.addEventListener("postDish", async (e) => {
+		await menu[currentType].controller.addDish(
+			null,
+			e.detail.dishName,
+			menu[currentType].name,
+			e.detail.ingredients
+		);
+		await dispatchThisEventForElements(form, display, "postDish", e);
+		allowUserContinue();
 	});
 
-	window.addEventListener("updateIngredient", async (e) => {
-		await dispatchIngredientChange();
-		console.log('window.addEventListener("updateIngredient"');
+	main.addEventListener("updateDish", async (e) => {
+		await dispatchIngredientChange(form);
+		await menu[currentType].controller.updateDish(
+			e.detail.dishId,
+			e.detail.dishName
+		);
+		await dispatchThisEventForElements(form, display, "updateDish", e);
+	});
+
+	main.addEventListener("updateIngredient", async (e) => {
+		await dispatchIngredientChange(form);
 		const ingredient = {
 			id: e.detail.ingredientId,
 			name: e.detail.name,
@@ -150,68 +152,59 @@ export default async function menuPage(constructorInfo) {
 			e.detail.dishId,
 			ingredient
 		);
-		console.log("finished controller.pushIngredient");
-		callFnWithDelay(delay, async () => {
-			console.log("dispatchThisEventForElements");
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"updateIngredient",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"updateIngredient",
+			e
+		);
 	});
 
-	window.addEventListener("deleteIngredient", async (e) => {
-		await dispatchIngredientChange();
+	main.addEventListener("deleteIngredient", async (e) => {
+		await dispatchIngredientChange(form);
 		await menu[currentType].controller.deleteIngredient(
 			e.detail.dishId,
 			e.detail.ingredientId
 		);
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"deleteIngredient",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"deleteIngredient",
+			e
+		);
 	});
 
-	window.addEventListener("dishSelectedToDelete", async (e) => {
-		await dispatchIngredientChange();
+	main.addEventListener("dishSelectedToDelete", async (e) => {
+		await dispatchIngredientChange(form);
 		await menu[currentType].controller.removeDish(e.detail.dishId);
 
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"dishSelectedToDelete",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"dishSelectedToDelete",
+			e
+		);
+		allowUserContinue();
 	});
 
-	window.addEventListener("dishSelectedToEdit", async (e) => {
-		await dispatchIngredientChange();
+	main.addEventListener("dishSelectedToEdit", async (e) => {
+		await dispatchIngredientChange(form);
 
-		callFnWithDelay(delay, async () => {
-			await dispatchThisEventForElements(
-				form,
-				display,
-				"dishSelectedToEdit",
-				e
-			);
-		});
+		await dispatchThisEventForElements(
+			form,
+			display,
+			"dishSelectedToEdit",
+			e
+		);
 	});
 
-	window.addEventListener("resize", () =>
+	main.addEventListener("resize", () =>
 		display.dispatchEvent(new CustomEvent("resize"))
 	);
 
-	const aside = getAsideForMenu(menu);
-	const form = await getForm(menu, currentType);
-	const display = await getDisplay(menu, currentType);
+	const aside = getAsideForMenu(menu, main);
+	const form = await getForm(menu, currentType, main);
+	const display = await getDisplay(menu, currentType, main);
 
 	main.appendChild(aside);
 	main.appendChild(form);

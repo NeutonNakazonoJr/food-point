@@ -47,6 +47,12 @@
 				filter: brightness(0.8);
 			}
 		}
+		& > button:nth-of-type(2) {
+			top: 2.3rem;
+			background: var(--blackberry-transparent);
+			border: 2px solid var(--raspberry);
+			border-right: 0;
+		}
 	}
 }
 
@@ -85,6 +91,78 @@
 		&:focus-within,
 		&:active {
 			filter: brightness(0.8);
+		}
+	}
+}
+
+#cepModal {
+	z-index: 1001;
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: var(--blackberry-transparent);
+	align-items: center;
+	justify-content: center;
+}
+
+#cepModalContent {
+	width: 80%;
+	height: 60%;
+	border-radius: var(--border-radius-1x);
+	background-color: var(--white-smoke);
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	flex-direction: column;
+	& > img {
+		width: 150px;
+	}
+	& > #cepModalForm {
+		display: flex;
+		flex-direction: column;
+		width: 80%;
+		height: 70%;
+		& > fieldset {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			width: 100%;
+			border: none;
+			& > * {
+				margin-bottom: 10px;
+			}
+			& > legend {
+				font-size: 1.5rem;
+				color: var(--raspberry);
+				font-weight: 700;
+			}
+			& > input {
+				border: 2px solid var(--raspberry);
+				padding: 10px 5px;
+				color: var(--blackberry);
+				outline: none;
+				border-radius: var(--border-radius-1x);
+				background-color: var(--white-smoke);
+			}
+			& > button {
+				cursor: pointer;
+				padding: 0.5rem 0;
+				color: var(--white-smoke);
+				border-radius: var(--border-radius-1x);
+				border: none;
+				outline: none;
+				background-color: var(--raspberry);
+				&:hover,
+				&:focus,
+				&:focus-visible,
+				&:focus-within,
+				&:active {
+					filter: brightness(0.8);
+				}
+			}
 		}
 	}
 }
