@@ -12,6 +12,9 @@ export default class DishController {
 	#dishes = [];
 	#eventID;
 
+	#idDebounceForIngredientUpdate = null;
+	#debounceDelay = 3000;
+
 	constructor(eventID) {
 		this.#eventID = eventID;
 	}
@@ -100,7 +103,7 @@ export default class DishController {
 			showToast(JSON.parse(res.error));
 			return;
 		}
-		
+
 		const ingredientsIds = res.ingredientsIds;
 		if (Array.isArray(ingredientsIds)) {
 			ingredientsIds.forEach((id, index) => {
@@ -230,6 +233,7 @@ export default class DishController {
 	}
 
 	async updateIngredient(dishId, ingredient) {
+		clearTimeout(this.#idDebounceForIngredientUpdate);
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
 			console.log("não encontramos esse ID:" + dishId);
@@ -264,17 +268,21 @@ export default class DishController {
 			unityMeasure: ingredient.unityMeasure,
 			quantity: ingredient.quantity,
 		};
-		const res = await updateIngredient(
-			this.#eventID,
-			dishId,
-			ingredient.id,
-			newIngredient
-		);
-		if (res.error) {
-			console.error(res.error);
-			showToast(JSON.parse(res.error));
-			return;
-		}
+		this.#idDebounceForIngredientUpdate = setTimeout(async () => {
+			const res = await updateIngredient(
+				this.#eventID,
+				dishId,
+				ingredient.id,
+				newIngredient
+			);
+			if (res.error) {
+				console.error(res.error);
+				showToast(JSON.parse(res.error));
+				return;
+			}
+			console.log("debounce trigger", res);
+		}, this.#debounceDelay);
+		console.log("debounce agendado", this.#idDebounceForIngredientUpdate);
 
 		this.#dishes[index].ingredients[ingredientIndex] = {
 			...this.#dishes[index].ingredients[ingredientIndex],

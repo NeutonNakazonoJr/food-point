@@ -1,3 +1,5 @@
+import buttonLoadState from "../../../utils/load/buttonLoadState.js";
+
 let main = null;
 function saveDish(dishName, ingredients) {
 	if (main instanceof HTMLElement) {
@@ -26,6 +28,21 @@ function updateDish(dishId, dishName, addDish) {
 
 function postIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
 	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("postIngredient", {
+			detail: {
+				dishId,
+				ingredientId,
+				name,
+				unityMeasure,
+				quantity,
+			},
+		});
+		main.dispatchEvent(event);
+	}
+}
+
+function updateIngredient(dishId, ingredientId, name, unityMeasure, quantity) {
+	if (main instanceof HTMLElement) {
 		const event = new CustomEvent("updateIngredient", {
 			detail: {
 				dishId,
@@ -47,6 +64,13 @@ function deleteIngredient(dishId, ingredientId) {
 				ingredientId,
 			},
 		});
+		main.dispatchEvent(event);
+	}
+}
+
+function emptyReboot() {
+	if (main instanceof HTMLElement) {
+		const event = new CustomEvent("emptyReboot", {});
 		main.dispatchEvent(event);
 	}
 }
@@ -101,7 +125,7 @@ function getDishField(dishId, dishName) {
 	});
 
 	fieldset.addEventListener("dispatchIngredientChange", () => {
-		console.log("fieldset.addEventListener 94.js");
+		console.log("fieldset dispatchIngredientChange 94.js");
 		if (!saved && input.checkValidity()) {
 			saved = true;
 			updateDish(dishId, input.value.trim(), false);
@@ -123,7 +147,6 @@ function createIngredientFieldset(
 	quantity
 ) {
 	function saveIngredient() {
-		clearTimeout(timeOut);
 		if (this instanceof HTMLElement) {
 			if (!this.reportValidity()) {
 				this.style.outline = "2px solid red";
@@ -133,25 +156,16 @@ function createIngredientFieldset(
 			}
 			this.removeAttribute("style");
 			ingredient[this.dataset.ingredient] = this.value;
-			saved = false;
-			timeOut = setTimeout(() => {
-				if (!saved) {
-					saved = true;
-					postIngredient(
-						dishId,
-						ingredient.id,
-						ingredient.name,
-						ingredient.unityMeasure,
-						parseInt(ingredient.quantity)
-					);
-				}
-			}, defaultAwait);
+			updateIngredient(
+				dishId,
+				ingredient.id,
+				ingredient.name,
+				ingredient.unityMeasure,
+				parseInt(ingredient.quantity)
+			);
 		}
 	}
 
-	let timeOut = 0;
-	let saved = true;
-	const defaultAwait = 4000;
 	const ingredient = {
 		id: ingredientId,
 		name: name,
@@ -223,21 +237,6 @@ function createIngredientFieldset(
 		fieldset.appendChild(deleteButton);
 	}
 
-	fieldset.addEventListener("dispatchIngredientChange", () => {
-		console.log("fieldset.addEventListener 218.js");
-		if (!saved) {
-			clearTimeout(timeOut);
-			saved = true;
-			postIngredient(
-				dishId,
-				ingredient.id,
-				ingredient.name,
-				ingredient.unityMeasure,
-				parseInt(ingredient.quantity)
-			);
-		}
-	});
-
 	return fieldset;
 }
 
@@ -270,24 +269,11 @@ function getIngredientsField(dishId, ingredients) {
 				ingredient.unityMeasure,
 				ingredient.quantity
 			);
-			const dispatchIngredientChange = () => {
-				ingredientFieldset.dispatchEvent(
-					new CustomEvent("dispatchIngredientChange")
-				);
-			};
-			fieldset.addEventListener(
-				"dispatchIngredientChange",
-				dispatchIngredientChange
-			);
 			fieldset.appendChild(ingredientFieldset);
 		});
 	}
 	addIngredient.addEventListener("click", async (e) => {
 		e.preventDefault();
-		await new Promise((resolve, reject) => {
-			fieldset.dispatchEvent(new CustomEvent("dispatchIngredientChange"));
-			resolve();
-		});
 		postIngredient(dishID, null, null, null, null);
 	});
 
@@ -411,6 +397,7 @@ function createEmptyIngredientFieldset() {
 	const deleteButton = document.createElement("button");
 	deleteButton.dataset.id = ingredient.id;
 	deleteButton.addEventListener("click", (e) => {
+		buttonLoadState(deleteButton, true, "fork-white");
 		const event = new CustomEvent("removeIngredient", {
 			detail: ingredient.id,
 			bubbles: true,
@@ -520,7 +507,7 @@ function bootForm(form, h1, p, dish) {
 export default async function getForm(menu, currentType, mainComponent) {
 	console.log("get FORM - " + Date.now());
 
-	main = mainComponent
+	main = mainComponent;
 	const form = document.createElement("form");
 	form.id = "newEventMenu-form";
 	form.addEventListener("submit", (e) => e.preventDefault());
@@ -553,15 +540,15 @@ export default async function getForm(menu, currentType, mainComponent) {
 		bootForm(form, h1, p, dish);
 	});
 
-	form.addEventListener("updateIngredient", (e) => {
+	form.addEventListener("postIngredient", (e) => {
 		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
 		bootForm(form, h1, p, dish);
 	});
 
-	form.addEventListener("deleteIngredient", (e) => {
-		const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
-		bootForm(form, h1, p, dish);
-	});
+	// form.addEventListener("deleteIngredient", (e) => {
+	// 	const dish = menu[currentType].controller.getOneDish(e.detail.dishId);
+	// 	bootForm(form, h1, p, dish);
+	// });
 
 	form.addEventListener("dishSelectedToDelete", () => {
 		const dish = undefined;
@@ -585,6 +572,11 @@ export default async function getForm(menu, currentType, mainComponent) {
 				});
 			}
 		}
+	});
+
+	form.addEventListener("emptyReboot", () => {
+		const dish = undefined;
+		bootForm(form, h1, p, dish);
 	});
 
 	return form;
