@@ -6,7 +6,7 @@ import { getMyLogin } from "../../api/userApi.js";
 const createProfileMobile = () => {
     const page = document.createElement("div");
     page.id = "profile"
-    const header = getHeader(false);
+    const header = getHeader(false, false);
     page.appendChild(header);
 
     //edit profile content
