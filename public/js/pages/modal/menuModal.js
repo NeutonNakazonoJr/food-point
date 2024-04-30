@@ -7,97 +7,114 @@ import createModal from "./createModal.js";
 const createInsertDishSection = async (eventID, dishType) => {
     const insertSection = htmlCreator.createSection('insert-dish-section');
     const sectionTitle = htmlCreator.createTitle('h3', 'Adicionar novo prato');
+
     const divInputDishName = await createDivDishName(eventID, dishType);
-
+    
     const ingredientSection = createIngredientSection();
-
+    
     insertSection.appendChild(sectionTitle);
     insertSection.appendChild(divInputDishName);
     insertSection.appendChild(ingredientSection);
-
+    
     return insertSection;
 }
 
-const createDivDishName = async (eventID, dishType, dishName) => {
-    // lógica para colocar o nome no input no modo edit;
+const handleSaveNewDish = async (eventID, dishType) => {
+    const divIngredientsInput = document.querySelectorAll('.div-new-ingredient-input');
+    const dishName = document.getElementById('input-dish-Name');
+
+    if (!dishName.value) {
+        showToast('O nome do prato precisa ser definido');
+        return;
+    }
+
+    if (divIngredientsInput.length === 0) {
+        showToast('Pelo menos um ingrediente deve estar associado a um prato');
+        return;
+    }
+
+    const ingredients = [];
+
+    let invalidIngredientName;
+    divIngredientsInput.forEach(input => {
+        const inputName = input.children[0].value;
+        const inputQuantity = input.children[1].value;
+        const inputUnityMeasure = input.children[2].value;
+
+        if (!inputName || Number(inputQuantity) === 0) {
+            showToast('O nome do ingrediente e a quantidade precisa ser definido');
+            invalidIngredientName = true;
+            return;
+        }
+
+        const newIngredient = {
+            'name': inputName,
+            'unityMeasure': inputUnityMeasure,
+            'quantity': inputQuantity
+        };
+
+        ingredients.push(newIngredient);
+    });
+
+    if (ingredients.length === 0 || invalidIngredientName) {
+        showToast('O nome do ingrediente e a quantidade precisa ser definido');
+        return;
+    }
+
+    const newDishInfos = {
+        dishName: dishName.value,
+        type: dishType,
+        ingredients
+    };
+
+    const dishEditMode = document.querySelector('.edit-mode');
+    let newDish;
+    if (dishEditMode) {
+        const deleteRequest = await deleteDish(eventID, dishEditMode.id);
+
+        if (!deleteRequest.error) {
+            newDish = await postDish(eventID, newDishInfos);
+            const cardDishButtons = document.querySelectorAll('#div-button-update-modal button');
+            cardDishButtons.forEach(btn => (btn.disabled = false));
+            dishEditMode.remove();
+        } else {
+            return showToast(deleteRequest.error.message);
+        }
+    } else {
+        newDish = await postDish(eventID, newDishInfos);
+    }
+
+    if (newDish.error) {
+        showToast(newDish.error);
+        return;
+    } else {
+        showToast('Prato adicionado com sucesso');
+    }
+
+    const newCardDish = createCardDish({ dishName: dishName.value, dishId: newDish.dishId });
+    const dishRegisteredDishes = document.getElementById('div-registered-dishes');
+    dishRegisteredDishes.appendChild(newCardDish);
+
+    const ingredientDiv = document.querySelectorAll('.div-new-ingredient-input');
+    ingredientDiv.forEach(ingredient => ingredient.remove());
+
+    dishName.value = '';
+};
+
+const createDivDishName = async (eventID, dishType) => {
     const inputDishNameOptions = {
         type: 'text',
         id: 'input-dish-Name',
         className: 'input-edit-dish',
         labelText: 'Nome do prato',
         classNameDiv: 'div-input-update-dish',
-    }
+    };
 
     const saveNewDishBtn = htmlCreator.createButton('Salvar prato', 'save-edit-dish-btn');
-    
+
     saveNewDishBtn.addEventListener('click', async () => {
-        const divIngredientsInput = document.querySelectorAll('.div-new-ingredient-input');
-        const dishName = document.getElementById('input-dish-Name');
-
-        if (!dishName.value) {
-            showToast('O nome do prato precisa ser definido');
-            return 
-        }
-
-        if (divIngredientsInput.length === 0) {
-            showToast('Pelo menos um ingrediente deve estar associado a um prato')
-            return 
-        }
-    
-        const ingredients = [];
-
-        let invalidIngredientName;
-        divIngredientsInput.forEach(input => {
-
-            const inputName = input.children[0].value;
-            const inputQuantity = input.children[1].value;
-            const inputUnityMeasure = input.children[2].value
-
-            if (!inputName || Number(inputQuantity) === 0) {
-                showToast('O nome do ingrediente e a quantidade precisa ser definido')
-                invalidIngredientName = true;
-                return
-            }
-
-            const newIngredient = {
-                'name': inputName,
-                'unityMeasure': inputUnityMeasure,
-                'quantity': inputQuantity 
-            }
-
-            ingredients.push(newIngredient);
-        })
-
-  
-        if (ingredients.length === 0 || invalidIngredientName) {
-            showToast('O nome do ingrediente e a quantidade precisa ser definido')
-            return
-        }
-
-        const newDish = {
-            dishName: dishName.value,
-            type: dishType,
-            ingredients
-        }
-
-        const addNewDish = await postDish(eventID, newDish);
-
-        if (addNewDish.error) {
-            showToast(addNewDish.error);
-            return 
-        } else {
-            showToast('Prato adicionado com sucesso');
-        }
-
-        const newCardDish = createCardDish({dishName: dishName.value, dishId: addNewDish.dishId});
-        const dishRegisteredDishes = document.getElementById('div-registered-dishes');
-        dishRegisteredDishes.appendChild(newCardDish);
-
-        dishName.value = '';
-        const sectionIngredient = document.getElementById('ingredient-section-modal');
-        // sectionIngredient.innerHTML = '';
-    })
-
+        await handleSaveNewDish(eventID, dishType);
+    });
 
     const divInput = htmlCreator.createInput(inputDishNameOptions);
 
@@ -106,25 +123,22 @@ const createDivDishName = async (eventID, dishType, dishName) => {
 
     const divDishName = htmlCreator.createDiv('div-dish-name');
     divDishName.appendChild(divInput);
-    divDishName.appendChild(saveNewDishBtn)
+    divDishName.appendChild(saveNewDishBtn);
 
     return divDishName;
-}
+};
+
  
 const createIngredientSection = (ingredientList) => {
-    // adicionar lógica para renderizar ingredientes já registrados
     const ingredientTitle = htmlCreator.createTitle('h5', 'Ingredientes');
     const addNewIngredientBtn = htmlCreator.createButton('adicionar ingrediente', 'add-new-ingredient-modal');
-    const divNewIngredientInput = createDivNewIngredientInput();
-    
     
     const ingredientSection = htmlCreator.createSection('ingredient-section-modal');
     ingredientSection.appendChild(ingredientTitle);
     ingredientSection.appendChild(addNewIngredientBtn);
-
+    
     addNewIngredientBtn.addEventListener('click', () => {
-        ingredientSection.appendChild(ingredientTitle);
-        ingredientSection.appendChild(addNewIngredientBtn); 
+        const divNewIngredientInput = createDivNewIngredientInput();
         ingredientSection.insertBefore(divNewIngredientInput, addNewIngredientBtn);
     });
 
@@ -202,7 +216,7 @@ const createUnityMeasureSelect = (registeredIngredient) => {
     sixthOption.innerText = 'Unidades (u)';
     
     const unityMeasureSelectModal = document.createElement('select');
-    unityMeasureSelectModal.id = 'select-unity-measure-modal';
+    unityMeasureSelectModal.classList.add('select-unity-measure-modal');
 
     unityMeasureSelectModal.appendChild(firstOption);
     unityMeasureSelectModal.appendChild(secondOption);
@@ -232,60 +246,77 @@ const createRegisteredDishesSection = (dishList, dishType, eventID) => {
     return registeredDishesDiv;
 }
 
-const createCardDish = (dishInfo, eventID) => {
+const handleDeleteButtonClick = async (eventID, dishInfo, cardDish) => {
+    const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
+    const deletedDish = await deleteDish(eventID || storageEventID.eventID, dishInfo.dishId);
+    
+    if (deletedDish.error) {
+        showToast(deletedDish.error.message);
+    } else {
+        showToast('Prato deletado com sucesso');
+        cardDish.remove();
+    }
+};
 
+const handleEditButtonClick = async (eventID, dishInfo, cardDish, editBtn, deleteBtn) => {
+    const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
+    const { ingredientList } = await getIngredientsByDishID(eventID || storageEventID.eventID, dishInfo.dishId);
+
+    cardDish.classList.toggle('edit-mode');
+    editBtn.remove();
+    deleteBtn.remove();
+
+    if (ingredientList.error) {
+        showToast(ingredientList.error.message);
+        return;
+    }
+
+    const cardTitle = htmlCreator.createSpan(' (Editando)');
+    const inputDishName = document.getElementById('input-dish-Name');
+    inputDishName.value = dishInfo.dishName
+    
+    cardDish.appendChild(cardTitle)
+    const cardDishButtons = document.querySelectorAll('#div-button-update-modal button');
+    cardDishButtons.forEach(btn => btn.disabled = true);
+
+    const renderedIngredients = document.querySelectorAll('.div-new-ingredient-input');
+
+    if (renderedIngredients.length > 0) {
+        renderedIngredients.forEach(ingredient => ingredient.remove());
+    }
+
+    const ingredientSection = document.getElementById('ingredient-section-modal'); 
+    const addNewIngredientBtn = document.getElementById('add-new-ingredient-modal');
+    
+    ingredientList.forEach(ingredient => {
+        const registeredIngredient = createDivNewIngredientInput(ingredient);
+        ingredientSection.insertBefore(registeredIngredient, addNewIngredientBtn);
+    });
+};
+
+const createCardDish = (dishInfo, eventID) => {
     const cardDish = htmlCreator.createDiv('card-dish-modal');
     cardDish.id = dishInfo.dishId;
     cardDish.classList.add('card-dish-modal');
     
     const cardTitle = htmlCreator.createParagraph(dishInfo.dishName);
-
-    const editBtn = htmlCreator.createButton('', 'edit-dish-modal');
-
-    editBtn.addEventListener('click', async () => {
-        const { ingredientList } = await getIngredientsByDishID(eventID, dishInfo.dishId)
-        
-        if (ingredientList.error) {
-            showToast(ingredientList.error.message);
-            return 
-        }
-
-        const inputDishName = document.getElementById('input-dish-Name');
-        inputDishName.value = cardTitle.innerText;
-
-        const renderedIngredients = document.querySelectorAll('.div-new-ingredient-input');
-
-        if (renderedIngredients.length > 0) {
-            renderedIngredients.forEach(ingredient => ingredient.remove());
-        }
-
-        const ingredientSection = document.getElementById('ingredient-section-modal'); 
-        const addNewIngredientBtn = document.getElementById('add-new-ingredient-modal');
-        
-        ingredientList.forEach(ingredient => {
-            const registeredIngredient = createDivNewIngredientInput(ingredient);
-            ingredientSection.insertBefore(registeredIngredient, addNewIngredientBtn);
-        });
-    })
-
-    const editIcon = htmlCreator.createImg('./assets/icons/pen.svg');
-    editBtn.appendChild(editIcon);
     
     const deleteBtn = htmlCreator.createButton('', 'delete-dish-btn-modal');
     const deleteIcon = htmlCreator.createImg('./assets/icons/trash.svg');
     deleteBtn.appendChild(deleteIcon);
 
-    deleteBtn.addEventListener('click', async function () {
-        const deletedDish = await deleteDish(eventID, dishInfo.dishId);
+    deleteBtn.addEventListener('click', () => {
+        handleDeleteButtonClick(eventID, dishInfo, cardDish);
+    });
 
-        if (deletedDish.error) {
-            showToast(deletedDish.error.message);
-        } else {
-            showToast('Prato deletado com sucesso');
-            cardDish.remove();
-        }
-    })
-    
+    const editBtn = htmlCreator.createButton('', 'edit-dish-modal');
+    const editIcon = htmlCreator.createImg('./assets/icons/pen.svg');
+    editBtn.appendChild(editIcon);
+
+    editBtn.addEventListener('click',function () {
+        handleEditButtonClick(eventID, dishInfo, cardDish, editBtn, deleteBtn)
+    });
+
     const divBtn = htmlCreator.createDiv('div-button-update-modal');
     divBtn.appendChild(editBtn);
     divBtn.appendChild(deleteBtn);
@@ -294,7 +325,9 @@ const createCardDish = (dishInfo, eventID) => {
     cardDish.appendChild(divBtn);
 
     return cardDish;
-}
+};
+
+
 
 async function menuUpdateModalComponent (eventID, dishType, dishes) {
     const icons = {
@@ -322,8 +355,24 @@ async function menuUpdateModalComponent (eventID, dishType, dishes) {
     containerMenuUpdate.appendChild(divTitle);
     containerMenuUpdate.appendChild(innerContainer);
     
-
+    const closeModalBtn = htmlCreator.createButton('', 'close-modal-btn');
+    const closeIcon = htmlCreator.createImg('./assets/icons/close-icon.svg');
+    closeModalBtn.appendChild(closeIcon);
+    containerMenuUpdate.appendChild(closeModalBtn);
+    
     const modal = createModal(containerMenuUpdate);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        modal.remove();
+    });
+    
+
     return modal;
 }
 

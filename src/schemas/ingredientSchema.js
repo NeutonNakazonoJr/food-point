@@ -5,8 +5,8 @@ const rgxUnityMeasure = /^\b([a-zA-Z]+)\s*\(([a-zA-Z]{1,2})\)$/;
 
 const ingredientSchema = joi.object({
     name: joi.string().pattern(rgxDish).required().messages({
-        'string.base': 'O tipo de dado de nome do ingredinte deve ser uma string',
-        'string.pattern.base': 'O nome do ingredinte deve conter apenas letras e hífen',
+        'string.base': 'O tipo de dado de nome do ingrediente deve ser uma string',
+        'string.pattern.base': 'O nome do ingrediente deve conter apenas letras e hífen',
         'any.required': 'O nome do ingrediente é obrigatório',
         'string.empty': 'O campo nome do ingrediente não pode estar vazio'
     }),
@@ -30,8 +30,8 @@ const purchaseListSchema = joi.object({
     ingredientList: joi.array().items(
         joi.object({
             name: joi.string().pattern(rgxDish).required().messages({
-                'string.base': 'O tipo de dado de nome do ingredinte deve ser uma string',
-                'string.pattern.base': 'O nome do ingredinte deve conter apenas letras e hífen',
+                'string.base': 'O tipo de dado de nome do ingrediente deve ser uma string',
+                'string.pattern.base': 'O nome do ingrediente deve conter apenas letras e hífen',
                 'any.required': 'O nome do ingrediente é obrigatório',
                 'string.empty': 'O campo nome do ingrediente não pode estar vazio'
             }),

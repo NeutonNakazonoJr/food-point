@@ -1,18 +1,3 @@
-:root {
-	--wine-color: #670029;
-	--white-smoke: #f2f7f2;
-	--blackberry: #311432;
-	--blackberry-transparent: #3114328a;
-	--cherry: #a73e5c;
-	--raspberry: #b22222;
-
-	--font-pacifico: "Pacifico", cursive;
-
-	--border-radius-1x: 8px;
-	--border-radius-2x: 16px;
-	--border-radius-3x: 24px;
-}
-
 
 #menu-update-modal {
     background-color: var(--white-smoke);
@@ -20,7 +5,21 @@
     padding: 2rem;
     width: 95%;
     max-width: 70rem;
-    min-height: calc(100vh - 5%);
+    min-height: 500px;
+    position: relative;
+}
+
+#close-modal-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+    
+    & img {
+        width: 1.5rem;
+    }
 }
 
 #inner-container-dish-modal {
@@ -66,6 +65,7 @@
 .div-input-update-dish {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 0.3rem;
     width: 65%;
     position: relative;
@@ -245,6 +245,10 @@
     & div {
         display: flex;
     }
+
+    & span {
+        font-size: 0.9rem;
+    }
 }
 
 #edit-dish-modal, #delete-dish-btn-modal {
@@ -254,6 +258,58 @@
     cursor: pointer;
 }
 
+#edit-dish-modal {
+    background-color: var(--white-smoke);
+}
+
 #delete-dish-btn-modal {
     background-color: var(--raspberry);
+}
+
+.edit-mode {
+    background-color: var(--raspberry);
+    border-color: var(--raspberry);
+}
+
+@media screen and (max-width: 900px) {
+
+    #menu-update-modal {
+        margin: 5rem 0 2rem;
+    }
+
+    #inner-container-dish-modal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #insert-dish-section {
+        border:none;
+        border-bottom: 2px solid var(--blackberry);
+        padding: 0 0 2rem;
+    }
+
+    #div-registered-dishes {
+        padding: 2rem 0;
+        margin-left: 0px;
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #insert-dish-section , #div-registered-dishes {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    #insert-dish-section , #div-registered-dishes {
+        width: 100%;
+    }
+}
+
+
+@media screen and (max-width: 700px) {
+    #menu-update-modal {
+        padding: 2rem 0.5rem;
+    }
 }
