@@ -258,11 +258,11 @@ async function saveInfoAndMoveOn(eventId, form) {
 					id: eventId,
 				},
 				stage: {
-					current: 3,
+					current: 1,
 					last: 0,
 				},
 			};
-			dispatchOnStateChange("/home/create/guest", constructorInfo);
+			dispatchOnStateChange("/home/create/menu", constructorInfo);
 		}
 	} else {
 		throw new Error("Erro no tratamento do formulário!!!!");
@@ -275,11 +275,11 @@ function skipThisStep(eventId) {
 			id: eventId,
 		},
 		stage: {
-			current: 3,
+			current: 1,
 			last: 0,
 		},
 	};
-	dispatchOnStateChange("/home/create/guest", constructorInfo);
+	dispatchOnStateChange("/home/create/menu", constructorInfo);
 }
 
 export default function newEventBasicPage(
@@ -299,14 +299,13 @@ export default function newEventBasicPage(
 	}
 ) {
 	if (
+		!constructorInfo ||
 		!constructorInfo.event ||
 		constructorInfo.event.id === "" ||
 		!constructorInfo.event.id
 	) {
-		alert("O evento passado para essa página não é válido!");
-		setTimeout(() => {
-			dispatchOnStateChange("/home", { animation: true });
-		}, 200);
+		showToast("O evento passado para essa página não é válido!");
+		dispatchOnStateChange("/home", { animation: true });
 		return document.createDocumentFragment();
 	}
 	const header = getHeader(false, true);

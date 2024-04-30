@@ -7,7 +7,6 @@ const userMiddleware = {
 
     validateUserId: async (req, res, next) => {
         try {
-
             if (!uuidValidate(req.userId)) { 
                 return res.status(400).json({error: 'ID inválido.'});
             };
@@ -40,7 +39,7 @@ const userMiddleware = {
             }
 
             next();
-        } catch (e) {
+        } catch (error) {
             return res.status(500).json({ error: 'Erro interno no servidor' , e});
         }
     },
