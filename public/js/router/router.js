@@ -6,6 +6,7 @@ import createGuestPage from "../pages/guestPage.js";
 import createRegisterForm from "../pages/RegisterPage.js";
 import createErrorPage from "../pages/errorPage.js";
 import createProfile from "../pages/profilePage.js";
+import createSuccessEventPage from "../pages/sucessEvent.js";
 
 const title = "Food Point";
 
@@ -53,6 +54,11 @@ const routes = {
 		html: createGuestPage,
 		title: "Guests | " + title,
 		description: "Planeje sua lista de convidados!"
+	},
+	"/home/create/success":{
+		html: createSuccessEventPage,
+		title: "Evento criado com sucesso | " + title,
+		description: "Evento criado com sucesso!"
 	},
 	"/error": {
 		html: createErrorPage,
