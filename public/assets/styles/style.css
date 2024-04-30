@@ -276,3 +276,17 @@
 	top: 0;
 	left: 0;
 }
+
+.button__loading-pseudoElements-fork-white {
+	&::after,
+	&::before {
+		background-image: url("../svg-animated/fork-white.svg") !important;
+	}
+}
+
+.button__loading-pseudoElements-spoon-white {
+	&::after,
+	&::before {
+		background-image: url("../svg-animated/spoon-white.svg") !important;
+	}
+}
