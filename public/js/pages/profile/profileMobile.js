@@ -32,7 +32,8 @@ const createProfileMobile = () => {
     editProfile.appendChild(headerProfile);
     const containerImage = document.createElement("div");
     const profileImage = document.createElement("div")
-    profileImage.id = "profile-image";
+    profileImage.className = "profile-image";
+    getImage();
     headerProfile.appendChild(containerImage);
     containerImage.appendChild(profileImage);
 
@@ -158,16 +159,21 @@ const createProfileMobile = () => {
     headerMenu.id = "header-profile";
     menuContent.appendChild(headerMenu);
     const container = document.createElement("div");
-    const profileImg = document.createElement("div")
-    profileImg.id = "profile-image";
+    const profileImg = document.createElement("div");
+    profileImg.id = "menuImage"
+    profileImg.className = "profile-image";
+    getImageMenu()
     headerMenu.appendChild(container);
     container.appendChild(profileImg);
 
     const nameArea = document.createElement("div");
     nameArea.className = "name-area";
     const user = document.createElement("h2");
-    user.textContent = "Name Complete of the user selected";
-
+    async function nameMenu() {
+        const data = await getMyLogin();
+        user.textContent = data.fullname;
+    }
+    nameMenu()
     nameArea.appendChild(user);
     headerMenu.appendChild(nameArea)
 
@@ -197,6 +203,52 @@ const createProfileMobile = () => {
     helpMenu.appendChild(helpText);
     menu.appendChild(helpMenu);
 
+    //logic to display the image on database
+    async function getImage() {
+        fetch("/api/upload")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error()
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length == 0) {
+                    return
+                } else {
+                    const profileImg = data[0].hash_name;
+                    profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
+
+                }
+            })
+            .catch(error => {
+                notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
+                console.error('Erro ao solicitar a imagem:', error);
+            });
+    }
+    //logic to display the image on database
+    async function getImageMenu() {
+        fetch("/api/upload")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error()
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.length == 0) {
+                    return
+                } else {
+                    const hash = data[0].hash_name;
+                    profileImg.style.backgroundImage = `url("/assets/uploads/${hash}")`;
+
+                }
+            })
+            .catch(error => {
+                notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
+                console.error('Erro ao solicitar a imagem:', error);
+            });
+    }
     //logic to change pictures and send to api
     anchor.addEventListener("click", (event) => {
         event.preventDefault();
@@ -252,7 +304,7 @@ const createProfileMobile = () => {
         }
         return true;
     }
-    function submitUserInfo(){
+    function submitUserInfo() {
         const fullName = nameInput.value.trim().toLowerCase();
         const email = emailInput.value.trim().toLowerCase();
 
@@ -266,24 +318,24 @@ const createProfileMobile = () => {
                 email: email
             }),
         })
-        .then(response => {
-            if(response.ok){
-                notification("Dados Atualizados com Sucesso!");
-                userName()
-            }else if(response.status === 400){
-                return response.json().then(data => {
-                    console.error(data.error);
-                });
-            } else {
-                throw new Error();
-            }
-        })
-        .catch(error => {
-            notification("Erro ao atualizar os dados!");
-            console.error(error.message)
-        });
+            .then(response => {
+                if (response.ok) {
+                    notification("Dados Atualizados com Sucesso!");
+                    userName()
+                } else if (response.status === 400) {
+                    return response.json().then(data => {
+                        console.error(data.error);
+                    });
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(error => {
+                notification("Erro ao atualizar os dados!");
+                console.error(error.message)
+            });
     }
-    
+
     //logic to navegate in menu tabs
     homeButton.addEventListener("click", () => {
         dispatchOnStateChange("/home");
@@ -532,6 +584,6 @@ const createProfileMobile = () => {
         }, 50);
         page.removeChild(helpTab)
     })
- return page
+    return page
 }
 export default createProfileMobile

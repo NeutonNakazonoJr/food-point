@@ -3,9 +3,9 @@ const uploadController = require("../controllers/uploadController")
 const uploadRouter = express.Router();
 
 const multer = require("multer");
-const upload = multer({ dest: './src/uploads'})
+const upload = multer({ dest: './public/assets/uploads'})
 
-uploadRouter.get("/upload/");
+uploadRouter.get("/upload/", uploadController.getImage);
 uploadRouter.post("/upload/", upload.single('image'), uploadController.uploadImage)
 
 

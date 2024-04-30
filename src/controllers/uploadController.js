@@ -1,5 +1,4 @@
-const { image } = require("pdfkit");
-const { newImage } = require("../repositories/uploadRepository");
+const { newImage, getImage, getOldImage, deleteImage } = require("../repositories/uploadRepository");
 
 const uploadController = {
     uploadImage: async (req, res) => {
@@ -16,9 +15,29 @@ const uploadController = {
         }
         catch (error) {
             return res.status(500).json({ message: "Erro interno, não foi possivel salvar a imagem" })
-        }
+        }  
+    },
 
-        
+    getImage: async(req, res) => {
+        try{
+            const userID = req.userId;
+            const image = await getImage(userID);
+  
+            if(image.length == 1){
+                return res.status(201).json(image)
+            }
+            else if(image.length > 1){
+                const oldImage =  await  getOldImage(userID);
+                const oldName = oldImage[0].hash_name;
+                 await deleteImage(oldName);
+                 const imageCheck = await getImage(userID);
+                 return res.status(201).json(imageCheck);
+ 
+            }
+        }
+        catch(error) {
+            return res.status(500).json({message: "Erro interno, não foi possivel resgatar a imagem"})
+        }
     }
 }
 

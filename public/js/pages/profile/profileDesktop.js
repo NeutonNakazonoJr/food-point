@@ -73,7 +73,8 @@ const createProfileDesktop = () => {
     editProfile.appendChild(headerProfile);
     const containerImage = document.createElement("div");
     const profileImage = document.createElement("div")
-    profileImage.id = "profile-image";
+    profileImage.className = "profile-image";
+    getImage();
     headerProfile.appendChild(containerImage);
     containerImage.appendChild(profileImage)
 
@@ -327,12 +328,38 @@ const createProfileDesktop = () => {
         rightSide.appendChild(helpTab)
     })
     
+    //logic to display the image on database
+    async function getImage() {   
+        fetch("/api/upload")
+        .then(response => {
+            if(!response.ok){
+                throw new Error()
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            if(data.length == 0){
+                return
+            } else{
+                const profileImg = data[0].hash_name;
+                profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
+            }           
+        })
+        .catch(error => {
+            notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
+            console.error('Erro ao solicitar a imagem:', error);
+        });
+    }
+    
+    
+
+    
     //input image logic and send to API
     anchor.addEventListener("click", (event) => {
         event.preventDefault();
         inputImg.click()
     })
-    
+
     inputImg.addEventListener("change", async (event) => {
         const picture = event.target.files[0];
         if(picture){
