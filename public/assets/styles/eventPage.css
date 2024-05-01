@@ -174,7 +174,7 @@
 }
 
 #select-dish-type {
-    border-radius: 0.3rem 0.3rem 0 0;
+    border-radius: 0.3rem;
     border: 2px solid var(--wine-color);
     color: var(--wine-color);
     padding: 0.3rem 0.8rem;
@@ -313,6 +313,7 @@
     color: var(--raspberry);
     cursor: pointer;
     transition: background-color ease 0.5s;
+    z-index: 2;
 }
 
 .btn-section:hover {
