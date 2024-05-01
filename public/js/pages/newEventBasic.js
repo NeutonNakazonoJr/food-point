@@ -100,20 +100,30 @@ function getFieldset(
 		input.min = new Date().toISOString().split("T")[0];
 	}
 
-	const eventListener = input.type === "date" ? "blur" : "change";
+	const dateTimeInput = input.type === "date" || input.type === "time";
+	const eventListener = dateTimeInput ? "blur" : "input";
 
 	input.addEventListener(eventListener, () => {
-		if (input.value !== "") {
-			if (input.checkValidity()) {
-				input.style.outline = "none";
-				form.dispatchEvent(new CustomEvent("bluroninput"));
-			} else {
-				input.style.outline = "2px solid red";
-				if (input.type !== "date") {
-					input.focus();
-				}
-				form.dispatchEvent(new CustomEvent("badinput"));
-			}
+		const valueCheck = dateTimeInput ? false : input.value === "";
+		const dateTimeIsWrong = dateTimeInput
+			? input.valueAsDate === null
+			: false;
+
+		if (dateTimeIsWrong) {
+			input.style.outline = "2px solid red";
+			input.setCustomValidity("A data está incompleta.");
+			form.dispatchEvent(new CustomEvent("badinput"));
+			return;
+		} else {
+			input.setCustomValidity("");
+		}
+		if (input.reportValidity() || valueCheck) {
+			input.style.outline = "none";
+			form.dispatchEvent(new CustomEvent("bluroninput"));
+		} else {
+			input.style.outline = "2px solid red";
+			input.focus();
+			form.dispatchEvent(new CustomEvent("badinput"));
 		}
 	});
 
@@ -185,6 +195,21 @@ function appendContinueBtn(eventId, form, div) {
 		const saveBtn = document.createElement("button");
 		const skipBtn = document.createElement("button");
 
+		const checkForm = () => {
+			if (form.reportValidity()) {
+				activeButton(saveBtn);
+				activeButton(skipBtn);
+				saveBtn.classList.remove("newEvent-basic-btns-disabled");
+
+				skipBtn.remove();
+				div.appendChild(saveBtn);
+				return;
+			}
+			disableButton(saveBtn);
+			disableButton(skipBtn);
+			saveBtn.classList.add("newEvent-basic-btns-disabled");
+		};
+
 		saveBtn.id = "newEvent-basic-btns-save";
 		saveBtn.textContent = "Salvar e Continuar";
 		skipBtn.textContent = "Decidir mais tarde";
@@ -198,23 +223,8 @@ function appendContinueBtn(eventId, form, div) {
 			skipThisStep(eventId);
 		});
 
-		form.addEventListener("bluroninput", () => {
-			if (form.reportValidity()) {
-				activeButton(saveBtn);
-				activeButton(skipBtn);
-				saveBtn.classList.remove("newEvent-basic-btns-disabled");
-
-				skipBtn.remove();
-				div.appendChild(saveBtn);
-			}
-		});
-		form.addEventListener("badinput", () => {
-			if (!form.reportValidity()) {
-				disableButton(saveBtn);
-				disableButton(skipBtn);
-				saveBtn.classList.add("newEvent-basic-btns-disabled");
-			}
-		});
+		form.addEventListener("bluroninput", checkForm);
+		form.addEventListener("badinput", checkForm);
 
 		div.appendChild(skipBtn);
 	}
