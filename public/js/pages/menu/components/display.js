@@ -135,6 +135,7 @@ export default async function getDisplay(menu, currentType, mainComponent) {
 	div.addEventListener("updateDish", () => rebootDiv());
 	div.addEventListener("dishSelectedToDelete", () => rebootDiv());
 	div.addEventListener("dishSelectedToEdit", (e) => rebootDiv(e.detail));
+	div.addEventListener("emptyReboot", () => rebootDiv());
 	div.addEventListener("resize", () => {
 		const currentWidth =
 			window.innerWidth ||
