@@ -1,14 +1,14 @@
 import getHeader from "../../components/header.js";
 import dispatchOnStateChange from "../../events/onStateChange.js";
 import notification from "../../components/notification.js";
-import { getMyLogin} from "../../api/userApi.js";
+import { getMyLogin } from "../../api/userApi.js";
 
 const createProfileDesktop = () => {
     const page = document.createElement("div");
     page.id = "profile"
     const header = getHeader(false, false);
     page.appendChild(header);
-   
+
     //menu bar
     const leftSide = document.createElement("div");
     leftSide.id = "left-side";
@@ -26,7 +26,7 @@ const createProfileDesktop = () => {
     leftSide.appendChild(buttonArea);
     buttonArea.appendChild(back);
     back.appendChild(backIcon);
-    
+
     const menuArea = document.createElement("div");
     menuArea.id = "menu-area";
     leftSide.appendChild(menuArea)
@@ -82,7 +82,7 @@ const createProfileDesktop = () => {
     const textarea = document.createElement("div");
     textarea.className = "name-area";
     const name = document.createElement("h2");
-    async function userName(){
+    async function userName() {
         const data = await getMyLogin();
         name.textContent = data.fullname;
     }
@@ -251,7 +251,7 @@ const createProfileDesktop = () => {
     buttonIcon.alt = "Icone de disquete"
     savePassword.appendChild(buttonIcon);
     securityEndpage.appendChild(savePassword)
-    
+
     //content - help
     const helpTab = document.createElement("div");
     helpTab.className = "content"
@@ -284,9 +284,9 @@ const createProfileDesktop = () => {
     const e2 = document.createElement("h4");
     e2.textContent = "Kevineduardof";
     const e3 = document.createElement("h4");
-    e3.textContent ="NeutonNakazonoJr";
+    e3.textContent = "NeutonNakazonoJr";
     const e4 = document.createElement("h4");
-    e4.textContent ="Ligia-Santiago";
+    e4.textContent = "Ligia-Santiago";
     const repositoryTitle = document.createElement("h3");
     repositoryTitle.className = "help-topic";
     repositoryTitle.textContent = "Quer saber mais sobre o nosso projeto? Visite nosso repositorio no GitHub: "
@@ -313,56 +313,54 @@ const createProfileDesktop = () => {
     })
     //change tabs
     editProfileMenu.addEventListener("click", () => {
-        if(rightSide.contains(helpTab)){
+        if (rightSide.contains(helpTab)) {
             rightSide.removeChild(helpTab)
-        }else if(rightSide.contains(editSecurity)){
+        } else if (rightSide.contains(editSecurity)) {
             rightSide.removeChild(editSecurity)
         }
         rightSide.appendChild(editProfile)
     })
     editPasswordMenu.addEventListener("click", () => {
-        if(rightSide.contains(editProfile)){
+        if (rightSide.contains(editProfile)) {
             rightSide.removeChild(editProfile)
-        }else if(rightSide.contains(helpTab)){
+        } else if (rightSide.contains(helpTab)) {
             rightSide.removeChild(helpTab)
         }
         rightSide.appendChild(editSecurity)
     })
     helpMenu.addEventListener("click", () => {
-        if(rightSide.contains(editProfile)){
+        if (rightSide.contains(editProfile)) {
             rightSide.removeChild(editProfile);
-        } else if(rightSide.contains(editSecurity)){
+        } else if (rightSide.contains(editSecurity)) {
             rightSide.removeChild(editSecurity)
         }
         rightSide.appendChild(helpTab)
     })
-    
-    //logic to display the image on database
-    async function getImage() {   
-        fetch("/api/upload")
-        .then(response => {
-            if(!response.ok){
-                throw new Error()
-            }
-            return response.json(); 
-        })
-        .then(data => {
-            if(data.length == 0){
-                return
-            } else{
-                const profileImg = data[0].hash_name;
-                profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
-            }           
-        })
-        .catch(error => {
-            notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
-            console.error('Erro ao solicitar a imagem:', error);
-        });
-    }
-    
-    
 
-    
+    //logic to display the image on database
+    async function getImage() {
+        try {
+            fetch("/api/upload")
+                .then(response => {
+                    if (!response.status == 200) {
+                        throw new Error()
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length == 0) {
+                        profileImage.style.backgroundImage = `none`;
+                    } else {
+                        const profileImg = data[0].hash_name;
+                        profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
+                    }
+                })
+        }
+        catch (error) {
+            console.error("Erro ao buscar imagem no servidor!", error)
+        };
+    }
+
     //input image logic and send to API
     anchor.addEventListener("click", (event) => {
         event.preventDefault();
@@ -371,27 +369,30 @@ const createProfileDesktop = () => {
 
     inputImg.addEventListener("change", async (event) => {
         const picture = event.target.files[0];
-        if(picture){
+        if (picture) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const newPicture = e.target.result;
                 const formData = new FormData();
                 formData.append("image", picture);
-                
+
                 fetch("/api/upload", {
                     method: "POST",
                     body: formData
                 })
-                .then(response => {
-                    if(!response.ok){
-                        throw new Error();
-                    }
-                    profileImage.style.backgroundImage = `url("${newPicture}")`; 
-                    notification("Imagem Atualizada!")
-                })
-                .catch(error => {
-                    notification("Erro ao enviar imagem", error)
-                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error();
+                        }
+                        profileImage.style.backgroundImage = `url("${newPicture}")`;
+                        notification("Imagem Atualizada! A pagina será recarregada!")
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 3000)
+                    })
+                    .catch(error => {
+                        notification("Erro ao enviar imagem", error)
+                    })
             }
             reader.readAsDataURL(picture);
         }
@@ -399,7 +400,7 @@ const createProfileDesktop = () => {
 
     //edit profile informations
     save.addEventListener("click", () => {
-        if(validateEmail()){
+        if (validateEmail()) {
             submitUserInfo();
         };
     })
@@ -407,19 +408,19 @@ const createProfileDesktop = () => {
         let name = nameInput.value;
         nameInput.value = name.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '')
     });
-    
-    function validateEmail(){
+
+    function validateEmail() {
         const email = emailInput.value.trim().toLowerCase();
         const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
         const emailValid = regex.test(email);
 
-        if (emailValid === false && email !== ""){
+        if (emailValid === false && email !== "") {
             notification("Insira um endereço de email valido!");
             return false;
         }
         return true;
     }
-    function submitUserInfo(){
+    function submitUserInfo() {
         const fullName = nameInput.value.trim().toLowerCase();
         const email = emailInput.value.trim().toLowerCase();
 
@@ -433,37 +434,37 @@ const createProfileDesktop = () => {
                 email: email
             }),
         })
-        .then(response => {
-            if(response.ok){
-                notification("Dados Atualizados com Sucesso!");
-                userName()
-            }else if(response.status === 400){
-                return response.json().then(data => {
-                    console.error(data.error);
-                });
-            } else {
-                throw new Error();
-            }
-        })
-        .catch(error => {
-            notification("Erro ao atualizar os dados!");
-            console.error(error.message)
-        });
+            .then(response => {
+                if (response.ok) {
+                    notification("Dados Atualizados com Sucesso!");
+                    userName()
+                } else if (response.status === 400) {
+                    return response.json().then(data => {
+                        console.error(data.error);
+                    });
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(error => {
+                notification("Erro ao atualizar os dados!");
+                console.error(error.message)
+            });
     }
 
     savePassword.addEventListener("click", () => {
-        if(validatePassword()){
-           submitNewPassword();
+        if (validatePassword()) {
+            submitNewPassword();
         }
     })
-    function validatePassword(){
+    function validatePassword() {
         const password = passwordInput.value;
         const confirmation = confirmInput.value;
 
-        if(password !== confirmation){
+        if (password !== confirmation) {
             notification("As senhas não conferem!");
             return false;
-        }else if(password === ""){
+        } else if (password === "") {
             notification("O campo senha não pode estar vazio!")
             return false
         }
@@ -482,21 +483,21 @@ const createProfileDesktop = () => {
                 password: password
             })
         })
-        .then(response => {
-            if(response.ok){
-                notification("Senha Atualizada com sucesso!");
-            } else if (response.status === 400){
-                return response.json().then(data => {
-                    notification(data.error);
-                });
-            }else{
-                throw new Error("Erro ao atualizar a nova senha!")
-            }
-        })
-        .catch(error => {
-            notification("Erro ao atualizar a senha! Tente Novamente mais tarde!");
-            console.error(error.message)
-        });
+            .then(response => {
+                if (response.ok) {
+                    notification("Senha Atualizada com sucesso!");
+                } else if (response.status === 400) {
+                    return response.json().then(data => {
+                        notification(data.error);
+                    });
+                } else {
+                    throw new Error("Erro ao atualizar a nova senha!")
+                }
+            })
+            .catch(error => {
+                notification("Erro ao atualizar a senha! Tente Novamente mais tarde!");
+                console.error(error.message)
+            });
     }
 
     return page;

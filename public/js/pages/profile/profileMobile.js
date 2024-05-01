@@ -205,26 +205,26 @@ const createProfileMobile = () => {
 
     //logic to display the image on database
     async function getImage() {
-        fetch("/api/upload")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error()
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.length == 0) {
-                    return
-                } else {
-                    const profileImg = data[0].hash_name;
-                    profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
-
-                }
-            })
-            .catch(error => {
-                notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
-                console.error('Erro ao solicitar a imagem:', error);
-            });
+        try {
+            fetch("/api/upload")
+                .then(response => {
+                    if (!response.status == 200) {
+                        throw new Error()
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length == 0) {
+                        profileImage.style.backgroundImage = `none`;
+                    } else {
+                        const profileImg = data[0].hash_name;
+                        profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
+                    }
+                })
+        }
+        catch (error) {
+            console.error("Erro ao buscar imagem no servidor!", error)
+        };
     }
     //logic to display the image on database
     async function getImageMenu() {
@@ -272,7 +272,10 @@ const createProfileMobile = () => {
                             throw new Error();
                         }
                         profileImage.style.backgroundImage = `url("${newPicture}")`;
-                        notification("Imagem Atualizada!")
+                        notification("Imagem Atualizada! A pagina será recarregada!")
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 3000)
                     })
                     .catch(error => {
                         notification("Erro ao enviar imagem", error)
@@ -563,9 +566,9 @@ const createProfileMobile = () => {
     const e2 = document.createElement("h4");
     e2.textContent = "Kevineduardof";
     const e3 = document.createElement("h4");
-    e3.textContent ="NeutonNakazonoJr";
+    e3.textContent = "NeutonNakazonoJr";
     const e4 = document.createElement("h4");
-    e4.textContent ="Ligia-Santiago";
+    e4.textContent = "Ligia-Santiago";
     const repositoryTitle = document.createElement("h3");
     repositoryTitle.className = "help-topic";
     repositoryTitle.textContent = "Quer saber mais sobre o nosso projeto? Visite nosso repositorio no GitHub: "

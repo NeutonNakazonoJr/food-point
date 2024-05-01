@@ -22,15 +22,20 @@ const uploadController = {
         try {
             const userID = req.userId;
             const image = await getImage(userID);
-            if (image.length == 1) {
-                return res.status(201).json(image)
+            if(image.length == 0){
+                return res.status(200).json(image)
+            }
+            else if (image.length == 1) {
+                return res.status(200).json(image)
             }
             else if (image.length > 1) {
                 const oldImage = await getOldImage(userID);
                 const oldName = oldImage[0].hash_name;
                 await deleteImage(oldName);
                 const imageCheck = await getImage(userID);
-                return res.status(201).json(imageCheck);
+                return res.status(200).json(imageCheck);
+            }else{
+                throw new Error()
             }
         }
         catch (error) {
