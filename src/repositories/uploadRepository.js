@@ -15,7 +15,7 @@ const uploadRepository = {
         }
     },
     getImage: async (userId) => {
-        const query = 'SELECT hash_name FROM upload WHERE user_id = $1'// ORDER BY uploaded DESC LIMIT 1';
+        const query = 'SELECT hash_name FROM upload WHERE user_id = $1';
         try {
             const { rows } = await dbConnection.query(query, [userId]);
             return rows;

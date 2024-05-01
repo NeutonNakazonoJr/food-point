@@ -93,7 +93,7 @@
 	flex-direction: column;
 	align-items: center;
 	margin: 0;
-	overflow-y: hidden;
+	overflow-y: auto;
 }
 .background {
 	width: 100%;
@@ -228,13 +228,17 @@
 .p {
 	margin: 2rem 0 2rem 0;
 }
-#help-topic {
-	margin-bottom: 2rem;
+.help-topic {
+	margin: 2rem 0 2rem 0;
 }
 #help-mails {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
+	width: 100%;
+}
+#repository-link{
+	font-size: large;
 }
 .notification {
 	position: fixed;
@@ -406,6 +410,12 @@
 		margin-left: 0.3rem;
 		transition-duration: 0.3s;
 	}
+	#help-body{
+		text-align: center;
+	}
+	#help-mails{
+		margin-right: .5rem;
+	}
     .notification{
         top: 20%;
     }
@@ -437,6 +447,9 @@
 	.form {
 		font-size: small;
 	}
+	#repository-link {
+		font-size: medium;
+	  }
 }
 @media screen and (max-width: 480px) {
 	.form {
@@ -517,6 +530,110 @@
 		margin-top: 0.5rem;
 		margin-bottom: 0;
 	}
+	#repository-link {
+		margin-bottom: 2rem;
+	  }
     
+}
+@media screen and (min-width: 769px) and (max-height: 689px) {
+	.form{
+		margin-top: 2rem;
+	}
+	.endpage{
+		margin-top: 2rem;
+	}
+}
+@media screen and (min-width: 769px) and (max-height: 548px) {
+	.profile-image{
+		width: 12rem;
+		height: 12rem;
+	}
+	#anchor{
+		margin-top: 0;
+	}
+	.form{
+		margin-top: 1rem;
+	}
+	.endpage{
+		margin-top: .5rem;
+	}
+}
+@media screen and (min-width: 769px) and (max-height: 460px) {
+	.profile-image{
+		width: 10rem;
+		height: 10rem;
+	}
+	.name-area{
+		font-size: small;
+	}
+	.div-form{
+		margin-bottom: 1rem;
+	}
+}
+@media screen and (min-width: 769px) and (max-height: 393px) {
+	.button-area{
+		height: auto;
+		margin-top: 4.5rem;
+	}
+	#menu-area{
+		margin-top: 2rem;
+	}
+	.profile-image{
+		width: 10rem;
+		height: 10rem;
+	}
+	.name-area{
+		font-size: small;
+	}
+	.div-form{
+		margin-bottom: 1rem;
+	}
+}
+@media screen and (max-width: 769px) and (max-height: 679px) {
+	.form{
+		margin-top: 7rem;
+	}
+	.endpage{
+		margin-top: 2rem;
+	}
+}
+@media screen and (max-width: 769px) and (max-height: 620px) {
+	.form{
+		margin-top: 7rem;
+	}
+	.endpage{
+		margin-top: 1rem;
+	}
+}
+@media screen and (max-width: 769px) and (max-height: 477px) {
+	.button-area{
+		height: 180%;
+	}
+	.profile-image{
+		width: 10rem;
+		height: 10rem;
+	}
+	#anchor{
+		margin-top: 0;
+	}
+	.name-area{
+		font-size: small;
+	}
+	.form{
+		margin-top: 5.5rem;
+	}
+	.div-form{
+		margin-bottom: 1rem;
+	}
+}
+@media screen and (max-width: 769px) and (max-height: 397px) {
+	.endpage{
+		margin-top: 0;
+		margin-bottom: .5rem;
+	}
+	.save{
+		width: 14rem;
+		font-size: small;
+	}
 }
 

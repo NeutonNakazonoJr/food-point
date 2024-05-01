@@ -15,28 +15,31 @@ const uploadController = {
         }
         catch (error) {
             return res.status(500).json({ message: "Erro interno, não foi possivel salvar a imagem" })
-        }  
+        }
     },
 
-    getImage: async(req, res) => {
-        try{
+    getImage: async (req, res) => {
+        try {
             const userID = req.userId;
             const image = await getImage(userID);
-  
-            if(image.length == 1){
-                return res.status(201).json(image)
+            if(image.length == 0){
+                return res.status(200).json(image)
             }
-            else if(image.length > 1){
-                const oldImage =  await  getOldImage(userID);
+            else if (image.length == 1) {
+                return res.status(200).json(image)
+            }
+            else if (image.length > 1) {
+                const oldImage = await getOldImage(userID);
                 const oldName = oldImage[0].hash_name;
-                 await deleteImage(oldName);
-                 const imageCheck = await getImage(userID);
-                 return res.status(201).json(imageCheck);
- 
+                await deleteImage(oldName);
+                const imageCheck = await getImage(userID);
+                return res.status(200).json(imageCheck);
+            }else{
+                throw new Error()
             }
         }
-        catch(error) {
-            return res.status(500).json({message: "Erro interno, não foi possivel resgatar a imagem"})
+        catch (error) {
+            return res.status(500).json({ message: "Erro interno, não foi possivel resgatar a imagem" })
         }
     }
 }

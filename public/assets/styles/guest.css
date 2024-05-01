@@ -76,7 +76,7 @@ body{
     background-color: var(--blackberry);
     margin: 1rem;
     width: 10rem;
-    height:auto;
+    height: 15rem;
     border-radius: 8px;
     padding: 1rem;
     display: flex;
@@ -110,7 +110,7 @@ body{
 }
 #edit-button{
     position: absolute;
-    top: 11rem;
+    bottom: 0;
     right: 0;
     background: var(--raspberry);
     padding: .5rem;
@@ -223,15 +223,13 @@ background: var(--cherry);
     }
     #guest-card{
         width: 8.5rem;
+        height: 13.5rem;
     }
     #guest-img{
         height: 65%;
     }
     #guest-name{
         height: 35%;
-    }
-    #edit-button{
-        top: 9.3rem;
     }
     #edit-guest-modal{
         width: 40%;
@@ -247,11 +245,16 @@ background: var(--cherry);
     .guest-button{
         width: 25%;
     }
+    #guest-card{
+        width: 9.2rem;
+        height: 13.2rem;
+    }
     #guest-img{
         height: 60%;
     }
     #guest-name{
-        height: 40%;
+        height: 30%;
+        margin-bottom: 20%;
     }
     #edit-guest-modal{
         width: 50%;
@@ -270,11 +273,15 @@ background: var(--cherry);
     .guest-button{
         width: 28%;
     }
+    #guest-card{
+        width: 8.2rem;
+        height: 12.3rem;
+    }
     #guest-img{
         height: 55%;
     }
     #guest-name{
-        height: 45%;
+        height: 35%;
     }
     #edit-guest-modal{
         width: 60%;
@@ -293,9 +300,6 @@ background: var(--cherry);
     #guest-img{
         height: 55%;
     }
-    #guest-name{
-        height: 45%;
-    }
 }
 @media screen and (max-width: 480px) {
     #add-guest{
@@ -305,11 +309,11 @@ background: var(--cherry);
         margin: .8rem;
         width: 8rem;
     }
+    #guest-img{
+        height: 60%;
+    }
     #guest-box{
         width: 85%;
-    }
-    #edit-button{
-        top: 8.6rem;
     }
     #edit-guest-modal{
         width: 70%;
@@ -320,8 +324,9 @@ background: var(--cherry);
         width: 80%;
     }
     #guest-card{
-        width: 7.3rem;
+        width: 8.3rem;
         margin: .5rem;
+        height: 12rem;
     }
     #guest-img{
         height: 60%;
@@ -335,9 +340,6 @@ background: var(--cherry);
     }
     #finish{
         margin-top: 2rem;
-    }
-    #edit-button{
-        top: 7.9rem;
     }
     #skip{
         margin-bottom: 2rem;
@@ -355,12 +357,12 @@ background: var(--cherry);
     }
     #guest-card{
         width: 7rem;
-        padding: .5rem;
+        height: 11.2rem;
+    }
+    #guest-img {
+        height: 55%;
     }
     #edit-guest-modal{
         width: 80%;
-    }
-    #edit-button{
-        top: 7.6rem;
     }
 }
