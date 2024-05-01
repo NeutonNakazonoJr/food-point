@@ -76,6 +76,7 @@
     border: 1px solid rgb(212, 212, 212);
 }
 
+
 #basic-infos-section {
     position: relative;
 }
@@ -253,7 +254,7 @@
     width: 3rem;
     height: 3rem;
     top: 0;
-    right: 0;
+    right: -8px;
     background-color: var(--blackberry-transparent); 
     border-radius: 0 0 0 100%;
 }
@@ -294,6 +295,7 @@
     align-items: end;
     padding-top: 4rem;
     gap: 1rem;
+    position: relative;
 }
 
 .btn-section {
@@ -340,6 +342,46 @@
 
 .edit-hidden {
     display: none;
+}
+
+.clean-to-download #event-main-container {
+    box-shadow: none;
+    height: 1700px;
+    text-align: left;
+
+    & p {
+        font-size: 1.3rem;
+    }
+}
+
+.clean-to-download #initial-div-events {
+    display: none;
+
+}
+
+.clean-to-download #btn-section {
+    display: none;
+}
+
+.clean-to-download #download-png {
+    display: none;
+}
+
+.clean-to-download .card-dishes {
+    box-shadow: none;
+    border: 1px solid var(--blackberry);
+    
+    & h3 {
+        font-size: 1.8rem;
+    }
+
+    & h4 {
+        font-size: 1.3rem;
+    }
+
+    & button {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 900px) {
