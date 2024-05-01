@@ -173,6 +173,19 @@
     margin-top: 4rem;
 }
 
+#select-dish-type {
+    border-radius: 0.3rem 0.3rem 0 0;
+    border: 2px solid var(--wine-color);
+    color: var(--wine-color);
+    padding: 0.3rem 0.8rem;
+    font-weight: 700;   
+    position: absolute;
+    top: 7rem;
+    z-index: 2;
+    cursor: pointer;
+    background-color: var(--white-smoke);
+}
+
 .menu-undefined {
     display: block;
     position: relative;
@@ -399,5 +412,10 @@
     
     #btn-section {
         align-items: center;
+    }
+
+    #div-title-update-menu h2 {
+        font-weight: 600;
+        font-size: 1.3rem;
     }
 }

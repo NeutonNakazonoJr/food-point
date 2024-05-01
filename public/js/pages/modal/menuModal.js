@@ -130,7 +130,7 @@ const createDivDishName = async (eventID, dishType) => {
 };
 
  
-const createIngredientSection = (ingredientList) => {
+const createIngredientSection = () => {
     const ingredientTitle = htmlCreator.createTitle('h5', 'Ingredientes');
     const addNewIngredientBtn = htmlCreator.createButton('adicionar ingrediente', 'add-new-ingredient-modal');
     
@@ -141,6 +141,12 @@ const createIngredientSection = (ingredientList) => {
     addNewIngredientBtn.addEventListener('click', () => {
         const divNewIngredientInput = createDivNewIngredientInput();
         ingredientSection.insertBefore(divNewIngredientInput, addNewIngredientBtn);
+
+        const modalMenu = document.getElementById('menu-update-modal');
+
+        if (modalMenu.scrollHeight > modalMenu.clientHeight) {
+            modalMenu.classList.add('has-scrollbar');
+          }
     });
 
 
@@ -236,10 +242,12 @@ const createRegisteredDishesSection = (dishList, dishType, eventID) => {
     const registeredDishesDiv = htmlCreator.createDiv('div-registered-dishes');
     registeredDishesDiv.appendChild(sectionTitle);
 
-    dishList.forEach(dishInfo => {
-        const card = createCardDish(dishInfo, eventID);
-        registeredDishesDiv.appendChild(card);
-    });
+    if (dishList) {
+        dishList.forEach(dishInfo => {
+            const card = createCardDish(dishInfo, eventID);
+            registeredDishesDiv.appendChild(card);
+        });
+    }
 
     const registeredDishesSection = htmlCreator.createSection('registered-dishes-section');
     registeredDishesSection.appendChild(registeredDishesDiv);
@@ -381,8 +389,9 @@ async function menuUpdateModalComponent (eventID, dishType, dishes) {
     
     const modal = createModal(containerMenuUpdate);
 
-    modal.addEventListener('click', (e) => {
+    modal.addEventListener('click', async (e) => {
         if (e.target === modal) {
+            await updateMenuSection(eventID);
             modal.remove();
         }
     });

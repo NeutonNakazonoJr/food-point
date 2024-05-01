@@ -6,7 +6,23 @@
     width: 95%;
     max-width: 70rem;
     min-height: 500px;
+    max-height: calc(100vh - 5%);
     position: relative;
+    overflow: auto;
+}
+
+#menu-update-modal.has-scrollbar::-webkit-scrollbar {
+    overflow: scroll;
+    width: 0.8rem;
+}
+
+#menu-update-modal.has-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #c0c0c0; 
+    border-radius: 0.2rem;
+}
+
+#menu-update-modal.has-scrollbar::-webkit-scrollbar-track {
+    background-color: #f1f1f1; 
 }
 
 #close-modal-btn {
