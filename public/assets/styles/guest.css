@@ -54,9 +54,11 @@ body{
     padding: .5%;
     transition: background-color .3s ease-in-out;
 }
+
 #add-button:hover {
-    background-color: var(--cherry)
+    background-color: var(--blackberry)
   }
+
 #add-input:focus, #add-input:focus-visible {
     border-color: var(--cherry);
     outline: none;
@@ -142,7 +144,7 @@ body{
     padding: 0 .5rem 0 0;
 }
 #skip:hover{
-background: var(--cherry);
+background: var(--blackberry);
 }
 #disabled{
     border: none;
@@ -176,7 +178,7 @@ background: var(--cherry);
     padding: 0 .5rem 0 0;
 }
 #finish:hover{
-    background: var(--cherry);
+    background: var(--blackberry);
 }
 #guest-modal{
         display: none;

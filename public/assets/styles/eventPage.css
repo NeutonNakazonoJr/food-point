@@ -288,7 +288,7 @@
     width: 16rem;
     height: 3rem;
     padding: 0 0.5rem;
-    border: 3px solid var(--raspberry);
+    border: 1.5px solid var(--raspberry);
     border-radius: 0.3rem;
     display: flex;
     flex-direction: row-reverse;
@@ -303,7 +303,8 @@
 }
 
 .btn-section:hover {
-    background-color: rgba(187, 48, 48, 0.562);
+    color: whitesmoke;
+    background-color: var(--raspberry);
 }
 
 .edit-event-btn {

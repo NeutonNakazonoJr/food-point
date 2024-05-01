@@ -106,8 +106,6 @@ const createSuccessEventPage = (constructorInfo =  { eventID: '' }) => {
 
     successEventContainer.appendChild(successEvent);
 
-    // document.body.appendChild(successEventContainer);
-
     return successEventContainer;
 };
 

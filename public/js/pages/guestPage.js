@@ -74,6 +74,7 @@ const createGuestPage = (
 	addguest.appendChild(error);
 
 	const button = document.createElement("button");
+	button.id = 'add-button';
 	button.className = "guest-button";
 	button.textContent = "Adicionar";
 	inputdiv.appendChild(button);
