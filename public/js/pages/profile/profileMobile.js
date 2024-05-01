@@ -556,20 +556,29 @@ const createProfileMobile = () => {
     const emails = document.createElement("div");
     emails.id = "help-mails";
     const topic = document.createElement("h3");
-    topic.id = "help-topic";
-    topic.textContent = "Entre em contato conosco através dos emails: "
+    topic.className = "help-topic";
+    topic.textContent = "Entre em contato conosco através do GitHub: "
     const e1 = document.createElement("h4");
-    e1.textContent = "carlos@aspirantealphaedtech.com";
+    e1.textContent = "delfo2";
     const e2 = document.createElement("h4");
-    e2.textContent = "kevin@aspirantealphaedtech.com";
+    e2.textContent = "Kevineduardof";
     const e3 = document.createElement("h4");
-    e3.textContent = "neuton@aspirantealphaedtech.com";
+    e3.textContent ="NeutonNakazonoJr";
     const e4 = document.createElement("h4");
-    e4.textContent = "ligia@aspirantealphaedtech.com";
+    e4.textContent ="Ligia-Santiago";
+    const repositoryTitle = document.createElement("h3");
+    repositoryTitle.className = "help-topic";
+    repositoryTitle.textContent = "Quer saber mais sobre o nosso projeto? Visite nosso repositorio no GitHub: "
+    const respositoryAddress = document.createElement("a");
+    respositoryAddress.id = "repository-link"
+    respositoryAddress.textContent = "https://github.com/NeutonNakazonoJr/food-point";
+    respositoryAddress.href = "https://github.com/NeutonNakazonoJr/food-point"
     helpTab.appendChild(helpBody)
     helpBody.appendChild(subtitle)
     helpBody.appendChild(helpIntr)
     helpBody.appendChild(emails)
+    helpBody.appendChild(repositoryTitle)
+    helpBody.appendChild(respositoryAddress)
     emails.appendChild(topic)
     emails.appendChild(e1)
     emails.appendChild(e2)

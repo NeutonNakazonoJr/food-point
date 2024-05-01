@@ -228,13 +228,17 @@
 .p {
 	margin: 2rem 0 2rem 0;
 }
-#help-topic {
-	margin-bottom: 2rem;
+.help-topic {
+	margin: 2rem 0 2rem 0;
 }
 #help-mails {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
+	width: 100%;
+}
+#repository-link{
+	font-size: large;
 }
 .notification {
 	position: fixed;
@@ -406,6 +410,12 @@
 		margin-left: 0.3rem;
 		transition-duration: 0.3s;
 	}
+	#help-body{
+		text-align: center;
+	}
+	#help-mails{
+		margin-right: .5rem;
+	}
     .notification{
         top: 20%;
     }
@@ -437,6 +447,9 @@
 	.form {
 		font-size: small;
 	}
+	#repository-link {
+		font-size: medium;
+	  }
 }
 @media screen and (max-width: 480px) {
 	.form {
@@ -517,6 +530,9 @@
 		margin-top: 0.5rem;
 		margin-bottom: 0;
 	}
+	#repository-link {
+		margin-bottom: 2rem;
+	  }
     
 }
 
