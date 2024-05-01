@@ -186,6 +186,23 @@ export async function deleteDish(eventID, dishID) {
 	}
 }
 
+
+export async function getAllDishes(eventID) {
+	try {
+		const url = `api/event/${eventID}/dish`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			const error = await res.json();
+			throw error;
+		}
+
+		return await res.json();
+	} catch (error) {
+		return error;
+	}
+}
+
 //-----------------INGREDIENT ENDPOINTS-----------------
 
 export async function postIngredient(eventID, dishID, ingredient) {
@@ -253,6 +270,22 @@ export async function deleteIngredient(eventID, dishID, ingredientID) {
 
 		const data = await res.json();
 		return data;
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function getIngredientsByDishID(eventID, dishID) {
+	try {
+		const url = `/api/event/${eventID}/dish/${dishID}/ingredient`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			const error = await res.json();
+			throw error;
+		}
+
+		return await res.json();
 	} catch (error) {
 		return error;
 	}

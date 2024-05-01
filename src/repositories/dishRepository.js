@@ -18,7 +18,7 @@ const dishRepository = {
         const query = 'DELETE FROM "dish" WHERE id = $1 RETURNING id';
         const { rows } = await dbConnection.query(query, [dishId]);
         return rows;
-    }
+    },
 }
 
 module.exports = dishRepository;
