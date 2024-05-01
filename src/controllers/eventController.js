@@ -103,23 +103,32 @@ const eventController = {
 		}
 	},
 
-	updateIngredientPurchaseList: async (req, res) => {
-		try {
-			const eventId = req.params.id;
-			const ingredientList = req.body.ingredientList;
+    updateIngredientPurchaseList: async (req, res) => {
+        try {
+            
+            const eventId = req.params.id;
+            const ingredientList = req.body.ingredientList;
+            
+            const updateRequested = await eventRepository.updatePurchaseList(eventId, ingredientList);
+            return res.status(200).json({
+                success: updateRequested.success, 
+                message: updateRequested.message 
+            });
+        } catch (error) {
+          return res.status(500).json({ error: 'Erro interno no servidor' });  
+        }
+    },
 
-			const updateRequested = await eventRepository.updatePurchaseList(
-				eventId,
-				ingredientList
-			);
-			return res.status(200).json({
-				success: updateRequested.success,
-				message: updateRequested.message,
-			});
-		} catch (error) {
-			return res.status(500).json({ error: "Erro interno no servidor" });
-		}
-	},
-};
+    getAllDishes: async (req, res) => {
+        try {
+            const dishes = await eventRepository.getAllDishesByEventId(req.params.id);
+            return res.status(200).json({ dishes });
+        } catch (error) {
+            return res.status(500).json({ error: 'Erro interno no servidor' });
+        }
+    }
+}
+
+
 
 module.exports = eventController;

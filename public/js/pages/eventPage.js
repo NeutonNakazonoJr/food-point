@@ -4,6 +4,7 @@ import htmlCreator from '../utils/htmlCreator.js';
 import dispatchOnStateChange from "../events/onStateChange.js";
 import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
 import showToast from "../components/toast.js";
+import  menuUpdateModalComponent from "./modal/menuModal.js"
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -107,7 +108,7 @@ export function createSectionBasicInfos(basicInfos, eventID, editMode) {
 }
 
 
-const createMenuSection = (dishInfos) => {
+export async function createMenuSection (dishInfos, eventID, editMode) {
 
     const menuIcon = htmlCreator.createImg('./assets/icons/menu-icon.svg');
     const menuTitle = htmlCreator.createTitle('h1', 'Cardápio');
@@ -117,20 +118,36 @@ const createMenuSection = (dishInfos) => {
     divTitle.appendChild(menuIcon);
     divTitle.appendChild(menuTitle);
 
-    const divDishesCard = createCardDiv(dishInfos);
+    const divCard = await createCardDiv(dishInfos, eventID, editMode);
 
     const menuSection = htmlCreator.createSection('menu-event-section');
+
+    const registeredDishesGroupedByType = groupDishesByType(dishInfos);
+    const alldishTypes = ['Entrada', 'Salada', 'Acompanhamento', 'Principal', 'Sobremesa', 'Drink'];
+    const dishTypeWithoutDefinition = alldishTypes.filter(dishType => !registeredDishesGroupedByType.hasOwnProperty(dishType));
+
+    if (dishTypeWithoutDefinition.length > 0) {
+        const selectToDishType = createSelectForUndefinedTypes(dishTypeWithoutDefinition, eventID);
+
+        if (!editMode) {
+            selectToDishType.classList.add('edit-hidden');
+        }
+
+        menuSection.appendChild(selectToDishType);
+    }
+
     menuSection.appendChild(divTitle);
-    menuSection.appendChild(divDishesCard);
+    menuSection.appendChild(divCard);
     
     return menuSection;
 }
   
 
-function groupDishesByType(dishes) {
+export function groupDishesByType(dishes) {
     const groupedDishes = {};
 
     dishes.forEach(dish => {
+        
         if (!groupedDishes[dish.type]) {
             groupedDishes[dish.type] = [];
         }
@@ -139,11 +156,48 @@ function groupDishesByType(dishes) {
     return groupedDishes;
 }
 
+const createSelectForUndefinedTypes = (undefinedTypes, eventID) => {
+    const selectToDishType = document.createElement('select');
+    selectToDishType.id = 'select-dish-type';
 
-const createCardDiv = (dishInfos) => {
+    const icons = {
+        'Entrada': './assets/icons/enter-type-icon.svg',
+        'Salada': './assets/icons/salad-type-icons.svg',
+        'Acompanhamento': './assets/icons/accompaniment-type-icon.svg',
+        'Principal': './assets/icons/main-type-icon.svg',
+        'Sobremesa': './assets/icons/dessert-type-icon.svg',
+        'Drink': './assets/icons/drink-event.svg'
+    }
+
+    for (const dishType of undefinedTypes) {
+        const option = document.createElement('option');
+        option.value = dishType;
+        option.innerText = dishType;
+        selectToDishType.appendChild(option);
+    }
+    
+    const defaultOption = document.createElement('option');
+    defaultOption.text = 'Novo tipo de prato';
+   
+    selectToDishType.add(defaultOption, 0);
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    
+    selectToDishType.addEventListener('change', async (e) => {
+        const dishType = e.target.value;
+        const modalMenu = await menuUpdateModalComponent(eventID, dishType);
+        const rootContainer = document.getElementById('root');
+        rootContainer.appendChild(modalMenu);
+    });
+
+    return selectToDishType;
+};
+
+const createCardDiv = async (dishInfos, eventID, editMode) => {
     
     const menuSection = htmlCreator.createSection('menu-section');
-    
+    const registeredDishesGroupedByType = groupDishesByType(dishInfos);
+
     if (dishInfos.length === 0) {
         const imgMenu = htmlCreator.createImg('./assets/images/big-menu-img.svg', 'img-menu-event');
         const text = htmlCreator.createTitle('h3', 'Aguardando definição do cardápio ...');
@@ -151,11 +205,6 @@ const createCardDiv = (dishInfos) => {
         const divWaitingMenu = htmlCreator.createDiv('wait-menu-event');
         divWaitingMenu.appendChild(text);
         divWaitingMenu.appendChild(imgMenu);
-
-        const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
-        editBtn.classList.add('edit-event-btn');
-        editBtn.classList.add('edit-hidden');
-        divWaitingMenu.appendChild(editBtn);
 
         menuSection.classList.add('menu-undefined')
         menuSection.appendChild(divWaitingMenu);
@@ -165,20 +214,22 @@ const createCardDiv = (dishInfos) => {
 
     const icons = {
         'Entrada': './assets/icons/enter-type-icon.svg',
-        'salada': './assets/icons/salad-type-icons.svg',
-        'acompanhamento': './assets/icons/accompaniment-type-icon.svg',
-        'principal': './assets/icons/main-type-icon.svg',
-        'sobremesa': './assets/icons/dessert-type-icon.svg',
-        'drink': './assets/icons/drink-event.svg'
+        'Salada': './assets/icons/salad-type-icons.svg',
+        'Acompanhamento': './assets/icons/accompaniment-type-icon.svg',
+        'Principal': './assets/icons/main-type-icon.svg',
+        'Sobremesa': './assets/icons/dessert-type-icon.svg',
+        'Drink': './assets/icons/drink-event.svg'
     }
 
-    const dishList = groupDishesByType(dishInfos);
-    for (const [ dishType, dishGroup ] of Object.entries(dishList)) {
-        
+
+    for (const [ dishType, dishGroup ] of Object.entries(registeredDishesGroupedByType)) {
+
+
         const cardTitle = htmlCreator.createTitle('h3',dishType);
         const icon = htmlCreator.createImg(icons[dishType]);
     
         const card = htmlCreator.createDiv('.card-dishes');
+        card.id = dishType;
         card.appendChild(cardTitle);
         card.appendChild(icon)
         
@@ -188,8 +239,21 @@ const createCardDiv = (dishInfos) => {
         });
 
         const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
-        editBtn.classList.add('edit-event-dishes', 'edit-hidden');
+        editBtn.classList.add('edit-event-dishes');
+
+        if (!editMode) {
+            editBtn.classList.add('edit-hidden');
+        }
+
         card.appendChild(editBtn);
+
+        editBtn.addEventListener('click', async (e) => {
+            const dishType = e.target.parentNode.id;
+            const modalMenu = await menuUpdateModalComponent(eventID, dishType, dishGroup);
+            const rootContainer = document.getElementById('root');
+            rootContainer.appendChild(modalMenu);
+        })
+
         menuSection.appendChild(card);
     }
 
@@ -254,13 +318,20 @@ const createHeaderEvent = () => {
 
         const editDishesBtn = document.querySelectorAll('.edit-event-dishes');
         const editInfosEvent = document.querySelectorAll('.edit-event-btn');
+        const selectDishType = document.getElementById('select-dish-type');
     
         if (toggleContainer.classList.contains('active-toggle-btn')) {
             editDishesBtn.forEach(btn => btn.classList.remove('edit-hidden'));
             editInfosEvent.forEach(btn => btn.classList.remove('edit-hidden'));
+            if (selectDishType) {
+                selectDishType.classList.remove('edit-hidden');
+            }
         } else {
             editDishesBtn.forEach(btn => btn.classList.add('edit-hidden'));
             editInfosEvent.forEach(btn => btn.classList.add('edit-hidden'));
+            if (selectDishType) {
+                selectDishType.classList.add('edit-hidden');
+            }
         }
     })
 
@@ -290,7 +361,7 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const storageEventID = JSON.parse(localStorage.getItem('eventInfo'));
 
     const requestEventInfos = await getEventById(eventID || storageEventID.eventID);
-    
+
     if (requestEventInfos.error) {
         showToast(requestEventInfos.error);        
         dispatchOnStateChange('/home', { animation: false });
@@ -302,7 +373,7 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const header = createHeaderEvent();
     const initialDiv = createEventMainTitleDiv();
     const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
-    const menuSection = createMenuSection(eventInfos.dishes);
+    const menuSection = await createMenuSection(eventInfos.dishes, eventID || storageEventID.eventID);
     const locationSection = createLocationSection(eventInfos.eventLocation);
     const buttonSection = createButtonSection();
     

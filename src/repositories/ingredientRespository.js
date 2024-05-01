@@ -22,8 +22,8 @@ const ingredientRepository = {
         return rows;
     },
 
-    getIngredientsNameByDish: async (dishId) => {
-        const query = 'SELECT "name" FROM ingredient WHERE dish_id = $1';
+    getIngredientsInfoByDish: async (dishId) => {
+        const query = 'SELECT "name", unity_measure, quantity FROM ingredient WHERE dish_id = $1';
         const { rows }  = await dbConnection.query(query, [dishId]);
         return rows;
     },

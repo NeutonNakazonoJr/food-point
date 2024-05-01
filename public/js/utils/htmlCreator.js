@@ -129,7 +129,8 @@ const htmlCreator = {
 
     createButton: (innerTextButton ='', buttonId = '', buttonClass = '') => {
         const btn = document.createElement('button');
-        btn.innerText = innerTextButton;
+
+        innerTextButton ? btn.innerText = innerTextButton : null;
 
         buttonId ? btn.id = buttonId : null;
         buttonClass ? btn.classList = buttonClass : null;
