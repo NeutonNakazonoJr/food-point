@@ -1,0 +1,123 @@
+@keyframes animateSpawnBall {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes animateDeathBall {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(0);
+		opacity: 0;
+	}
+}
+
+#eventProgress-wrapper {
+	background-color: var(--white-smoke);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
+#eventProgress {
+	display: flex;
+	height: 3px;
+	margin-top: 15vh;
+	width: 90%;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--raspberry);
+
+	& > .eventProgress__tiny-ball {
+		animation: 300ms ease-in-out;
+		width: 30px;
+		height: 30px;
+		background-color: var(--raspberry);
+		border-radius: 100%;
+	}
+	& > .eventProgress__tiny-ball:nth-child(2) {
+		animation: 600ms ease-in-out;
+	}
+	& > .eventProgress__tiny-ball:nth-child(3) {
+		animation: 900ms ease-in-out;
+	}
+	& > .eventProgress__tiny-ball:nth-child(4) {
+		animation: 1200ms ease-in-out;
+	}
+	& > .eventProgress__tiny-ball:nth-child(5) {
+		animation: 1500ms ease-in-out;
+	}
+}
+
+#eventProgress > #eventProgress__big-ball {
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--raspberry);
+	border-radius: 100%;
+	transition: all 500ms;
+}
+
+#eventProgress > .eventProgress__BigBall-withFella::after {
+	animation: 500ms ease-in-out;
+	animation-name: animateSpawnBall;
+	content: "";
+	height: 30px;
+	width: 30px;
+	background-color: var(--white-smoke);
+	display: inline-block;
+	border-radius: 100%;
+}
+
+#eventProgress > .eventProgress__BigBall-withoutFella::after {
+	animation: 500ms ease-in-out;
+	animation-name: animateDeathBall;
+	content: "";
+	height: 30px;
+	width: 30px;
+	opacity: 0;
+	background-color: var(--white-smoke);
+	display: inline-block;
+	border-radius: 100%;
+}
+
+#eventProgress-titles {
+	margin-top: 1.5rem;
+	display: flex;
+	width: 90%;
+	justify-content: space-between;
+	& > * {
+		width: 100px;
+		transition: all 500ms;
+	}
+	& > span:nth-child(2) {
+		padding-left: 10px;
+	}
+	& > span:nth-child(3) {
+		text-align: center;
+	}
+	& > span:nth-child(4) {
+		padding-left: 20px;
+	}
+	& > span:nth-child(5) {
+		text-align: right;
+		padding-left: 55px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#eventProgress-wrapper {
+		display: none;
+	}
+}

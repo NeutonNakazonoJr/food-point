@@ -1,0 +1,175 @@
+#newEventLocal {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	position: relative;
+	max-width: 1600px;
+	margin: 0 auto;
+	padding: 1rem 4rem;
+	color: var(--blackberry);
+	& > h1 {
+		font-size: 2rem;
+	}
+	& > div {
+		width: 100%;
+		border-radius: var(--border-radius-1x);
+		border: 3px solid var(--raspberry);
+		height: 45vh;
+		& > button {
+			display: flex;
+			align-items: center;
+			position: absolute;
+			z-index: 401;
+			top: 0px;
+			right: 0px;
+			color: var(--blackberry);
+			background-color: var(--raspberry);
+			border: none;
+			border-radius: 0 0 0 var(--border-radius-1x);
+			padding: 0.5rem 1rem;
+			cursor: pointer;
+			color: var(--white-smoke);
+			font-weight: 600;
+			&::before {
+				background: url("../icons/gps.svg") no-repeat center;
+				background-size: contain;
+				margin-right: 5px;
+				content: "";
+				display: inline-block;
+				height: 1rem;
+				width: 1rem;
+			}
+			&:hover,
+			&:focus,
+			&:focus-visible,
+			&:focus-within,
+			&:active {
+				filter: brightness(0.8);
+			}
+		}
+		& > button:nth-of-type(2) {
+			top: 2.3rem;
+			background: var(--blackberry-transparent);
+			border: 2px solid var(--raspberry);
+			border-right: 0;
+		}
+	}
+}
+
+#newEventLocal-footer {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+	position: fixed;
+	bottom: 0;
+	padding-bottom: 1rem;
+	padding-right: 2rem;
+	& > a {
+		border: none;
+		cursor: pointer;
+		background-color: var(--raspberry);
+		font-size: 1rem;
+		display: flex;
+		align-items: center;
+		font-weight: 700;
+		color: var(--white-smoke);
+		text-decoration: none;
+		padding: 0.5rem 3rem;
+		border-radius: var(--border-radius-1x);
+		&::after {
+			content: "";
+			background: url("../icons/arrow-rigth.svg") no-repeat center;
+			background-size: contain;
+			width: 1rem;
+			height: 1rem;
+			margin-left: 5px;
+			display: inline-block;
+		}
+		&:hover,
+		&:focus,
+		&:focus-visible,
+		&:focus-within,
+		&:active {
+			filter: brightness(0.8);
+		}
+	}
+}
+
+#cepModal {
+	z-index: 1001;
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: var(--blackberry-transparent);
+	align-items: center;
+	justify-content: center;
+}
+
+#cepModalContent {
+	width: 80%;
+	height: 60%;
+	border-radius: var(--border-radius-1x);
+	background-color: var(--white-smoke);
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	flex-direction: column;
+	& > img {
+		width: 150px;
+	}
+	& > #cepModalForm {
+		display: flex;
+		flex-direction: column;
+		width: 80%;
+		height: 70%;
+		& > fieldset {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			width: 100%;
+			border: none;
+			& > * {
+				margin-bottom: 10px;
+			}
+			& > legend {
+				font-size: 1.5rem;
+				color: var(--raspberry);
+				font-weight: 700;
+			}
+			& > input {
+				border: 2px solid var(--raspberry);
+				padding: 10px 5px;
+				color: var(--blackberry);
+				outline: none;
+				border-radius: var(--border-radius-1x);
+				background-color: var(--white-smoke);
+			}
+			& > button {
+				cursor: pointer;
+				padding: 0.5rem 0;
+				color: var(--white-smoke);
+				border-radius: var(--border-radius-1x);
+				border: none;
+				outline: none;
+				background-color: var(--raspberry);
+				&:hover,
+				&:focus,
+				&:focus-visible,
+				&:focus-within,
+				&:active {
+					filter: brightness(0.8);
+				}
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#newEventLocal {
+		margin-top: 3rem;
+		padding: 1rem;
+	}
+}

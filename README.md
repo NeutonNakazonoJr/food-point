@@ -7,3 +7,4 @@ Plataforma de planejamento de eventos gatronômicos.
 - Linux
 - Trelo
 - PgAdmin4
+

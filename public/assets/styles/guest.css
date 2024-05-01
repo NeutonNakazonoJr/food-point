@@ -1,0 +1,368 @@
+body{
+    background-color: var(--white-smoke);
+}
+.guest-page{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+#guest-body{
+    margin-top: 1rem;
+    width: 90%;
+    height: 10rem;
+    text-align: center;
+    color: var(--raspberry);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+#add-guest{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    justify-content: flex-start;
+}
+#guest-label{
+    align-self: start;  
+}
+.input-div{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.guest-input{
+    height: 2.2rem;
+    width: 80%;
+    padding: .5rem;
+    font-size: 15px;
+    border: 2px solid var(--raspberry);
+    border-radius: 8px 0 0 8px;
+    background-color: transparent;
+}
+.guest-button{
+    height: 2.2rem;
+    width: 20%;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background-color: var(--raspberry);
+    color: #fff;
+    cursor: pointer;
+    padding: .5%;
+    transition: background-color .3s ease-in-out;
+}
+#add-button:hover {
+    background-color: var(--cherry)
+  }
+#add-input:focus, #add-input:focus-visible {
+    border-color: var(--cherry);
+    outline: none;
+}
+#guest-box{
+    display: none;
+    justify-content: space-around;
+    margin-top: 2rem;
+    width: 100%;
+    height: auto;
+    border: 2px solid var(--raspberry);
+    border-radius: 8px;
+    flex-wrap:wrap;
+}
+#guest-card{
+    position: relative;
+    background-color: var(--blackberry);
+    margin: 1rem;
+    width: 10rem;
+    height: 15rem;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#guest-img{
+    width: auto;
+    height: 70%;
+}
+#guest-name{
+    margin-bottom: 25%;
+    height: 30%;
+    overflow: hidden;
+    color: white;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+}
+#delete-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--raspberry);
+    color: white;
+    border: none;
+    padding: 0.5rem ;
+    border-radius: 0 8px 0px 8px;
+    cursor: pointer; 
+}
+#edit-button{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--raspberry);
+    padding: .5rem;
+    border-radius: 8px 0 8px;
+    cursor: pointer;
+}
+#end-page{
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+#skip{
+    border: none;
+    border-radius: 8px;
+    background: var(--raspberry);
+    color: white;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    font-weight: bolder;
+    cursor: pointer;
+}
+#later{
+    padding: 0 .5rem 0 0;
+}
+#skip:hover{
+background: var(--cherry);
+}
+#disabled{
+    border: none;
+    border-radius: 8px;
+    background: #8d6161;
+    color: white;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: not-allowed;
+}
+#finish{
+    border: none;
+    border-radius: 8px;
+    background: var(--raspberry);
+    color: white;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+    width: 13rem;
+    height: 2.5rem;
+    cursor: pointer;
+}
+#finish-icon{
+    padding: 0 .5rem 0 0;
+}
+#finish:hover{
+    background: var(--cherry);
+}
+#guest-modal{
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+}
+#edit-guest-modal{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white-smoke);
+    color: var(--raspberry);
+    margin: 20% auto;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 30%;
+
+}
+#close-div{
+    display: flex;
+    justify-content: flex-end;
+}
+#X:hover{
+    color: black;
+}
+@media screen and (max-width: 1199px) {  
+    .guest-button{
+        width: 45%;
+    }
+}
+@media screen and (max-width: 991px) {
+    #add-guest{
+        width: 50%;
+    }
+    .guest-input{
+        width: 78%;
+    }
+    .guest-button{
+        width: 22%;
+    }
+    #guest-card{
+        width: 8.5rem;
+        height: 13.5rem;
+    }
+    #guest-img{
+        height: 65%;
+    }
+    #guest-name{
+        height: 35%;
+    }
+    #edit-guest-modal{
+        width: 40%;
+    }
+}
+@media screen and (max-width: 766px) {
+    .guest-button{
+        width: 55%;
+    }
+    .guest-input{
+        width: 75%;
+    }
+    .guest-button{
+        width: 25%;
+    }
+    #guest-card{
+        width: 9.2rem;
+        height: 13.2rem;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-name{
+        height: 30%;
+        margin-bottom: 20%;
+    }
+    #edit-guest-modal{
+        width: 50%;
+    }
+}
+@media screen and (max-width: 600px) {
+    #guest-body{
+        margin-top: 6rem;
+    }
+    #add-guest{
+        width: 60%;
+    }
+    .guest-input{
+        width: 72%;
+    }
+    .guest-button{
+        width: 28%;
+    }
+    #guest-card{
+        width: 8.2rem;
+        height: 12.3rem;
+    }
+    #guest-img{
+        height: 55%;
+    }
+    #guest-name{
+        height: 35%;
+    }
+    #edit-guest-modal{
+        width: 60%;
+    }
+}
+@media screen and (max-width: 575px) {
+    #add-guest{
+        width: 65%;
+    }
+    .guest-input{
+        width: 72%;
+    }
+    .guest-button{
+        width: 28%;
+    }
+    #guest-img{
+        height: 55%;
+    }
+}
+@media screen and (max-width: 480px) {
+    #add-guest{
+        width: 75%;
+    }
+    #guest-card{
+        margin: .8rem;
+        width: 8rem;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-box{
+        width: 85%;
+    }
+    #edit-guest-modal{
+        width: 70%;
+    }
+}
+@media screen and (max-width: 425px) {
+    #add-guest{
+        width: 80%;
+    }
+    #guest-card{
+        width: 8.3rem;
+        margin: .5rem;
+        height: 12rem;
+    }
+    #guest-img{
+        height: 60%;
+    }
+    #guest-name{
+        height: 40%;
+    }
+    #end-page{
+        flex-direction: column;
+        align-items: center;
+    }
+    #finish{
+        margin-top: 2rem;
+    }
+    #skip{
+        margin-bottom: 2rem;
+    }
+}
+@media screen and (max-width: 350px) {
+    #add-guest{
+        width: 85%;
+    }
+    .guest-input{
+        width: 62%;
+    }
+    .guest-button{
+        width: 38%;
+    }
+    #guest-card{
+        width: 7rem;
+        height: 11.2rem;
+    }
+    #guest-img {
+        height: 55%;
+    }
+    #edit-guest-modal{
+        width: 80%;
+    }
+}
