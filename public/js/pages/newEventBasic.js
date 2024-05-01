@@ -1,4 +1,4 @@
-import { putEvent } from "../api/eventApi.js";
+import { deleteEvent, putEvent } from "../api/eventApi.js";
 import eventProgressBar from "../components/eventProgressBar.js";
 import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
@@ -138,7 +138,7 @@ function getFieldset(
 
 function getCancelBtn(modal) {
 	const btn = document.createElement("button");
-	btn.addEventListener("click", (e) => {
+	btn.addEventListener("click", async (e) => {
 		e.preventDefault();
 		if (modal instanceof HTMLElement) {
 			modal.style.display = "flex";
@@ -150,7 +150,7 @@ function getCancelBtn(modal) {
 	return btn;
 }
 
-function cancelThisEventModal() {
+function cancelThisEventModal(eventID) {
 	const modal = document.createElement("div");
 	const container = document.createElement("div");
 	modal.id = "newEvent-basic-modal";
@@ -170,7 +170,13 @@ function cancelThisEventModal() {
 	btnCancel.textContent = "Cancelar evento";
 	btnReturn.textContent = "Continuar criação";
 
-	btnCancel.addEventListener("click", () => {
+	btnCancel.addEventListener("click", async () => {
+		const res = await deleteEvent(eventID);
+		if (res.error) {
+			showToast(res.error);
+		} else {
+			showToast("Evento deletado com sucesso");
+		}
 		dispatchOnStateChange("/home", { animation: false });
 	});
 	btnReturn.addEventListener("click", () => {
@@ -378,7 +384,7 @@ export default function newEventBasicPage(
 
 	divInfo.appendChild(divDate);
 
-	const modal = cancelThisEventModal();
+	const modal = cancelThisEventModal(constructorInfo.event.id);
 	const cancelBtn = getCancelBtn(modal);
 	divBtns.appendChild(cancelBtn);
 	appendContinueBtn(constructorInfo.event.id, form, divBtns);
