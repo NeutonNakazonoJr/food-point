@@ -56,7 +56,6 @@ export default function getHeader(
 	if (userIsLogged) {
 		const a = document.createElement("a");
 		const img = document.createElement("img");
-		const span = document.createElement("span");
 
 		redirectToHome(h1);
 
@@ -83,14 +82,13 @@ export default function getHeader(
 					console.error('Erro ao solicitar a imagem de perfil:', error);
 				});
 		}
-		setANimationForAnchor(a, animation);
+		// setANimationForAnchor(a, animation);
 		a.addEventListener("click", (e) => {
 			e.preventDefault();
 			dispatchOnStateChange(a.href, { animation: false });
 		});
 
 		a.appendChild(img);
-		a.appendChild(span);
 		header.appendChild(a);
 	}
 
