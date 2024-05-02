@@ -1,0 +1,95 @@
+
+:root {
+	--wine-color: #670029;
+	--white-smoke: #f2f7f2;
+	--blackberry: #311432;
+	--blackberry-transparent: #1313138a;
+	--cherry: #a73e5c;
+	--raspberry: #b22222;
+	--salmon: #ffa69e;
+
+	--font-pacifico: "Pacifico", cursive;
+
+	--border-radius-1x: 8px;
+	--border-radius-2x: 16px;
+	--border-radius-3x: 24px;
+}
+
+#recover-pass-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#form-forget-pass {
+    border-radius: var(--border-radius-1x);
+    height: 25rem;
+
+    & fieldset {
+        width: 25rem;
+        height: 20rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1rem;
+        border-radius: var(--border-radius-1x);
+        border: 1px solid rgb(209, 209, 209);
+        background-color: rgb(253, 253, 253);
+    }
+
+    & legend {
+        margin-left: 1rem;
+        padding: 0 0.3rem;
+        font-weight: 500;
+        font-size: 1.2rem;
+        color: var(--wine-color);
+    }
+    
+    & input::placeholder {
+        font-size: 0.8rem;
+    }
+
+    & label {
+        color: var(--wine-color);
+    }
+}
+
+#form-forget-pass div {
+    position: relative;
+
+    & img {
+        position: absolute;
+        left: 0.5rem;
+        bottom: 0.8rem;
+        width: 0.7rem;
+    }
+
+    & input {
+        padding: 0.5rem 1.3rem;
+        outline: none;
+        border-radius: var(--border-radius-1x);
+        border: 1px solid rgb(209, 209, 209);
+        margin-top: 1rem;
+        width: 100%;
+    }
+   
+}
+
+
+#form-forget-pass #input-code {
+    margin-top: 0.3rem;
+    width: 100%;
+}
+
+#submit-recover-pass {
+    width: 80%;
+    padding: 0.5rem 0;
+    border-radius: var(--border-radius-1x);
+    border: none;
+    background-color: var(--wine-color);
+    color: var(--white-smoke);
+    margin: 1.4rem auto;
+    cursor: pointer;
+    font-size: 1rem;
+}
