@@ -10,6 +10,7 @@ const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
     const eventIcon = htmlCreator.createImg('./assets/icons/glass-of-wine.svg');
     const divInitial = htmlCreator.createDiv('initial-div-events');
+    divInitial.classList.add('none-to-download');
     divInitial.appendChild(mainTitle);
     divInitial.appendChild(eventIcon);
     return divInitial;
@@ -303,6 +304,17 @@ const createButtonSection = () => {
     homeButton.appendChild(homeIcon);
 
     const buttonSection = htmlCreator.createSection('btn-section');
+    buttonSection.classList.add('none-to-download');
+
+    const downloadPngBtn = htmlCreator.createButton('download', 'download-png');
+    const downloadIcon = htmlCreator.createImg('./assets/icons/download-icon-png.svg');
+    downloadPngBtn.appendChild(downloadIcon);
+
+    downloadPngBtn.classList.add('none-to-download');
+    downloadPngBtn.classList.add('btn-section');
+    downloadPngBtn.addEventListener('click', handleDownloadPNG);
+    buttonSection.appendChild(downloadPngBtn);
+
     buttonSection.appendChild(guestButton);
     buttonSection.appendChild(homeButton);
     return buttonSection;
@@ -350,6 +362,40 @@ const createHeaderEvent = () => {
     return header;
 }
 
+function handleDownloadPNG() {
+    const main = document.getElementById('main-page-event');
+    const cardDishes = document.querySelectorAll('.card-dishes');
+
+    for (const card of cardDishes) {
+        card.classList.add('clean-to-download');
+    }
+
+    const containersToClean = document.querySelectorAll('.none-to-download');
+    for (const container of containersToClean) {
+        container.classList.add('clean-to-dowload');
+    }
+
+    main.classList.add('clean-to-download');
+    main.style.width = '1100px';
+    
+    html2canvas(main).then(function(canvas) {
+        const imgData = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = imgData;
+        a.download = 'evento.png';
+        a.click();
+
+        main.classList.remove('clean-to-download');
+        main.style.width = '';
+
+        for (const card of cardDishes) {
+            card.classList.remove('clean-to-download');
+        }
+    });
+}
+
+
+
 const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
 
     const eventID = constructorInfo.eventID;
@@ -382,11 +428,12 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     mainContainer.appendChild(menuSection);
     mainContainer.appendChild(locationSection);
     mainContainer.appendChild(buttonSection);
-    
+
     const main = document.createElement('main');
     main.id = 'main-page-event'
     main.appendChild(initialDiv);
     main.appendChild(mainContainer);
+
     
     const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);
