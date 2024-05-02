@@ -6,7 +6,7 @@ const multer = require("multer");
 const upload = multer({ dest: './public/assets/uploads'})
 
 uploadRouter.get("/upload/", uploadController.getImage);
-uploadRouter.post("/upload/", upload.single('image'), uploadController.uploadImage)
+uploadRouter.put("/upload/", upload.single('image'), uploadController.uploadImage)
 
 
 module.exports = uploadRouter;
