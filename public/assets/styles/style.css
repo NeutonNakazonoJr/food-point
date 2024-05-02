@@ -39,8 +39,11 @@
 }
 
 #apiLoadingScreen {
+	animation: 300ms ease-in-out;
 	display: flex;
-	position: absolute;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
 	z-index: 10000;
 	background-color: var(--blackberry-transparent);
 	height: 100vh;
@@ -63,23 +66,64 @@
 	}
 }
 
+@keyframes spin {
+	0%{
+		transform: rotate(0);
+	}
+	0%{
+		transform: rotate(360deg);
+	}
+}
+
 #loadingContentDisplay {
-	--parentSize: 250px;
-	animation: fadeIn 300ms ease-in;
-	width: 250px;
-	height: 250px;
+	--parentSize: 150px;
+	animation: spin 300ms ease-in;
+	width: var(--parentSize);
+	height: var(--parentSize);
 	margin: 0 auto;
-	background-color: var(--wine-color);
 	position: relative;
 	border-radius: 100%;
-	outline: 5px solid var(--wine-color);
-	border: 5px solid var(--white-smoke);
 	& > * {
 		position: absolute;
 		width: calc(var(--parentSize) / 1.5);
 		height: calc(var(--parentSize) / 1.5);
-		left: calc(var(--parentSize) / 6.5);
-		top: calc(var(--parentSize) / 6.5);
+		left: calc(var(--parentSize) / 6);
+		top: calc(var(--parentSize) / 6);
 		object-fit: contain;
+		z-index: 2;
+	}
+	&::before,
+	&::after {
+		content: "";
+		outline: 5px solid var(--wine-color);
+		width: calc(var(--parentSize) - 10px);
+		height: calc(var(--parentSize) - 10px);
+		position: absolute;
+		left: 0;
+		display: inline-block;
+		top: 0;
+		border-radius: 100%;
+	}
+	&::before {
+		animation: spin 2s infinite ease-in-out;
+		outline: 0;
+		border: 5px solid var(--raspberry);
+		border-color: var(--raspberry) var(--white-smoke) var(--white-smoke) var(--white-smoke);
+		z-index: 2;
+	}
+	&::after {
+		border: 5px solid var(--white-smoke);
+		background-color: var(--wine-color);
+		z-index: 1;
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	#loadingContentDisplay {
+		--parentSize: 100px;
+		& > * {
+			left: calc(var(--parentSize) / 6);
+			top: calc(var(--parentSize) / 6);
+		}
 	}
 }
