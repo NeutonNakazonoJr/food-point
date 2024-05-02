@@ -5,6 +5,7 @@ import dispatchOnStateChange from "../events/onStateChange.js";
 import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
 import showToast from "../components/toast.js";
 import  menuUpdateModalComponent from "./modal/menuModal.js"
+import guestList from "./modal/guestModal.js";
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -290,10 +291,15 @@ const createLocationSection = (eventLocation) => {
     return locationSection;
 }
 
-const createButtonSection = () => {
+const createButtonSection = (eventID) => {
     const guestButton = htmlCreator.createButton('Lista de convidados', null, 'btn-section');
     const guestIcon = htmlCreator.createImg('./assets/icons/guest-list-icon.svg');
     guestButton.appendChild(guestIcon);
+    guestButton.addEventListener("click", () =>{
+        const guestModal = guestList(eventID);
+        const rootContainer = document.getElementById('root');
+         rootContainer.appendChild(guestModal)
+    })
 
     const homeButton = htmlCreator.createButton('Página inicial', null, 'btn-section');
     homeButton.addEventListener('click', () => {
@@ -421,7 +427,7 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
     const menuSection = await createMenuSection(eventInfos.dishes, eventID || storageEventID.eventID);
     const locationSection = createLocationSection(eventInfos.eventLocation);
-    const buttonSection = createButtonSection();
+    const buttonSection = createButtonSection(eventID);
     
     const mainContainer = htmlCreator.createSection('event-main-container');
     mainContainer.appendChild(basicInfosSection);
