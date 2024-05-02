@@ -44,10 +44,10 @@ const fieldsBuilderInfo = [
 	{
 		fieldClassName: "newEvent-basic-genericInput",
 		legend: "Data do evento",
-		labelText: "Por favor não coloque 17/09/2024",
+		labelText: "Recomendamos ser no final de semana!",
 		inputType: "date",
 		inputID: "newEvent-basic-date",
-		title: "Por favor insira uma data maior que a data atual.",
+		title: "Por favor insira uma data válida.",
 	},
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -279,7 +279,7 @@ export default function newEventBasicPage(
 		dispatchOnStateChange("/home", { animation: true });
 		return document.createDocumentFragment();
 	}
-	const header = getHeader(false, true);
+	const header = getHeader(false, false);
 	const timeline = eventProgressBar(
 		true,
 		true,

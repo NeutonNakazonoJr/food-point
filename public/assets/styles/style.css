@@ -4,6 +4,7 @@
 :root {
 	--wine-color: #670029;
 	--white-smoke: #f2f7f2;
+	--white-smoke-gray: #a3a3a3;
 	--blackberry: #311432;
 	--blackberry-transparent: #1313138a;
 	--cherry: #a73e5c;
@@ -24,7 +25,6 @@
 	box-sizing: border-box;
 }
 
-
 #modal {
 	position: fixed;
 	display: flex;
@@ -34,8 +34,8 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); 
-    z-index: 10;
+	background-color: rgba(0, 0, 0, 0.4);
+	z-index: 10;
 }
 
 #apiLoadingScreen {
@@ -60,5 +60,26 @@
 	&::after,
 	&::before {
 		background-image: url("../svg-animated/spoon-white.svg") !important;
+	}
+}
+
+#loadingContentDisplay {
+	--parentSize: 250px;
+	animation: fadeIn 300ms ease-in;
+	width: 250px;
+	height: 250px;
+	margin: 0 auto;
+	background-color: var(--wine-color);
+	position: relative;
+	border-radius: 100%;
+	outline: 5px solid var(--wine-color);
+	border: 5px solid var(--white-smoke);
+	& > * {
+		position: absolute;
+		width: calc(var(--parentSize) / 1.5);
+		height: calc(var(--parentSize) / 1.5);
+		left: calc(var(--parentSize) / 6.5);
+		top: calc(var(--parentSize) / 6.5);
+		object-fit: contain;
 	}
 }

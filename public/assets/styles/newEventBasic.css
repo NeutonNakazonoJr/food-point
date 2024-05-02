@@ -152,6 +152,11 @@
 		color: var(--white-smoke);
 		padding: 10px 10px 10px 30px;
 	}
+	& > input::placeholder,
+	& > #newEvent-basic-date::placeholder,
+	& > #newEvent-basic-time::placeholder {
+		color: var(--white-smoke);
+	}
 }
 
 #newEvent-basic-info > div {
