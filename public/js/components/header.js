@@ -77,6 +77,7 @@ export default function getHeader(
 
 	if (userIsLogged) {
 		const div = document.createElement("div");
+		div.id = "mainHeader-divButtons";
 
 		const a = document.createElement("a");
 		const img = document.createElement("img");

@@ -69,13 +69,13 @@
 	}
 }
 
-#mainHeader > div {
+#mainHeader > #mainHeader-divButtons {
 	display: flex;
 	width: 90px;
 	justify-content: space-between;
 }
 
-#mainHeader > div > #mainHeader-buttonLogout {
+#mainHeader > #mainHeader-divButtons > #mainHeader-buttonLogout {
 	width: 40px;
 	height: 40px;
 	background: url("/assets/icons/logout.svg") center no-repeat;
@@ -89,7 +89,7 @@
 	}
 }
 
-#mainHeader > div > a {
+#mainHeader > #mainHeader-divButtons > a {
 	animation: 1s 1s ease-in-out alternate both;
 	align-items: center;
 	border-radius: var(--border-radius-3x);

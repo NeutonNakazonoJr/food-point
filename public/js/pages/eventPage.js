@@ -5,6 +5,7 @@ import dispatchOnStateChange from "../events/onStateChange.js";
 import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
 import showToast from "../components/toast.js";
 import  menuUpdateModalComponent from "./modal/menuModal.js"
+import cancelThisEventModal from "./modal/deleteEventModal.js";
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -290,7 +291,7 @@ const createLocationSection = (eventLocation) => {
     return locationSection;
 }
 
-const createButtonSection = () => {
+const createButtonSection = (modal) => {
     const guestButton = htmlCreator.createButton('Lista de convidados', null, 'btn-section');
     const guestIcon = htmlCreator.createImg('./assets/icons/guest-list-icon.svg');
     guestButton.appendChild(guestIcon);
@@ -313,10 +314,21 @@ const createButtonSection = () => {
     downloadPngBtn.classList.add('none-to-download');
     downloadPngBtn.classList.add('btn-section');
     downloadPngBtn.addEventListener('click', handleDownloadPNG);
-    buttonSection.appendChild(downloadPngBtn);
 
+	const deleteEventBtn = htmlCreator.createButton("Deletar Evento", "event-page-delete-this-event", null);
+	deleteEventBtn.classList.add('none-to-download');
+	deleteEventBtn.classList.add('btn-section');
+	deleteEventBtn.addEventListener('click', (e) => {
+		e.preventDefault();
+		if(modal instanceof HTMLElement) {
+			modal.style.display = 'flex';
+		}
+	})
+    
+	buttonSection.appendChild(downloadPngBtn);
     buttonSection.appendChild(guestButton);
     buttonSection.appendChild(homeButton);
+    buttonSection.appendChild(deleteEventBtn);
     return buttonSection;
 }
 
@@ -421,13 +433,16 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
     const menuSection = await createMenuSection(eventInfos.dishes, eventID || storageEventID.eventID);
     const locationSection = createLocationSection(eventInfos.eventLocation);
-    const buttonSection = createButtonSection();
+	
+	const modal = cancelThisEventModal(eventID || storageEventID.eventID, "Continuar edição", "Deletar evento", "Deletar evento?");
+    const buttonSection = createButtonSection(modal);
     
     const mainContainer = htmlCreator.createSection('event-main-container');
     mainContainer.appendChild(basicInfosSection);
     mainContainer.appendChild(menuSection);
     mainContainer.appendChild(locationSection);
     mainContainer.appendChild(buttonSection);
+	mainContainer.appendChild(modal);
 
     const main = document.createElement('main');
     main.id = 'main-page-event'

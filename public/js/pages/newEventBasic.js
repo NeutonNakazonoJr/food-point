@@ -4,6 +4,7 @@ import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import { activeButton, disableButton } from "../utils/disableButton.js";
+import cancelThisEventModal from "./modal/deleteEventModal.js";
 
 const regex = `^[a-zA-ZÀ-ÖØ-öø-ÿ\\s"^\\\`\\~\\:\\.\\,\\?\\!\\-]+$`;
 const regexTitle =
@@ -148,52 +149,6 @@ function getCancelBtn(modal) {
 	btn.textContent = "Cancelar";
 
 	return btn;
-}
-
-function cancelThisEventModal(eventID) {
-	const modal = document.createElement("div");
-	const container = document.createElement("div");
-	modal.id = "newEvent-basic-modal";
-	container.id = "newEvent-basic-modal-container";
-
-	const h2 = document.createElement("h2");
-	const p = document.createElement("p");
-	const img = document.createElement("img");
-	const divBtn = document.createElement("div");
-	const btnCancel = document.createElement("button");
-	const btnReturn = document.createElement("button");
-
-	h2.textContent = "Cancelar evento?";
-	p.textContent =
-		"ALERTA: Essa ação irá apagar todos os dados escritos até agora!";
-	img.src = "/assets/svg-backgrounds/doubt.svg";
-	btnCancel.textContent = "Cancelar evento";
-	btnReturn.textContent = "Continuar criação";
-
-	btnCancel.addEventListener("click", async () => {
-		const res = await deleteEvent(eventID);
-		if (res.error) {
-			showToast(res.error);
-		} else {
-			showToast("Evento deletado com sucesso");
-		}
-		dispatchOnStateChange("/home", { animation: false });
-	});
-	btnReturn.addEventListener("click", () => {
-		modal.style.display = "none";
-	});
-
-	divBtn.appendChild(btnCancel);
-	divBtn.appendChild(btnReturn);
-
-	container.appendChild(h2);
-	container.appendChild(p);
-	container.appendChild(img);
-	container.appendChild(divBtn);
-
-	modal.appendChild(container);
-	modal.style.display = "none";
-	return modal;
 }
 
 function appendContinueBtn(eventId, form, div) {
