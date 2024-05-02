@@ -9,6 +9,7 @@ import cancelThisEventModal from "./modal/deleteEventModal.js";
 import locationStrToCityName from "../utils/locationStrToCityName.js";
 import modalLocationComponent from "./modal/locationModal.js";
 import apiLoading from "../utils/load/apiLoading.js";
+import guestList from "./modal/guestModal.js";
 
 const createEventMainTitleDiv = () => {
     const mainTitle = htmlCreator.createTitle('h1','Evento');
@@ -300,10 +301,15 @@ const createLocationSection = async (eventLocation, eventID) => {
     return locationSection;
 }
 
-const createButtonSection = (modal) => {
+const createButtonSection = (eventID, modal) => {
     const guestButton = htmlCreator.createButton('Lista de convidados', null, 'btn-section');
     const guestIcon = htmlCreator.createImg('./assets/icons/guest-list-icon.svg');
     guestButton.appendChild(guestIcon);
+    guestButton.addEventListener("click", () =>{
+        const guestModal = guestList(eventID);
+        const rootContainer = document.getElementById('root');
+         rootContainer.appendChild(guestModal)
+    })
 
     const homeButton = htmlCreator.createButton('Página inicial', null, 'btn-section');
     homeButton.addEventListener('click', () => {
@@ -446,7 +452,7 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const locationSection = await createLocationSection(eventInfos.basicInfos?.eventLocation,  eventID || storageEventID.eventID);
 	
 	const modal = cancelThisEventModal(eventID || storageEventID.eventID, "Continuar edição", "Deletar evento", "Deletar evento?");
-    const buttonSection = createButtonSection(modal);
+    const buttonSection = createButtonSection(eventID, modal);
     
     const mainContainer = htmlCreator.createSection('event-main-container');
     mainContainer.appendChild(basicInfosSection);
