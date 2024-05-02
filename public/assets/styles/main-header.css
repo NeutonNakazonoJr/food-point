@@ -77,7 +77,7 @@
 	cursor: pointer;
 	filter: brightness(1);
 	justify-content: space-between;
-	height: 70%;
+	height: 40px;
 	overflow: hidden;
 	width: 40px;
 	&:hover {
@@ -85,6 +85,7 @@
 	}
 	& > img {
 		height: 100%;
+		width: 100%;
 		border-radius: 100%;
 		object-fit: cover;
 	}
@@ -100,9 +101,6 @@
 	#mainHeader {
 		& > h1 {
 			font-size: 1.5rem;
-		}
-		& > a {
-			width: 70px;
 		}
 	}
 }
