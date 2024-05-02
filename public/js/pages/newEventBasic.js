@@ -1,4 +1,4 @@
-import { deleteEvent, putEvent } from "../api/eventApi.js";
+import { putEvent } from "../api/eventApi.js";
 import eventProgressBar from "../components/eventProgressBar.js";
 import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
