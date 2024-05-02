@@ -1,3 +1,4 @@
+#config for /etc/nginx/sites-available/default file 
 server {
 	#default por for https connections
 	listen 443 ssl default_server;
