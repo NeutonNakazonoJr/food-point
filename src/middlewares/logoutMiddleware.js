@@ -1,11 +1,5 @@
 const logout = (req, res) => {
-	const cookieOptions = {
-		maxAge: 30 * 1000,
-		httpOnly: true,
-		sameSite: "strict",
-		secure: true,
-	};
-	res.cookie("session_token", "", cookieOptions);
+	res.clearCookie("session_token");
 	return res.status(200).json({ success: true });
 };
 
