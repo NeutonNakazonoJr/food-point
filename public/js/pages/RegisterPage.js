@@ -25,6 +25,19 @@ const createRegisterForm = () => {
     registerFormDiv.id = 'register-form';
     registerForm.appendChild(registerFormDiv);
 
+    const landing = document.createElement("div");
+    landing.id = "landing-button"
+    const home = document.createElement("button");
+    home.id = "back-landing"
+    home.textContent = "Voltar"
+    const backIcon = document.createElement("img")
+    backIcon.id = "back-flag"
+    backIcon.src = "/assets/icons/flag-back-wine.svg";
+
+    home.appendChild(backIcon)
+    landing.appendChild(home)
+    registerFormDiv.appendChild(landing)
+
     const imgLogoDiv = document.createElement('div');
     imgLogoDiv.id = 'img-logo';
     const imgLogo = document.createElement('img');
@@ -324,6 +337,10 @@ const createRegisterForm = () => {
     });
 
     registerFormDiv.appendChild(registerButton);
+
+    home.addEventListener("click", () => {
+        dispatchOnStateChange("/")
+    })
 
     return bodyRegister;
 };

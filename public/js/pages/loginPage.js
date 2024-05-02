@@ -2,6 +2,7 @@ import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
 
+
 const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
     bodyLogin.classList.add('body-login');
@@ -25,8 +26,22 @@ const createLoginForm = () => {
     loginFormDiv.id = 'login-form';
     loginForm.appendChild(loginFormDiv);
 
+    const landing = document.createElement("div");
+    landing.id = "landing-button"
+    const home = document.createElement("button");
+    home.id = "back-landing"
+    home.textContent = "Voltar"
+    const backIcon = document.createElement("img")
+    backIcon.id = "back-flag"
+    backIcon.src = "/assets/icons/flag-back-wine.svg"
+
+    home.appendChild(backIcon)
+    landing.appendChild(home)
+    loginFormDiv.appendChild(landing)
+
     const imgLogoDiv = document.createElement('div');
     imgLogoDiv.id = 'img-logo';
+    
     const imgLogo = document.createElement('img');
     imgLogo.src = './assets/icons/main-logo-login.svg';
     imgLogo.alt = 'logo';
@@ -130,12 +145,17 @@ const createLoginForm = () => {
     function validateLoginForm() {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
+        const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+        const emailValid = regex.test(email);
 
         if (!email || !password) {
             showToast("Por favor, preencha todos os campos.");
             return false;
         }
-
+        else if ( emailValid === false){
+            showToast("Insira um endereço de email valido!");
+            return false
+        }
         return true;
     }
 
@@ -189,6 +209,10 @@ const createLoginForm = () => {
             }
         }
     });
+
+    home.addEventListener("click", () => {
+        dispatchOnStateChange("/")
+    })
 
     return bodyLogin;
 };
