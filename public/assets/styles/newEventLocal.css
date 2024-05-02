@@ -173,3 +173,10 @@
 		padding: 1rem;
 	}
 }
+
+@media screen and (max-width: 500px) {
+	#newEventLocal-footer {
+		padding-right: 0;
+		justify-content: center;
+	}
+}
