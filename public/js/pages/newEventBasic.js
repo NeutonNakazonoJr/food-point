@@ -118,6 +118,19 @@ function getFieldset(
 		} else {
 			input.setCustomValidity("");
 		}
+
+		if (
+			input.type === "text" &&
+			!/^[a-zA-ZÀ-ÖØ-öø-ÿ\s"^`~:.,?!-]+$/.test(input.value)
+		) {
+			input.setCustomValidity(regexTitle);
+			input.style.outline = "2px solid red";
+			form.dispatchEvent(new CustomEvent("badinput"));
+			return;
+		} else {
+			input.setCustomValidity("");
+		}
+
 		if (input.reportValidity() || valueCheck) {
 			input.style.outline = "none";
 			form.dispatchEvent(new CustomEvent("bluroninput"));
@@ -155,7 +168,7 @@ function appendContinueBtn(eventId, form, div) {
 	if (form instanceof HTMLFormElement && div instanceof HTMLDivElement) {
 		const saveBtn = document.createElement("button");
 		const skipBtn = document.createElement("button");
-		skipBtn.id = 'skip-button-new-event-page';
+		skipBtn.id = "skip-button-new-event-page";
 
 		const checkForm = () => {
 			if (form.reportValidity()) {
@@ -275,6 +288,8 @@ export default function newEventBasicPage(
 		!constructorInfo.event.id
 	) {
 		showToast("O evento passado para essa página não é válido!");
+
+		const main = document.getElementById("newEvent-basic");
 		dispatchOnStateChange("/home", { animation: true });
 		return document.createDocumentFragment();
 	}

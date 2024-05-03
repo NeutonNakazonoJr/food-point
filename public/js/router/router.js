@@ -28,7 +28,12 @@ function mockTemplate(innerText) {
  */
 const routes = {
 	404: {
-		html: () => mockTemplate("not found!"),
+		html: () =>
+			createErrorPage({
+				title: "Página não encontrada",
+				subtitle: "Essa página não existe",
+				error: "tente acessar outra página!",
+			}),
 		title: title,
 		description: "Esta página não existe!",
 		needLogin: false,
@@ -93,16 +98,16 @@ const routes = {
 		description: "Informações do evento",
 		needLogin: true,
 	},
-	"/home/create/success":{
+	"/home/create/success": {
 		html: createSuccessEventPage,
 		title: "Evento criado com sucesso | " + title,
-		description: "Evento criado com sucesso!"
+		description: "Evento criado com sucesso!",
 	},
 	"/error": {
 		html: createErrorPage,
 		title: "Error | " + title,
-		description: "Algo deu errado"
-  	},
+		description: "Algo deu errado",
+	},
 	"/profile": {
 		html: createProfile,
 		title: "Perfil | " + title,
@@ -120,7 +125,7 @@ const routes = {
 		title: "Recuperar senha | " + title,
 		description: "recuperação de senha",
 		needLogin: false,
-	}
+	},
 };
 
 /** Check the current path and returns according with it
@@ -175,9 +180,25 @@ function initRouter(root) {
 	let constructorInfo = { animation: true };
 	renderIntoRoot(root, constructorInfo);
 
-	window.addEventListener("popstate", (e) =>
-		renderIntoRoot(root, constructorInfo)
-	);
+	window.addEventListener("deleteConstructorInfo", () => {
+		constructorInfo = { animation: true };
+		console.log(constructorInfo);
+	});
+
+	window.addEventListener("popstate", (e) => {
+		const location = window.location.pathname;
+		const notAllowedPop = [
+			"/home/create",
+			"/home/create/menu",
+			"/home/create/local",
+			"/home/create/guest",
+			"/home/create/success",
+		];
+		if (notAllowedPop.includes(location)) {
+			constructorInfo = { animation: true };
+		}
+		renderIntoRoot(root, constructorInfo);
+	});
 	window.addEventListener("onstatechange", (e) => {
 		const path = e.detail.path;
 		constructorInfo = e.detail.constructorInfo;

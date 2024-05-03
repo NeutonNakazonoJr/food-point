@@ -12,8 +12,8 @@ function getUserLocation(div, callbackFn) {
 	const apiLoadedEvent = new CustomEvent("apiLoaded", {});
 	const finishApiLoad = () => {
 		controller.dispatchEvent(apiLoadedEvent);
-	}
-	
+	};
+
 	if (navigator && navigator.geolocation) {
 		const options = {
 			timeout: 10000,
@@ -55,7 +55,7 @@ function getUserLocation(div, callbackFn) {
 				);
 			}
 			finishApiLoad();
-			callbackFn()
+			callbackFn();
 		}
 		navigator.geolocation.getCurrentPosition(
 			publishPosition,
@@ -67,7 +67,7 @@ function getUserLocation(div, callbackFn) {
 	}
 	controller.addEventListener("apiLoaded", () => {
 		apiLoading(false);
-	})
+	});
 }
 
 function dispatchSelectLatLng(htmlElement, latLng) {
@@ -128,7 +128,7 @@ function getMap(main) {
 		setButtonAfterInLoadState(button, true);
 		getUserLocation(div, () => {
 			setButtonAfterInLoadState(button, false);
-		})
+		});
 	});
 	buttonCep.addEventListener("click", (e) => {
 		e.preventDefault();
@@ -204,9 +204,11 @@ function getFooter(eventId, href) {
 			const result = await updateEventLocation(eventId, {
 				location: `${lat},${lng}`,
 			});
+			const main = document.querySelector("main");
 			dispatchOnStateChange(href, constructorInfo);
 			return;
 		}
+		const main = document.querySelector("main");
 		dispatchOnStateChange(href, constructorInfo);
 	});
 
@@ -222,11 +224,16 @@ function getFooter(eventId, href) {
 }
 
 export default function newEventLocalPage(constructorInfo) {
-	if(!constructorInfo || !constructorInfo.event || !constructorInfo.event.id) {
+	if (
+		!constructorInfo ||
+		!constructorInfo?.event ||
+		!constructorInfo?.event.id
+	) {
 		showToast("O ID do evento é inválido");
 		dispatchOnStateChange("/home");
+		return document.createDocumentFragment();
 	}
-	const event = constructorInfo.event.id;
+	const event = constructorInfo?.event?.id;
 	const stage = constructorInfo?.stage || {
 		current: 2,
 		last: 1,

@@ -19,6 +19,7 @@ const createGuestPage = (
 	}
 ) => {
 	if (
+		!constructorInfo ||
 		!constructorInfo.stage ||
 		!constructorInfo.event ||
 		constructorInfo.event.id === ""
@@ -64,7 +65,7 @@ const createGuestPage = (
 	addguest.appendChild(inputdiv);
 
 	const input = document.createElement("input");
-	input.id = "add-input"
+	input.id = "add-input";
 	input.className = "guest-input";
 	inputdiv.appendChild(input);
 
@@ -74,7 +75,7 @@ const createGuestPage = (
 	addguest.appendChild(error);
 
 	const button = document.createElement("button");
-	button.id = 'add-button';
+	button.id = "add-button";
 	button.className = "guest-button";
 	button.textContent = "Adicionar";
 	inputdiv.appendChild(button);
@@ -111,7 +112,6 @@ const createGuestPage = (
 	finish.appendChild(wineIcon);
 	endPage.appendChild(finish);
 
-
 	const guests = [];
 
 	//logic to control the input
@@ -124,45 +124,48 @@ const createGuestPage = (
 	addguest.addEventListener("submit", (event) => {
 		const guestName = input.value.trim().toLowerCase();
 		event.preventDefault();
-		if (guestName == ""){
+		if (guestName == "") {
 			error.style.display = "block";
-			setTimeout( () => {
+			setTimeout(() => {
 				error.style.display = "none";
-			}, 500)
-
+			}, 500);
 		} else {
 			async function submitGuest() {
-				const guest = guestName.replace(/\b\w/g, (c) => c.toUpperCase())
+				const guest = guestName.replace(/\b\w/g, (c) =>
+					c.toUpperCase()
+				);
 				const data = await getEvents();
 				const lastEvent = data.events[data.events.length - 1];
 				const eventId = lastEvent.event_id;
-				const sendGuest = { name: guestName }
+				const sendGuest = { name: guestName };
 
 				fetch(`/api/guest/${eventId}`, {
 					method: "POST",
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(sendGuest)
+					body: JSON.stringify(sendGuest),
 				})
-					.then(response => {
-						if(!response.ok){
-							throw new Error()
-						} 
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error();
+						}
 						return response.json();
 					})
-					.then(data => {
+					.then((data) => {
 						document.getElementById("add-input").value = "";
-							finish.id = "finish";
-							finish.disabled = false;
-							const id = data[0].id
-							buildCard(guest, id);
-							guests.push(guest);
+						finish.id = "finish";
+						finish.disabled = false;
+						const id = data[0].id;
+						buildCard(guest, id);
+						guests.push(guest);
 					})
-					.catch(error => {
-						console.error("Erro interno", error)
-						notification("Ocorreu um problema ao adicionar o convidado, tente novamente mais tarde!")
-					})
+					.catch((error) => {
+						console.error("Erro interno", error);
+						notification(
+							"Ocorreu um problema ao adicionar o convidado, tente novamente mais tarde!"
+						);
+					});
 			}
 			submitGuest();
 		}
@@ -213,20 +216,20 @@ const createGuestPage = (
 		const content = document.createElement("div");
 		content.id = "edit-guest-modal";
 		const close = document.createElement("div");
-		close.id = "close-div"
+		close.id = "close-div";
 		const closeIcon = document.createElement("h2");
-		closeIcon.id = "X"
-		closeIcon.textContent = "X"
+		closeIcon.id = "X";
+		closeIcon.textContent = "X";
 		const formEdit = document.createElement("form");
 		const label = document.createElement("h3");
-		label.textContent = "Editar convidado: "
+		label.textContent = "Editar convidado: ";
 		const div = document.createElement("div");
 		div.className = "input-div";
 		const editInput = document.createElement("input");
 		editInput.className = "guest-input";
 		editInput.value = guest;
 		const save = document.createElement("button");
-		save.className = "guest-button"
+		save.className = "guest-button";
 		save.textContent = "Salvar";
 		const editError = document.createElement("p");
 		editError.style.display = "none";
@@ -248,103 +251,102 @@ const createGuestPage = (
 			fetch(`/api/guest/${guestId}`, {
 				method: "DELETE",
 				headers: {
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
 				},
 			})
-			.then(response => {
-				if(!response.ok){
-					throw new Error()
-				}
-				else{
-					notification("Convidado Removido!")
-					guestCard.remove();
-					const guestIndex = guests.indexOf(guest);
-					if (guestIndex !== -1) {
-						guests.splice(guestIndex, 1);
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error();
+					} else {
+						notification("Convidado Removido!");
+						guestCard.remove();
+						const guestIndex = guests.indexOf(guest);
+						if (guestIndex !== -1) {
+							guests.splice(guestIndex, 1);
+						}
+						if (guests.length === 0) {
+							guestBox.style.display = "none";
+							finish.id = "disabled";
+							finish.disabled = "true";
+						}
 					}
-					if (guests.length === 0) {
-						guestBox.style.display = "none";
-						finish.id = "disabled";
-						finish.disabled = "true";
-					}
-				}
-			})
-			.catch(error => {
-				console.error("Erro interno", error);
-				notification("Ocorreu um problema ao remover o convidado, tente novamente mais tarde!")
-			})
-
+				})
+				.catch((error) => {
+					console.error("Erro interno", error);
+					notification(
+						"Ocorreu um problema ao remover o convidado, tente novamente mais tarde!"
+					);
+				});
 		});
 
 		//listener to open an edit modal for guest
 		editButton.addEventListener("click", () => {
-			modal.style.display = "block"
-		})
-		
-		//close modal
-		window.onclick = function (event){
-			if(event.target == modal){
-				modal.style.display = "none"
-			}
-		}
-		closeIcon.addEventListener("click", () => {
-			modal.style.display = "none"
-		})
+			modal.style.display = "block";
+		});
 
+		//close modal
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		};
+		closeIcon.addEventListener("click", () => {
+			modal.style.display = "none";
+		});
 
 		//control edit input and submit new value
 		editInput.addEventListener("input", (event) => {
 			const input = editInput.value;
 			editInput.value = input.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, "");
-		})
+		});
 		save.addEventListener("click", (event) => {
 			event.preventDefault();
 			const inputValue = editInput.value.trim().toLowerCase();
-			if (inputValue == ""){
+			if (inputValue == "") {
 				editError.style.display = "block";
-				setTimeout( () => {
+				setTimeout(() => {
 					editError.style.display = "none";
-				}, 500)
+				}, 500);
 			} else {
 				async function editGuest() {
-					const newName = inputValue.replace(/\b\w/g, (c) => c.toUpperCase());
+					const newName = inputValue.replace(/\b\w/g, (c) =>
+						c.toUpperCase()
+					);
 					guestName.textContent = newName;
-					const fixedGuest = {name: inputValue}
+					const fixedGuest = { name: inputValue };
 					modal.style.display = "none";
-					
+
 					fetch(`/api/guest/${guestId}`, {
 						method: "PUT",
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
 						},
-						body: JSON.stringify(fixedGuest)
+						body: JSON.stringify(fixedGuest),
 					})
-					.then(response => {
-						if(response.ok){
-							notification("Convidado Atualizado!")
-						}
-						else{
-							throw new Error()
-						}
-					})
-					.catch(error => {
-						console.error("Erro interno", error)
-						notification("Ocorreu um problema ao atualizar o convidado, tente novamente mais tarde!")
-					})
+						.then((response) => {
+							if (response.ok) {
+								notification("Convidado Atualizado!");
+							} else {
+								throw new Error();
+							}
+						})
+						.catch((error) => {
+							console.error("Erro interno", error);
+							notification(
+								"Ocorreu um problema ao atualizar o convidado, tente novamente mais tarde!"
+							);
+						});
 				}
 				editGuest();
 			}
-		})
+		});
 	}
 
-
 	skipButton.addEventListener("click", (e) => {
-		dispatchOnStateChange("/home");
+		dispatchOnStateChange("/home/create/success", constructorInfo);
 	});
-	//logic that sends the array with the guest list to the api
 	finish.addEventListener("click", () => {
-		dispatchOnStateChange("/home/create/success");
-		dispatchOnStateChange("/home");
+		dispatchOnStateChange("/home/create/success", constructorInfo);
 	});
 	return body;
 };
