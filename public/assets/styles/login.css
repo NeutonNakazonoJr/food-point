@@ -8,7 +8,7 @@
 }
 
 .body-login {
-	background-image: url("../images/wallpaper-login.jpeg");
+	background-image: url("../images/wallpaper-login.webp");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
@@ -89,6 +89,7 @@
 	border-radius: 20px;
 	background-color: var(--white-smoke);
 	border: 2px solid var(--wine-color);
+	padding-left: 1rem;
 }
 
 #remember-password {
@@ -183,6 +184,50 @@
 	border-radius: 5px;
 	z-index: 10;
 	animation: slideIn 0.5s ease forwards;
+}
+
+#landing-button{
+	display: flex;
+	width: 100%;
+}
+
+#back-landing {
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+	justify-content: flex-start;
+	width: 6rem;
+	height: 2rem;
+	border: 2px solid var(--wine-color);
+	padding: 0.5rem;
+	background-color: transparent;
+	color: var(--wine-color);
+	font-weight: bolder;
+	cursor: pointer;
+	position: relative;
+	border-radius: 8px;
+	box-shadow: 3px 3px 3px var(--wine-color);
+	transition-duration: 0.3s;
+	margin: 1rem;
+}
+
+#back-flag {
+	width: 2rem;
+	position: absolute;
+	left: 0;
+	margin-left: 0.3rem;
+	transition-duration: 0.3s;
+}
+#back-landing:hover {
+	color: transparent;
+}
+
+#back-landing:hover img {
+	left: 30%;
+	margin: 0;
+	padding: 0;
+	border: none;
+	transition-duration: 0.3s;
 }
 
 #login-form-forget-pass {

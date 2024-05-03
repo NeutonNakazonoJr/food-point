@@ -48,7 +48,7 @@
 			}
 		}
 		& > button:nth-of-type(2) {
-			top: 2.3rem;
+			top: 2.2rem;
 			background: var(--blackberry-transparent);
 			border: 2px solid var(--raspberry);
 			border-right: 0;
@@ -90,7 +90,7 @@
 		&:focus-visible,
 		&:focus-within,
 		&:active {
-			filter: brightness(0.8);
+			background-color: var(--blackberry);
 		}
 	}
 }
@@ -100,7 +100,7 @@
 	display: flex;
 	width: 100vw;
 	height: 100vh;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	background: var(--blackberry-transparent);
@@ -171,5 +171,12 @@
 	#newEventLocal {
 		margin-top: 3rem;
 		padding: 1rem;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	#newEventLocal-footer {
+		padding-right: 0;
+		justify-content: center;
 	}
 }
