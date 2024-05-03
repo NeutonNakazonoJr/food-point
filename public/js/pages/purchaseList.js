@@ -6,7 +6,7 @@ import showToast from "../components/toast.js";
 import apiLoading from "../utils/load/apiLoading.js";
 
 const createDivLogo = () => {
-	const logo = htmlCreator.createImg("./assets/images/Fav icon.png");
+	const logo = htmlCreator.createImg("./assets/images/Fav-icon_1.webp");
 
 	const mainTitle = htmlCreator.createTitle("h1", "Lista de Compras");
 	const listIcon = htmlCreator.createImg("./assets/icons/list.svg");

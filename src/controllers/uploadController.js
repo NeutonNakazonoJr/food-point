@@ -6,7 +6,6 @@ const uploadController = {
             const user = req.userId;
             const image = {
                 user_id: user,
-                original_name: req.file.originalname,
                 hash_name: req.file.filename,
                 image_path: req.file.path
             };
