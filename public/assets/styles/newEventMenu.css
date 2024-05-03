@@ -314,7 +314,7 @@
 	padding-bottom: 1rem;
 	padding-right: 2rem;
 	& > .do__latter {
-		background-color: var(--raspberry);
+		background-color: var(--blackberry);
 	}
 	& > a {
 		border: 3px solid var(--white-smoke);
@@ -342,7 +342,7 @@
 		&:focus-visible,
 		&:focus-within,
 		&:active {
-			background-color: var(--blackberry);
+			filter: brightness(0.8);
 		}
 	}
 }

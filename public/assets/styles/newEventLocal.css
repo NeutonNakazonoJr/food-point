@@ -90,7 +90,7 @@
 		&:focus-visible,
 		&:focus-within,
 		&:active {
-			background-color: var(--blackberry);
+			filter: brightness(0.8);
 		}
 	}
 }

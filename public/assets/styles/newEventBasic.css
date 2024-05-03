@@ -215,8 +215,7 @@
 		color: var(--white-smoke);
 		filter: brightness(1);
 		&:hover {
-			border: 1px solid var(--blackberry);
-			background-color: var(--blackberry);
+			filter: brightness(0.9);
 		}
 		&::before {
 			background-image: url("../icons/send-latter.svg");

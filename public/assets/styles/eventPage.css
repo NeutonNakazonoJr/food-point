@@ -319,28 +319,27 @@
 }
 
 .btn-section {
-    box-sizing: border-box;
-    width: 16rem;
-    height: 3rem;
-    padding: 0 0.5rem;
-    border: 1.5px solid var(--raspberry);
-    border-radius: 0.3rem;
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem ;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--raspberry);
-    cursor: pointer;
-    transition: background-color ease 0.5s;
-    z-index: 2;
+	box-sizing: border-box;
+	width: 16rem;
+	height: 3rem;
+	padding: 0 0.5rem;
+	border: 3px solid var(--raspberry);
+	border-radius: 0.3rem;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	font-size: 1.1rem;
+	font-weight: bold;
+	color: var(--raspberry);
+	cursor: pointer;
+	transition: background-color ease 0.5s;
+	z-index: 2;
 }
 
 .btn-section:hover {
-    color: whitesmoke;
-    background-color: var(--raspberry);
+	background-color: rgba(187, 48, 48, 0.562);
 }
 
 .edit-event-btn {

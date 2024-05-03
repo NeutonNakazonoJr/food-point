@@ -18,7 +18,6 @@ export default function getFooter(eventId = null, href = "/home/create/local") {
 	a.href = href;
 	a.textContent = "Decidir mais tarde";
 	a.classList.add("do__latter");
-	a.id= "a-menu-page"
 	a.addEventListener("click", (e) => {
 		e.preventDefault();
 		dispatchOnStateChange(href, constructorInfo);
