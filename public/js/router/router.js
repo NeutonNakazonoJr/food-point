@@ -76,19 +76,19 @@ const routes = {
 	},
 	"/home/create/menu": {
 		html: menuPage,
-		title: "Novo evento | " + title,
+		title: "Menu | " + title,
 		description: "Crie o seu cardápio.",
 		needLogin: true,
 	},
 	"/home/create/local": {
 		html: newEventLocalPage,
-		title: "Novo evento | " + title,
+		title: "Localização | " + title,
 		description: "Defina a localização do seu evento gastronômico.",
 		needLogin: true,
 	},
 	"/home/create/guest": {
 		html: createGuestPage,
-		title: "Guests | " + title,
+		title: "Convidados | " + title,
 		description: "Planeje sua lista de convidados!",
 		needLogin: true,
 	},
