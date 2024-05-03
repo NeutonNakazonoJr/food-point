@@ -2,6 +2,7 @@ import getHeader from "../../components/header.js";
 import dispatchOnStateChange from "../../events/onStateChange.js";
 import notification from "../../components/notification.js";
 import { getMyLogin } from "../../api/userApi.js";
+import apiLoading from "../../utils/load/apiLoading.js";
 
 const createProfileDesktop = () => {
     const page = document.createElement("div");
@@ -339,6 +340,7 @@ const createProfileDesktop = () => {
 
     //logic to display the image on database
     async function getImage() {
+		apiLoading(true);
         try {
             fetch("/api/upload")
                 .then(response => {
@@ -359,6 +361,7 @@ const createProfileDesktop = () => {
         catch (error) {
             console.error("Erro ao buscar imagem no servidor!", error)
         };
+		apiLoading(false);
     }
 
     //input image logic and send to API
@@ -368,6 +371,7 @@ const createProfileDesktop = () => {
     })
 
     inputImg.addEventListener("change", async (event) => {
+		apiLoading(true)
         const picture = event.target.files[0];
         if (picture) {
             const reader = new FileReader();
@@ -393,6 +397,7 @@ const createProfileDesktop = () => {
             }
             reader.readAsDataURL(picture);
         }
+		apiLoading(false);
     })
 
     //edit profile informations
@@ -427,6 +432,7 @@ const createProfileDesktop = () => {
         return true;
     }
     function submitUserInfo() {
+		apiLoading(true);
         const fullName = nameInput.value.trim();
         const email = emailInput.value.trim();
 
@@ -456,6 +462,7 @@ const createProfileDesktop = () => {
                 notification("Erro ao atualizar os dados!");
                 console.error(error.message)
             });
+			apiLoading(false);
     }
 
     savePassword.addEventListener("click", () => {
@@ -478,6 +485,7 @@ const createProfileDesktop = () => {
     }
 
     function submitNewPassword() {
+		apiLoading(true);
         const password = passwordInput.value;
 
         fetch("/api/user", {
@@ -504,6 +512,7 @@ const createProfileDesktop = () => {
                 notification("Erro ao atualizar a senha! Tente Novamente mais tarde!");
                 console.error(error.message)
             });
+			apiLoading(false);
     }
 
     return page;
