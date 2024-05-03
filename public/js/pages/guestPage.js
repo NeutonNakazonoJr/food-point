@@ -224,6 +224,7 @@ const createGuestPage = (
 		div.className = "input-div";
 		const editInput = document.createElement("input");
 		editInput.className = "guest-input";
+		editInput.value = guest;
 		const save = document.createElement("button");
 		save.className = "guest-button"
 		save.textContent = "Salvar";
@@ -344,6 +345,7 @@ const createGuestPage = (
 	finish.addEventListener("click", () => {
 		console.log(guests);
 		dispatchOnStateChange("/home/create/success");
+		dispatchOnStateChange("/home");
 	});
 	return body;
 };

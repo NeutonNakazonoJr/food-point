@@ -180,6 +180,13 @@ const createFormUpdateInfos = (basicInfos, eventID) => {
 const modalUpdateInfosComponent = (basicInfos, eventID) => {
     const form = createFormUpdateInfos(basicInfos, eventID);
     const modal = createModal(form);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+    
     return modal;
 }
 

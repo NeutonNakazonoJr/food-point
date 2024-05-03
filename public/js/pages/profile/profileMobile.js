@@ -6,7 +6,7 @@ import { getMyLogin } from "../../api/userApi.js";
 const createProfileMobile = () => {
     const page = document.createElement("div");
     page.id = "profile"
-    const header = getHeader(false);
+    const header = getHeader(false, false);
     page.appendChild(header);
 
     //edit profile content
@@ -205,26 +205,26 @@ const createProfileMobile = () => {
 
     //logic to display the image on database
     async function getImage() {
-        fetch("/api/upload")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error()
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.length == 0) {
-                    return
-                } else {
-                    const profileImg = data[0].hash_name;
-                    profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
-
-                }
-            })
-            .catch(error => {
-                notification("Erro inesperado ao carregar a imagem de perfil, tente novamente mais tarde!")
-                console.error('Erro ao solicitar a imagem:', error);
-            });
+        try {
+            fetch("/api/upload")
+                .then(response => {
+                    if (!response.status == 200) {
+                        throw new Error()
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length == 0) {
+                        profileImage.style.backgroundImage = `none`;
+                    } else {
+                        const profileImg = data[0].hash_name;
+                        profileImage.style.backgroundImage = `url("/assets/uploads/${profileImg}")`;
+                    }
+                })
+        }
+        catch (error) {
+            console.error("Erro ao buscar imagem no servidor!", error)
+        };
     }
     //logic to display the image on database
     async function getImageMenu() {
@@ -264,7 +264,7 @@ const createProfileMobile = () => {
                 formData.append("image", picture);
 
                 fetch("/api/upload", {
-                    method: "POST",
+                    method: "PUT",
                     body: formData
                 })
                     .then(response => {
@@ -284,7 +284,7 @@ const createProfileMobile = () => {
 
     //edit profile informations
     save.addEventListener("click", () => {
-        if (validateEmail()) {
+        if (validateInfo()) {
             submitUserInfo();
         };
     })
@@ -293,13 +293,22 @@ const createProfileMobile = () => {
         nameInput.value = name.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '')
     });
 
-    function validateEmail() {
-        const email = emailInput.value.trim().toLowerCase();
+    function validateInfo() {
+        const email = emailInput.value.trim();
+        const fullName = nameInput.value.trim();
         const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
         const emailValid = regex.test(email);
 
-        if (emailValid === false && email !== "") {
+        if (fullName == "" && email == "") {
+            notification("Insira suas novas informações!");
+            return false;
+        }
+        else if (emailValid === false) {
             notification("Insira um endereço de email valido!");
+            return false;
+        }
+        else if (fullName == "") {
+            notification("O nome não pode estar vazio!");
             return false;
         }
         return true;
@@ -556,20 +565,29 @@ const createProfileMobile = () => {
     const emails = document.createElement("div");
     emails.id = "help-mails";
     const topic = document.createElement("h3");
-    topic.id = "help-topic";
-    topic.textContent = "Entre em contato conosco através dos emails: "
+    topic.className = "help-topic";
+    topic.textContent = "Entre em contato conosco através de um dos endereços de email abaixo: "
     const e1 = document.createElement("h4");
-    e1.textContent = "carlos@aspirantealphaedtech.com";
+    e1.textContent = "carlos13bem@gmail.com";
     const e2 = document.createElement("h4");
-    e2.textContent = "kevin@aspirantealphaedtech.com";
+    e2.textContent = "kevineduardoferreira@gmail.com";
     const e3 = document.createElement("h4");
-    e3.textContent = "neuton@aspirantealphaedtech.com";
+    e3.textContent = "junior_nakazono@hotmail.com";
     const e4 = document.createElement("h4");
-    e4.textContent = "ligia@aspirantealphaedtech.com";
+    e4.textContent = "santiago.ligia.751@gmail.com";
+    const repositoryTitle = document.createElement("h3");
+    repositoryTitle.className = "help-topic";
+    repositoryTitle.textContent = "Quer saber mais sobre o nosso projeto? Visite nosso repositorio no GitHub: "
+    const respositoryAddress = document.createElement("a");
+    respositoryAddress.id = "repository-link"
+    respositoryAddress.textContent = "https://github.com/NeutonNakazonoJr/food-point";
+    respositoryAddress.href = "https://github.com/NeutonNakazonoJr/food-point"
     helpTab.appendChild(helpBody)
     helpBody.appendChild(subtitle)
     helpBody.appendChild(helpIntr)
     helpBody.appendChild(emails)
+    helpBody.appendChild(repositoryTitle)
+    helpBody.appendChild(respositoryAddress)
     emails.appendChild(topic)
     emails.appendChild(e1)
     emails.appendChild(e2)

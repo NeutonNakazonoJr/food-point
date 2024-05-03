@@ -113,32 +113,31 @@ const createCardSection = () => {
 	const cardSection = htmlCreator.createSection("card-section-landing");
 	const cardInfos = [
 		{
-			urlImg: "./assets/icons/bandeja.svg",
 			cardTitle: "Construa seus Pratos",
 			cardText:
-				"Crie suas pratos únicos e memoráveis, adicionando ingredientes, instruções e imagens",
+				"Planeje seu menu de forma detalhada separando cada prato por um propósito específico na progressão do jantar e específicando os ingredientes relacionados.",
+			id: 'title-first-card'
 		},
 		{
-			urlImg: "./assets/icons/gg_list.svg",
 			cardTitle: "lista de Compras Dinâmica",
 			cardText:
-				"Deixe nosso sistema calcular automaticamente a quantidade dos ingredientes necessários para suas receitas.",
+				"Após a definição dos pratos, tenha acesso à sua lista de compras com o total de ingredientes necessários, podendo atualizar e fazer download em PDF.",
+			id: 'title-second-card'
 		},
 		{
-			urlImg: "./assets/icons/calendar.svg",
 			cardTitle: "Personalização do Evento",
 			cardText:
-				"Dê vida ao seu evento com convites personalizados, E sugestões de cardápio de acordo com seu estilo de comida preferido.",
+				"Registre seus eventos e mantenha-os salvos para reutilizá-los sempre que desejar! Atualize suas informações a qualquer momento para manter seus eventos sempre atualizados.",
+			id: 'title-third-card'
 		},
 	];
 
-	cardInfos.forEach((cardInfo) => {
+	cardInfos.forEach(cardInfo => {
 		const cardContainer = htmlCreator.createDiv(".card-landing");
-		const cardIcon = htmlCreator.createImg(cardInfo.urlImg);
 		const title = htmlCreator.createTitle("h4", cardInfo.cardTitle);
+		title.id = cardInfo.id;
 		const text = htmlCreator.createParagraph(cardInfo.cardText);
 
-		cardContainer.appendChild(cardIcon);
 		cardContainer.appendChild(title);
 		cardContainer.appendChild(text);
 
@@ -171,41 +170,56 @@ function landingPageComponent() {
 	document.body.style.backgroundImage =
 		"url(./assets/images/background-landing.webp)";
 	document.body.classList.add("body-landing");
+	const containerLanding = htmlCreator.createDiv('container-landing');
+	containerLanding.style.backgroundImage =
+		"url(./assets/images/background-landing.png)";
+
 	const header = createHeader();
 	const main = createMain();
 
-	const mainContainer = htmlCreator.createSection("main-container-landing");
-	const ballOrnamentOne = htmlCreator.createImg(
-		"./assets/icons/side-ball.svg",
-		"side-ball-one"
-	);
-	const ballOrnamentTwo = htmlCreator.createImg(
-		"./assets/icons/side-ball.svg",
-		"side-ball-two"
-	);
-	const ballOrnamentThree = htmlCreator.createImg(
-		"./assets/icons/side-ball.svg",
-		"side-ball-three"
-	);
-	const ballOrnamentFour = htmlCreator.createImg(
-		"./assets/icons/side-ball.svg",
-		"side-ball-four"
-	);
-	const sideTableOrnament = htmlCreator.createImg(
-		"./assets/icons/side-table.svg",
-		"side-table-ornament"
-	);
+	const imgsDefinition = [
+		{
+			url: "./assets/icons/side-ball.svg",
+			id: "side-ball-one",
+			class: 'ornament'
+		},
+		{
+			url: "./assets/icons/side-ball.svg",
+			id: "side-ball-two",
+			class: 'ornament'
+		},
+		{
+			url: "./assets/icons/side-ball.svg",
+			id: "side-ball-three",
+			class: 'ornament'
+		},
+		{
+			url: "./assets/icons/side-ball.svg",
+			id: "side-ball-four",
+			class: 'ornament'
+		}
+	]
 
-	mainContainer.appendChild(ballOrnamentOne);
-	mainContainer.appendChild(ballOrnamentTwo);
-	mainContainer.appendChild(ballOrnamentThree);
-	mainContainer.appendChild(ballOrnamentFour);
+	const mainContainer = htmlCreator.createSection("main-container-landing");
+
+	for (const img of imgsDefinition) {
+		const ballOrnament = htmlCreator.createImg(img.url, img.id);
+		ballOrnament.classList.add(img.class);
+		mainContainer.appendChild(ballOrnament);	
+	}
+
+	const sideTableOrnament = htmlCreator.createImg("./assets/icons/side-table.svg", "side-table-ornament");
+	sideTableOrnament.classList.add('ornament');
 	mainContainer.appendChild(sideTableOrnament);
+	
 
 	mainContainer.appendChild(header);
 	mainContainer.appendChild(main);
 
-	return mainContainer;
+	containerLanding.appendChild(mainContainer);
+
+
+	return containerLanding;
 }
 
 export default landingPageComponent;

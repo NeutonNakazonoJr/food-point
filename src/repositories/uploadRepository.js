@@ -15,7 +15,7 @@ const uploadRepository = {
         }
     },
     getImage: async (userId) => {
-        const query = 'SELECT hash_name FROM upload WHERE user_id = $1'// ORDER BY uploaded DESC LIMIT 1';
+        const query = 'SELECT hash_name FROM upload WHERE user_id = $1';
         try {
             const { rows } = await dbConnection.query(query, [userId]);
             return rows;
@@ -24,29 +24,26 @@ const uploadRepository = {
             throw new Error("Erro ao localizar imagem no banco de dados", error)
         }
     },
-    getOldImage: async (userId) => {
-        const query = 'SELECT hash_name FROM upload WHERE user_id = $1 ORDER BY uploaded ASC LIMIT 1';
-        try {
-            const { rows } = await dbConnection.query(query, [userId]);
-            return rows;
+    updateImage: async (image) => {
+        const query = 'UPDATE upload SET original_name = $1, hash_name = $2, image_path = $3, uploaded = CURRENT_TIMESTAMP WHERE user_id = $4 RETURNING *';
+        try{
+            const {rows} = await dbConnection.query(query, [image.original_name, image.hash_name, image.image_path, image.user_id])
+        return rows[0]
         }
         catch (error) {
-            throw new Error("Erro ao localizar imagem", error)
+            throw new Error("Erro ao atualizar imagem no banco de dados", error) 
         }
     },
     deleteImage: async (oldName) => {
         const imagePath = path.join(__dirname, '../../public/assets/uploads/', oldName);
-        const query = 'DELETE FROM upload WHERE hash_name = $1';
         try {
             if (!fs.existsSync(imagePath)) {
             throw new Error()
             } 
             fs.unlinkSync(imagePath);
-            const { rows } = await dbConnection.query(query, [oldName]);
-            return rows;
         }
         catch(error){
-            console.error("Erro ao apagar imagem", error);
+            console.error("Erro ao apagar arquivo imagem", error);
         }
     }
 

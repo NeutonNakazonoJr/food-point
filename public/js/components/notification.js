@@ -13,7 +13,7 @@ function notification(message) {
             setTimeout(() => {
                 document.getElementById("root").removeChild(alert);
             }, 500);
-        }, 3000);
+        }, 2400);
     }, 100);
 }
 

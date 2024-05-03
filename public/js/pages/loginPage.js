@@ -1,6 +1,62 @@
 import dispatchOnStateChange from "../events/onStateChange.js";
 import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
+import htmlCreator from "../utils/htmlCreator.js";
+import createModal from "./modal/createModal.js";
+import { postRecoverPasswordEmail } from "../api/passwordApi.js";
+
+const createFormToRecoverPass = () => {
+    const inputEmail = htmlCreator.createInput({type: 'email', id: 'input-email-recover-pass', labelText: 'Digite seu email cadastrado:'});
+    const span = htmlCreator.createSpan('Enviaremos um código e um link para a redefinição da senha.');
+
+    const title = htmlCreator.createTitle('h3', 'Recuperar senha'); 
+    
+    const submitEmailBtn = htmlCreator.createButton('Enviar', 'submit-recover-pass-btn');
+    
+    submitEmailBtn.addEventListener('click', async (e) => {
+        e.preventDefault(); 
+        const submitEmail = document.getElementById('input-email-recover-pass').value;
+        console.log(submitEmail);
+        if (!submitEmail) {
+            showToast('Email indefinido')
+            return
+        }
+
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!emailPattern.test(submitEmail)) {
+            showToast('Email inválido')
+            return
+        }
+
+        const requestToSendEmail = await postRecoverPasswordEmail({email: submitEmail});
+  
+        if (requestToSendEmail.error) {
+            showToast(requestToSendEmail.error)
+            return
+        }
+
+        return showToast(requestToSendEmail.message);
+    })
+
+    
+    
+    const fieldset = document.createElement('fieldset');
+    fieldset.id = 'fieldset-login-recover-pass';
+    fieldset.appendChild(inputEmail);
+    fieldset.appendChild(span);
+    fieldset.appendChild(submitEmailBtn);
+    
+    const forgetPassForm = document.createElement('form');
+    forgetPassForm.id = ('login-form-forget-pass');
+    forgetPassForm.appendChild(title);
+    forgetPassForm.appendChild(fieldset);
+
+    const modal = createModal(forgetPassForm);
+    return modal;
+}
+
+
 
 const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
@@ -25,8 +81,22 @@ const createLoginForm = () => {
     loginFormDiv.id = 'login-form';
     loginForm.appendChild(loginFormDiv);
 
+    const landing = document.createElement("div");
+    landing.id = "landing-button"
+    const home = document.createElement("button");
+    home.id = "back-landing"
+    home.textContent = "Voltar"
+    const backIcon = document.createElement("img")
+    backIcon.id = "back-flag"
+    backIcon.src = "/assets/icons/flag-back-wine.svg"
+
+    home.appendChild(backIcon)
+    landing.appendChild(home)
+    loginFormDiv.appendChild(landing)
+
     const imgLogoDiv = document.createElement('div');
     imgLogoDiv.id = 'img-logo';
+    
     const imgLogo = document.createElement('img');
     imgLogo.src = './assets/icons/main-logo-login.svg';
     imgLogo.alt = 'logo';
@@ -40,6 +110,16 @@ const createLoginForm = () => {
     const loginCompleteSection = document.createElement('section');
     loginCompleteSection.id = 'login-complete';
     loginFormDiv.appendChild(loginCompleteSection);
+
+    const forgetBtn = htmlCreator.createButton('Esqueceu sua senha?', 'forget-pass-btn-login');
+
+    forgetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const form = createFormToRecoverPass()
+
+        const containerRoot = document.getElementById('root');
+        containerRoot.appendChild(form);
+    })
 
     const dataLoginDiv = document.createElement('div');
     dataLoginDiv.id = 'data-login';
@@ -73,6 +153,7 @@ const createLoginForm = () => {
     passwordLoginDiv.appendChild(passwordLabel);
     passwordLoginDiv.appendChild(passwordInput);
     dataLoginDiv.appendChild(passwordLoginDiv);
+    dataLoginDiv.appendChild(forgetBtn);
 
     function createPasswordToggleBtn(passwordField) {
         const toggleBtn = document.createElement('button');
@@ -130,12 +211,17 @@ const createLoginForm = () => {
     function validateLoginForm() {
         const email = document.getElementById("email-login").value;
         const password = document.getElementById("password-login").value;
+        const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+        const emailValid = regex.test(email);
 
         if (!email || !password) {
             showToast("Por favor, preencha todos os campos.");
             return false;
         }
-
+        else if ( emailValid === false){
+            showToast("Insira um endereço de email valido!");
+            return false
+        }
         return true;
     }
 
@@ -189,6 +275,10 @@ const createLoginForm = () => {
             }
         }
     });
+
+    home.addEventListener("click", () => {
+        dispatchOnStateChange("/")
+    })
 
     return bodyLogin;
 };

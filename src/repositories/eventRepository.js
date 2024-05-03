@@ -179,15 +179,22 @@ const eventRepository = {
                 FROM (VALUES ${valuesClause}) AS v(purchased, name, eventId)
                 WHERE i.name = v.name AND i.event_id = v.eventId
             `;
+               
+            await dbConnection.query(query, params); 
+            await dbConnection.query('COMMIT'); 
+    
+            return { success: true, message: 'Atualização bem sucedida' }; 
+        } catch (error) {
+            await dbConnection.query('ROLLBACK'); 
+            throw error; 
+        } 
+    },
 
-			await dbConnection.query(query, params);
-			await dbConnection.query("COMMIT");
-
-			return { success: true, message: "Atualização bem sucedida" };
-		} catch (error) {
-			await dbConnection.query("ROLLBACK");
-			throw error;
-		}
-	},
-};
+    getAllDishesByEventId: async (eventId) => {
+        const query = 'SELECT id as "dishId",  dish_name as "dishName", type FROM dish WHERE event_id = $1';
+        const { rows } = await dbConnection.query(query, [eventId]);
+        return rows;
+    } 
+}
 module.exports = eventRepository;
+

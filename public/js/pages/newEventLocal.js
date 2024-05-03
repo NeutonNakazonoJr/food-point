@@ -4,9 +4,10 @@ import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import apiLoading from "../utils/load/apiLoading.js";
+import { setButtonAfterInLoadState } from "../utils/load/buttonLoadState.js";
 import cepModal from "./modal/cepModal.js";
 
-function getUserLocation(div) {
+function getUserLocation(div, callbackFn) {
 	if (navigator && navigator.geolocation) {
 		const options = {
 			timeout: 10000,
@@ -27,6 +28,7 @@ function getUserLocation(div) {
 				div.dispatchEvent(event);
 			}
 			apiLoading(false);
+			callbackFn();
 		}
 		function informError(error) {
 			console.log(error);
@@ -48,6 +50,7 @@ function getUserLocation(div) {
 				);
 			}
 			apiLoading(false);
+			callbackFn()
 		}
 		navigator.geolocation.getCurrentPosition(
 			publishPosition,
@@ -116,18 +119,26 @@ function getMap(main) {
 
 	button.textContent = "Usar minha localização";
 	buttonCep.textContent = "Usar meu cep";
-	button.addEventListener("click", () => getUserLocation(div));
+	button.addEventListener("click", () => {
+		setButtonAfterInLoadState(button, true);
+		getUserLocation(div, () => {
+			setButtonAfterInLoadState(button, false);
+		})
+	});
 	buttonCep.addEventListener("click", (e) => {
 		e.preventDefault();
+		setButtonAfterInLoadState(buttonCep, true);
 		const modal = cepModal(div);
 		const root = document.getElementById("root");
 		root.appendChild(modal);
 		modal.addEventListener("click", () => {
 			modal.remove();
+			setButtonAfterInLoadState(buttonCep, false);
 		});
 		modal.addEventListener("publishCep", (e) => {
 			modal.remove();
 			div.dispatchEvent(new CustomEvent("postUserGeoLocation", e));
+			setButtonAfterInLoadState(buttonCep, true);
 		});
 	});
 

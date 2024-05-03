@@ -13,6 +13,7 @@ import { getMyLogin } from "../api/userApi.js";
 import showToast from "../components/toast.js";
 import newEventLocalPage from "../pages/newEventLocal.js";
 import createPurchaseListPage from "../pages/purchaseList.js";
+import createForgetPasswordPage from "../pages/forgetPass.js";
 
 const title = "Food Point";
 
@@ -114,6 +115,12 @@ const routes = {
 		description: "Lista de compras de ingredientes relacionadas ao evento",
 		needLogin: true,
 	},
+	"/forget-password": {
+		html: createForgetPasswordPage,
+		title: "Recuperar senha | " + title,
+		description: "recuperação de senha",
+		needLogin: false,
+	}
 };
 
 /** Check the current path and returns according with it

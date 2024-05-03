@@ -29,9 +29,9 @@ const ingredientController = {
         }
     },
 
-    getIngredientsName: async (req, res) => {
+    getIngredientsInfo: async (req, res) => {
         try {
-            const ingredientList = await ingredientRepository.getIngredientsNameByDish(req.params.dishId);
+            const ingredientList = await ingredientRepository.getIngredientsInfoByDish(req.params.dishId);
             return res.status(200).json({ingredientList});
         } catch (error) {
             return res.status(500).json({ error: 'Erro interno no servidor' });

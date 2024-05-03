@@ -56,20 +56,39 @@ export default function getHeader(
 	if (userIsLogged) {
 		const a = document.createElement("a");
 		const img = document.createElement("img");
-		const span = document.createElement("span");
 
 		redirectToHome(h1);
 
 		a.href = profilePageUrl;
-		img.src = userImg;
-		setANimationForAnchor(a, animation);
+		getImage();
+		function getImage() {
+			fetch("/api/upload")
+				.then(response => {
+					if (!response.ok) {
+						throw new Error()
+					}
+					return response.json();
+				})
+				.then(data => {
+					if (data.length == 0) {
+						img.src = userImg;
+					} else {
+						const hash = data[0].hash_name;
+						img.src = `/assets/uploads/${hash}`;
+					}
+				})
+				.catch(error => {
+					img.src = userImg;
+					console.error('Erro ao solicitar a imagem de perfil:', error);
+				});
+		}
+		// setANimationForAnchor(a, animation);
 		a.addEventListener("click", (e) => {
 			e.preventDefault();
 			dispatchOnStateChange(a.href, { animation: false });
 		});
 
 		a.appendChild(img);
-		a.appendChild(span);
 		header.appendChild(a);
 	}
 
