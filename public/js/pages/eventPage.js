@@ -24,7 +24,14 @@ const createEventMainTitleDiv = () => {
 export function createSectionBasicInfos(basicInfos, eventID, editMode) {
 	const basicInfosSection = htmlCreator.createSection("basic-infos-section");
 
-	if (Object.values(basicInfos).every((value) => value === null)) {
+	const interestingInfos = {
+		eventDate: basicInfos.eventDate,
+		eventDescription: basicInfos.eventDescription,
+		eventName: basicInfos.eventName,
+		eventTheme: basicInfos.eventTheme,
+		eventTime: basicInfos.eventTime,
+	};
+	if (Object.values(interestingInfos).every((value) => value === null)) {
 		const divUndefinedBasicInfos = htmlCreator.createDiv(
 			"div-undefined-basic-infos"
 		);
