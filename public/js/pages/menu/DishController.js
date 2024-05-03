@@ -23,19 +23,15 @@ export default class DishController {
 
 	getDishes() {
 		const dishes = this.#dishes;
-		console.log("GET", this.#dishes);
-
 		return dishes;
 	}
 
 	getOneDish(dishId) {
 		const index = this.#dishes.findIndex((dish) => dish.dishId === dishId);
 		if (index === -1) {
-			console.log(`Prato com ID ${dishId} não existe.`);
 			return;
 		}
 		const dish = this.#dishes[index];
-		console.log("GET ONE", this.#dishes);
 		return dish;
 	}
 
@@ -52,12 +48,10 @@ export default class DishController {
 			(dish) => dish.dishId === dishId
 		);
 		if (this.#dishes.length > 0 && dishAlreadyExists) {
-			console.log(`Prato com ID ${dishId} já existe.`);
 			return;
 		}
 
 		if (!type) {
-			console.error(`Prato tentou ser criado com TYPE vazio.`);
 			return;
 		}
 
@@ -112,20 +106,15 @@ export default class DishController {
 		}
 		dish.dishId = res.dishId;
 		this.#dishes.push(dish);
-
-		console.log(`Prato "${dishName}" adicionado com sucesso.`);
-		console.log("POST", this.#dishes);
 	}
 
 	async updateDish(dishId, dishName) {
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
-			console.log(`Prato com ID ${dishId} não existe.`);
 			return;
 		}
 
 		if (!dishName) {
-			console.error(`Prato tentou ser atualizado com DISH_NAME vazio.`);
 			return;
 		}
 
@@ -140,13 +129,11 @@ export default class DishController {
 			...this.#dishes[index],
 			dishName: dishName,
 		};
-		console.log("PUT", this.#dishes);
 	}
 
 	async removeDish(dishId) {
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
-			console.log(`Prato com ID ${dishId} não existe.`);
 			return;
 		}
 
@@ -158,8 +145,6 @@ export default class DishController {
 		}
 
 		this.#dishes.splice(index, 1);
-		console.log(`Prato com ID ${dishId} removido com sucesso.`);
-		console.log("DELETE  | current arr: ", this.#dishes);
 	}
 
 	findDishIndex(dishId) {
@@ -179,10 +164,8 @@ export default class DishController {
 	}
 
 	async pushIngredient(dishId, ingredient) {
-		console.log("DishController.pushIngredient");
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
-			console.log("não encontramos esse prato (ID):" + dishId);
 			return;
 		}
 		if (ingredient.id) {
@@ -228,20 +211,16 @@ export default class DishController {
 		newIngredient.id = res.newIngredientId.id;
 
 		this.#dishes[index].ingredients.push(newIngredient);
-		console.log(`Ingrediente adicionado para o prato com ID ${dishId}.`);
-		console.log("PUT", this.#dishes);
 	}
 
 	async updateIngredient(dishId, ingredient) {
 		clearTimeout(this.#idDebounceForIngredientUpdate[ingredient.id]);
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
-			console.log("não encontramos esse ID:" + dishId);
 			return;
 		}
 		const ingredientIndex = this.findIngredientIndex(index, ingredient);
 		if (ingredientIndex === -1) {
-			console.log(`o ingrediente com ID ${ingredientIndex} não existe.`);
 			return;
 		}
 
@@ -280,9 +259,7 @@ export default class DishController {
 				showToast(JSON.parse(res.error));
 				return;
 			}
-			console.log("debounce trigger", res);
 		}, this.#debounceDelay);
-		console.log("debounce agendado", this.#idDebounceForIngredientUpdate);
 
 		this.#dishes[index].ingredients[ingredientIndex] = {
 			...this.#dishes[index].ingredients[ingredientIndex],
@@ -290,20 +267,16 @@ export default class DishController {
 			unityMeasure: newIngredient.unityMeasure,
 			quantity: newIngredient.quantity,
 		};
-		console.log(`Ingredientes atualizados para o prato com ID ${dishId}.`);
-		console.log("PUT", this.#dishes);
 	}
 
 	async deleteIngredient(dishId, ingredientId) {
 		clearTimeout(this.#idDebounceForIngredientUpdate[ingredientId]);
 		const index = this.findDishIndex(dishId);
 		if (index === -1) {
-			console.log("não encontramos esse ID:" + dishId);
 			return;
 		}
 		const ingredientIndex = this.findIngredientIndex(index, ingredientId);
 		if (ingredientIndex === -1) {
-			console.log(`o ingrediente com ID ${ingredientIndex} não existe.`);
 		}
 		const res = await deleteIngredient(this.#eventID, dishId, ingredientId);
 		if (res.error) {
@@ -313,7 +286,5 @@ export default class DishController {
 		}
 
 		this.#dishes[index].ingredients.splice(ingredientIndex, 1);
-		console.log(`Ingrediente deletado para o prato com ID ${dishId}.`);
-		console.log("DELETE", this.#dishes);
 	}
 }

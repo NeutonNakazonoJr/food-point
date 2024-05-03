@@ -343,7 +343,6 @@ const createGuestPage = (
 	});
 	//logic that sends the array with the guest list to the api
 	finish.addEventListener("click", () => {
-		console.log(guests);
 		dispatchOnStateChange("/home/create/success");
 		dispatchOnStateChange("/home");
 	});

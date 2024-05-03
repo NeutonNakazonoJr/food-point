@@ -70,7 +70,6 @@ export default function createForgetPasswordPage() {
     fieldset.appendChild(inputContainer);
     fieldset.appendChild(secontInputContainer);
     fieldset.appendChild(submitBtn);
-    console.log(fieldset);
     form.appendChild(fieldset);
 
     const recoverPasswordContainer = htmlCreator.createSection('recover-pass-container');

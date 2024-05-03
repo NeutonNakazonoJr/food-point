@@ -167,12 +167,9 @@ const createMain = () => {
 };
 
 function landingPageComponent() {
-	document.body.style.backgroundImage =
-		"url(./assets/images/background-landing.webp)";
-	document.body.classList.add("body-landing");
 	const containerLanding = htmlCreator.createDiv('container-landing');
 	containerLanding.style.backgroundImage =
-		"url(./assets/images/background-landing.png)";
+		"url(./assets/images/background-landing.webp)";
 
 	const header = createHeader();
 	const main = createMain();

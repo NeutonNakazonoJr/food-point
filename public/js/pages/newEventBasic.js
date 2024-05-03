@@ -220,8 +220,6 @@ async function saveInfoAndMoveOn(eventId, form) {
 			eventTime: hours,
 		};
 		const result = await putEvent(eventId, eventInfos);
-		console.log(result);
-
 		if (result instanceof Error) {
 			showToast(result);
 		} else {

@@ -10,7 +10,6 @@ const ingredientController = {
                 updatedIngredient
             })
         } catch (error) {
-            console.log(error.message);
             return res.status(500).json({error: 'Erro interno no servidor'});
         }
     },

@@ -125,7 +125,6 @@ function getDishField(dishId, dishName) {
 	});
 
 	fieldset.addEventListener("dispatchIngredientChange", () => {
-		console.log("fieldset dispatchIngredientChange 94.js");
 		if (!saved && input.checkValidity()) {
 			saved = true;
 			updateDish(dishId, input.value.trim(), false);
@@ -454,11 +453,9 @@ function bootEmptyForm(form, h1, p) {
 			);
 			if (index === -1) {
 				dish.ingredients.push(e.detail);
-				console.log("soft push", dish);
 				return;
 			}
 			dish.ingredients[index] = e.detail;
-			console.log("soft update", dish);
 		}
 	};
 	const removeIngredient = (e) => {
@@ -468,11 +465,9 @@ function bootEmptyForm(form, h1, p) {
 				return;
 			}
 			dish.ingredients.splice(index, 1);
-			console.log("soft remove", dish);
 		}
 	};
 	const publishDish = (e) => {
-		console.log("publish", Date.now(), dish);
 		dish.dishName = e.detail;
 		saveDish(dish.dishName, dish.ingredients);
 	};
@@ -488,7 +483,6 @@ function bootEmptyForm(form, h1, p) {
 }
 
 function bootForm(form, h1, p, dish) {
-	console.log("fn bootform called!");
 	form.innerHTML = "";
 
 	if (!dish) {
@@ -506,7 +500,6 @@ function bootForm(form, h1, p, dish) {
 }
 
 export default async function getForm(menu, currentType, mainComponent) {
-	console.log("get FORM - " + Date.now());
 
 	main = mainComponent;
 	const form = document.createElement("form");

@@ -16,7 +16,6 @@ const createFormToRecoverPass = () => {
     submitEmailBtn.addEventListener('click', async (e) => {
         e.preventDefault(); 
         const submitEmail = document.getElementById('input-email-recover-pass').value;
-        console.log(submitEmail);
         if (!submitEmail) {
             showToast('Email indefinido')
             return
@@ -177,35 +176,11 @@ const createLoginForm = () => {
     const toggleBtn = createPasswordToggleBtn(passwordInput);
     passwordLoginDiv.appendChild(toggleBtn);
 
-    // const rememberPasswordDiv = document.createElement('div');
-    // rememberPasswordDiv.id = 'remember-password';
-    // loginCompleteSection.appendChild(rememberPasswordDiv);
-
-    // const rememberAllPasswordDiv = document.createElement('div');
-    // rememberAllPasswordDiv.id = 'remember-all-password';
-    // rememberPasswordDiv.appendChild(rememberAllPasswordDiv);
-
-    // const rememberPasswordInput = document.createElement('input');
-    // rememberPasswordInput.type = 'checkbox';
-    // rememberPasswordInput.id = 'remember-passw';
-    // rememberPasswordInput.alt = 'lembrar senha';
-    // const rememberPasswordLabel = document.createElement('label');
-    // rememberPasswordLabel.textContent = 'Lembrar minha senha';
-    // rememberPasswordLabel.setAttribute('for', 'remember-passw');
-    // rememberAllPasswordDiv.appendChild(rememberPasswordInput);
-    // rememberAllPasswordDiv.appendChild(rememberPasswordLabel);
-
     const loginButton = document.createElement('button');
     loginButton.type = 'button';
     loginButton.id = 'loginPage-btn';
     loginButton.alt = 'Entrar';
     loginButton.textContent = 'Entrar';
-
-    // loginButton.addEventListener("click", (e) => {
-    //     e.preventDefault();
-    //     console.log("click");
-    //     dispatchOnStateChange("/home");
-    // })
     loginFormDiv.appendChild(loginButton);
 
     function validateLoginForm() {

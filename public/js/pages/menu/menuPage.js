@@ -125,7 +125,6 @@ export default async function menuPage(constructorInfo) {
 			e.detail.dishName
 		);
 		if (e.detail.addDish) {
-			console.log("main updateDish addDish");
 			await dispatchThisEventForElements(
 				form,
 				display,
@@ -133,10 +132,8 @@ export default async function menuPage(constructorInfo) {
 				{}
 			);
 		} else {
-			console.log("main updateDish NOT addDish");
 			await dispatchThisEventForElements(form, display, "updateDish", e);
 		}
-		console.log("main updateDish executed");
 	});
 
 	main.addEventListener("updateIngredient", async (e) => {
@@ -169,7 +166,6 @@ export default async function menuPage(constructorInfo) {
 			"postIngredient",
 			e
 		);
-		console.log("main updateIngredient executed");
 	});
 
 	main.addEventListener("deleteIngredient", async (e) => {

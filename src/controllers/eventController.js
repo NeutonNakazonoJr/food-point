@@ -68,7 +68,6 @@ const eventController = {
 			);
 			return res.status(200).json({ eventInfos });
 		} catch (error) {
-			console.log(error.message);
 			return res.status(500).json({ error: "Erro interno no servidor" });
 		}
 	},

@@ -25,7 +25,6 @@ const guestList = (eventID) => {
 export default guestList
 
 const guests = []
-console.log(guests)
 
 function form(eventID) {
     const addguest = document.createElement("form");
@@ -86,7 +85,6 @@ function form(eventID) {
                         const id = data[0].id
                         createCard(guest, id);
                         guests.push(guest);
-                        console.log(guests);
                         notification("Convidado adicionado!")
                         document.getElementById("guest-box-modal").style.display = "flex"
                     })
@@ -118,7 +116,6 @@ function guestBox(eventID) {
                 data.forEach(guest => {
                     createCard(guest.name, guest.id)
                     guests.push(guest.name)
-                    console.log(guest)
                 });
             }
         })
@@ -146,7 +143,6 @@ function createCard(guest, id) {
     document.getElementById("guest-box-modal").appendChild(guestCard)
 
     editButton.addEventListener("click", () => {
-        console.log(guests)
         const guestModalContent = document.getElementById("guestlist-modal")
         const addguest = document.getElementById("add-guest")
         const endpage = document.getElementById("end-page")
@@ -257,7 +253,6 @@ function createCard(guest, id) {
                     const guestIndex = guests.indexOf(guest);
                     if (guestIndex !== -1) {
                         guests.splice(guestIndex, 1);
-                        console.log(guests)
                     }
                     if (guests.length === 0) {
                         box.style.display = "none";
