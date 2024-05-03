@@ -19,12 +19,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE FUNCTION is_valid_location(text_to_check TEXT) RETURNS BOOLEAN AS $$
+CREATE OR REPLACE FUNCTION is_valid_location(text_to_check TEXT) RETURNS BOOLEAN AS $$
 BEGIN
     IF text_to_check = '' THEN
         RETURN TRUE;
     END IF;
-    RETURN text_to_check ~ '^-\d+(\.\d+)?,-\d+(\.\d+)?$';
+    RETURN text_to_check ~ '^-?\d+(\.\d+)?,-?\d+(\.\d+)?$';
 END;
 $$ LANGUAGE plpgsql;
 

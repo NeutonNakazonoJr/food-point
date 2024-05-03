@@ -69,7 +69,27 @@
 	}
 }
 
-#mainHeader > a {
+#mainHeader > #mainHeader-divButtons {
+	display: flex;
+	width: 90px;
+	justify-content: space-between;
+}
+
+#mainHeader > #mainHeader-divButtons > #mainHeader-buttonLogout {
+	width: 40px;
+	height: 40px;
+	background: url("/assets/icons/logout.svg") center no-repeat;
+	background-color: var(--raspberry);
+	background-size: 85%;
+	border: none;
+	border-radius: 100%;
+	cursor: pointer;
+	&:hover {
+		background-color: var(--blackberry-transparent);
+	}
+}
+
+#mainHeader > #mainHeader-divButtons > a {
 	animation: 1s 1s ease-in-out alternate both;
 	align-items: center;
 	border-radius: var(--border-radius-3x);
@@ -77,19 +97,32 @@
 	cursor: pointer;
 	filter: brightness(1);
 	justify-content: space-between;
-	height: 70%;
+	height: 40px;
 	overflow: hidden;
 	width: 40px;
+	position: relative;
 	&:hover {
 		filter: brightness(0.9);
+		&::before {
+			content: "";
+			display: inline-block;
+			height: 40px;
+			width: 40px;
+			background: url("../icons/pencil-white.svg") center no-repeat;
+			background-size: 66%;
+			background-color: var(--blackberry-transparent);
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
 	}
 	& > img {
 		height: 100%;
+		width: 100%;
 		border-radius: 100%;
 		object-fit: cover;
 	}
 }
-
 
 @media screen and (max-width: 425px) {
 	#mainHeader {
@@ -100,9 +133,6 @@
 	#mainHeader {
 		& > h1 {
 			font-size: 1.5rem;
-		}
-		& > a {
-			width: 70px;
 		}
 	}
 }

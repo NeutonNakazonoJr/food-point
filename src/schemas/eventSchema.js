@@ -4,7 +4,7 @@ const moment = require("moment-timezone");
 const rgxText = /^[a-zA-ZÀ-ÖØ-öø-ÿ\s"^`~:.,?!-]+$/;
 const rgxTime = /^(([01]\d|2[0-3]):([0-5]\d))$/;
 const rgxDate = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-const rgxLocation = /^-\d+(\.\d+)?,-\d+(\.\d+)?$/;
+const rgxLocation = /^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/;
 const rgxDish = /^[a-zA-ZÀ-ÖØ-öø-ÿ\s'-]+$/;
 const rgxUnityMeasure = /^\b([a-zA-Z]+)\s*\(([a-zA-Z]{1,2})\)$/;
 
@@ -126,7 +126,7 @@ const eventSchema = {
 		location: joi.string().pattern(rgxLocation).required().messages({
 			"string.base": "O tipo de dado localização deve ser uma string",
 			"string.pattern.base":
-				"O nome do prato deve conter apenas números, traços e virgulas",
+				"A localização deve conter apenas números, traços e virgulas",
 			"any.required": "O campo location é obrigatório",
 			"string.empty": "O campo location não pode estar vazio",
 		}),

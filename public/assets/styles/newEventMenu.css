@@ -371,6 +371,12 @@
 		width: 60%;
 	}
 }
+@media screen and (max-width: 500px) {
+	#newEventMenu-footer {
+		padding-right: 0;
+		justify-content: center;
+	}
+}
 
 @media screen and (max-width: 770px) {
 	#newEventMenu {

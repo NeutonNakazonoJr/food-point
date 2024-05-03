@@ -62,7 +62,7 @@ const createLoginForm = () => {
     const bodyLogin = document.createElement('div');
     bodyLogin.classList.add('body-login');
 
-    const headerLogin = getHeader(true, false);
+    const headerLogin = getHeader(true, false, "/");
     bodyLogin.appendChild(headerLogin);
 
     const blackOverlayLogin = document.createElement('div');
