@@ -84,7 +84,7 @@ const createLoginForm = () => {
     imgLogoDiv.id = 'img-logo';
     
     const imgLogo = document.createElement('img');
-    imgLogo.src = './assets/icons/main-logo-login.svg';
+    imgLogo.src = '/assets/icons/main-logo-login.svg';
     imgLogo.alt = 'logo';
     imgLogoDiv.appendChild(imgLogo);
     loginFormDiv.appendChild(imgLogoDiv);
@@ -112,7 +112,7 @@ const createLoginForm = () => {
     loginCompleteSection.appendChild(dataLoginDiv);
 
     const emailImg = document.createElement('img');
-    emailImg.src = './assets/icons/email-symbol.svg';
+    emailImg.src = '/assets/icons/email-symbol.svg';
     const emailLabel = document.createElement('label');
     emailLabel.textContent = 'Email:';
     const emailInput = document.createElement('input');
@@ -127,7 +127,7 @@ const createLoginForm = () => {
     const passwordLoginDiv = document.createElement('div');
     passwordLoginDiv.id = 'password-login-div';
     const passwordImg = document.createElement('img');
-    passwordImg.src = './assets/icons/password-symbol.svg';
+    passwordImg.src = '/assets/icons/password-symbol.svg';
     const passwordLabel = document.createElement('label');
     passwordLabel.textContent = 'Senha:';
     const passwordInput = document.createElement('input');
@@ -143,17 +143,17 @@ const createLoginForm = () => {
 
     function createPasswordToggleBtn(passwordField) {
         const toggleBtn = document.createElement('button');
-        toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Mostrar Senha">';
+        toggleBtn.innerHTML = '<img src="/assets/icons/vision-on.svg" alt="Mostrar Senha">';
         toggleBtn.type = 'button';
         toggleBtn.classList.add('toggle-password-btn');
 
         toggleBtn.addEventListener('click', function () {
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Ocultar Senha">';
+                toggleBtn.innerHTML = '<img src="/assets/icons/vision-off.svg" alt="Ocultar Senha">';
             } else {
                 passwordField.type = 'password';
-                toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Mostrar Senha">';
+                toggleBtn.innerHTML = '<img src="/assets/icons/vision-on.svg" alt="Mostrar Senha">';
             }
         });
 

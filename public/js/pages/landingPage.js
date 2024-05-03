@@ -3,11 +3,11 @@ import htmlCreator from "../utils/htmlCreator.js";
 
 const createHeader = () => {
 	const headerLogo = htmlCreator.createImg(
-		"./assets/icons/logo.svg",
+		"/assets/icons/logo.svg",
 		"header-logo"
 	);
 
-	const chefHatIcon = htmlCreator.createImg("./assets/icons/chef-hat.svg");
+	const chefHatIcon = htmlCreator.createImg("/assets/icons/chef-hat.svg");
 
 	const headerTitleFirstPart = htmlCreator.createTitle("h3", "Food");
 	const headerTitleSecondPart = htmlCreator.createTitle("h3", "Point");
@@ -16,7 +16,7 @@ const createHeader = () => {
 	titleDiv.appendChild(headerTitleSecondPart);
 
 	const forkKnifeIcon = htmlCreator.createImg(
-		"./assets/icons/fork-knife.svg"
+		"/assets/icons/fork-knife.svg"
 	);
 
 	const headerCentralContainer = htmlCreator.createDiv(
@@ -100,7 +100,7 @@ const createContentSection = () => {
 
 const createMiddleContainer = () => {
 	const contentSection = createContentSection();
-	const mainLogo = htmlCreator.createImg("./assets/icons/main-logo.svg");
+	const mainLogo = htmlCreator.createImg("/assets/icons/main-logo.svg");
 
 	const middleContainer = htmlCreator.createSection("middle-container");
 	middleContainer.appendChild(contentSection);
@@ -169,29 +169,29 @@ const createMain = () => {
 function landingPageComponent() {
 	const containerLanding = htmlCreator.createDiv('container-landing');
 	containerLanding.style.backgroundImage =
-		"url(./assets/images/background-landing.webp)";
+		"url(/assets/images/background-landing.webp)";
 
 	const header = createHeader();
 	const main = createMain();
 
 	const imgsDefinition = [
 		{
-			url: "./assets/icons/side-ball.svg",
+			url: "/assets/icons/side-ball.svg",
 			id: "side-ball-one",
 			class: 'ornament'
 		},
 		{
-			url: "./assets/icons/side-ball.svg",
+			url: "/assets/icons/side-ball.svg",
 			id: "side-ball-two",
 			class: 'ornament'
 		},
 		{
-			url: "./assets/icons/side-ball.svg",
+			url: "/assets/icons/side-ball.svg",
 			id: "side-ball-three",
 			class: 'ornament'
 		},
 		{
-			url: "./assets/icons/side-ball.svg",
+			url: "/assets/icons/side-ball.svg",
 			id: "side-ball-four",
 			class: 'ornament'
 		}
@@ -205,7 +205,7 @@ function landingPageComponent() {
 		mainContainer.appendChild(ballOrnament);	
 	}
 
-	const sideTableOrnament = htmlCreator.createImg("./assets/icons/side-table.svg", "side-table-ornament");
+	const sideTableOrnament = htmlCreator.createImg("/assets/icons/side-table.svg", "side-table-ornament");
 	sideTableOrnament.classList.add('ornament');
 	mainContainer.appendChild(sideTableOrnament);
 	

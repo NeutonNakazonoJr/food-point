@@ -113,7 +113,7 @@ const createFormUpdateInfos = (basicInfos, eventID) => {
     form.appendChild(divInputTime);
 
     const cancelUpdateBtn = htmlCreator.createButton('Cancelar', 'cancel-edit-btn');
-    const cancelIcon = htmlCreator.createImg('./assets/icons/x-icon.svg');
+    const cancelIcon = htmlCreator.createImg('/assets/icons/x-icon.svg');
     cancelUpdateBtn.appendChild(cancelIcon);
 
     cancelUpdateBtn.addEventListener('click', (e) => {
@@ -124,7 +124,7 @@ const createFormUpdateInfos = (basicInfos, eventID) => {
     })
 
     const sendUpdateBasicInfos = htmlCreator.createButton('Confirmar', 'save-edit-btn');
-    const sendIcon = htmlCreator.createImg('./assets/icons/v-icon.svg');
+    const sendIcon = htmlCreator.createImg('/assets/icons/v-icon.svg');
     sendUpdateBasicInfos.appendChild(sendIcon);
 
     sendUpdateBasicInfos.addEventListener('click', async (e) => {

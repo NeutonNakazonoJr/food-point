@@ -28,7 +28,7 @@ const createRegisterForm = () => {
     const imgLogoDiv = document.createElement('div');
     imgLogoDiv.id = 'img-logo';
     const imgLogo = document.createElement('img');
-    imgLogo.src = './assets/icons/main-logo-login.svg';
+    imgLogo.src = '/assets/icons/main-logo-login.svg';
     imgLogo.alt = 'logo';
     imgLogoDiv.appendChild(imgLogo);
     registerFormDiv.appendChild(imgLogoDiv);
@@ -46,7 +46,7 @@ const createRegisterForm = () => {
     registerCompleteSection.appendChild(dataRegisterDiv);
 
     const emailImg = document.createElement('img');
-    emailImg.src = './assets/icons/email-symbol.svg';
+    emailImg.src = '/assets/icons/email-symbol.svg';
     const emailLabel = document.createElement('label');
     emailLabel.textContent = 'Email:';
     const emailInput = document.createElement('input');
@@ -59,7 +59,7 @@ const createRegisterForm = () => {
     dataRegisterDiv.appendChild(emailInput);
 
     const fullNameImg = document.createElement('img');
-    fullNameImg.src = './assets/icons/userLogin.svg';
+    fullNameImg.src = '/assets/icons/userLogin.svg';
     const fullNameLabel = document.createElement('label');
     fullNameLabel.textContent = 'Nome completo:';
     const fullNameInput = document.createElement('input');
@@ -74,7 +74,7 @@ const createRegisterForm = () => {
     const passwordDiv = document.createElement('div');
     passwordDiv.id = 'password-div';
     const passwordImg = document.createElement('img');
-    passwordImg.src = './assets/icons/password-symbol.svg';
+    passwordImg.src = '/assets/icons/password-symbol.svg';
     const passwordLabel = document.createElement('label');
     passwordLabel.textContent = 'Senha:';
     const passwordInput = document.createElement('input');
@@ -90,7 +90,7 @@ const createRegisterForm = () => {
     const confirmPasswordDiv = document.createElement('div');
     confirmPasswordDiv.id = 'confirm-password-div';
     const confirmPasswordImg = document.createElement('img');
-    confirmPasswordImg.src = './assets/icons/password-symbol.svg';
+    confirmPasswordImg.src = '/assets/icons/password-symbol.svg';
     const confirmPasswordLabel = document.createElement('label');
     confirmPasswordLabel.textContent = 'Confirmar senha:';
     const confirmPasswordInput = document.createElement('input');
@@ -106,17 +106,17 @@ const createRegisterForm = () => {
 
     function createPasswordToggleBtn(passwordField) {
         const toggleBtn = document.createElement('button');
-        toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Mostrar Senha">';
+        toggleBtn.innerHTML = '<img src="/assets/icons/vision-off.svg" alt="Mostrar Senha">';
         toggleBtn.type = 'button';
         toggleBtn.classList.add('toggle-password-btn');
 
         toggleBtn.addEventListener('click', function () {
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                toggleBtn.innerHTML = '<img src="./assets/icons/vision-on.svg" alt="Ocultar Senha">';
+                toggleBtn.innerHTML = '<img src="/assets/icons/vision-on.svg" alt="Ocultar Senha">';
             } else {
                 passwordField.type = 'password';
-                toggleBtn.innerHTML = '<img src="./assets/icons/vision-off.svg" alt="Mostrar Senha">';
+                toggleBtn.innerHTML = '<img src="/assets/icons/vision-off.svg" alt="Mostrar Senha">';
             }
         });
 

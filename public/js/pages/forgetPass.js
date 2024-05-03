@@ -25,7 +25,7 @@ export default function createForgetPasswordPage() {
     const inputCode = htmlCreator.createInput({type: 'text', id: 'input-code', labelText: 'Cole o códido de validação'});
 
     const eyeIconOne = document.createElement('img');
-    eyeIconOne.src = './assets/icons/password-symbol.svg';
+    eyeIconOne.src = '/assets/icons/password-symbol.svg';
     eyeIconOne.classList.add = 'eye-icon-new-password';
 
     const inputPassword = htmlCreator.createInput(inputOptions[0]);
@@ -34,7 +34,7 @@ export default function createForgetPasswordPage() {
     inputContainer.appendChild(eyeIconOne);
 
     const eyeIconTwo = document.createElement('img');
-    eyeIconTwo.src = './assets/icons/password-symbol.svg';
+    eyeIconTwo.src = '/assets/icons/password-symbol.svg';
     eyeIconTwo.classList.add = 'eye-icon-new-password';
 
     const secondInputPassword = htmlCreator.createInput(inputOptions[1]);
