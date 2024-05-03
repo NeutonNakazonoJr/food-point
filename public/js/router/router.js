@@ -178,12 +178,7 @@ async function renderIntoRoot(root, constructorInfo) {
  */
 function initRouter(root) {
 	let constructorInfo = { animation: true };
-	renderIntoRoot(root, constructorInfo);
-
-	window.addEventListener("deleteConstructorInfo", () => {
-		constructorInfo = { animation: true };
-		console.log(constructorInfo);
-	});
+	renderIntoRoot(root, constructorInfo);;
 
 	window.addEventListener("popstate", (e) => {
 		const location = window.location.pathname;
