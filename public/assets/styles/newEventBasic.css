@@ -152,11 +152,6 @@
 		color: var(--white-smoke);
 		padding: 10px 10px 10px 30px;
 	}
-	& > input::placeholder,
-	& > #newEvent-basic-date::placeholder,
-	& > #newEvent-basic-time::placeholder {
-		color: var(--white-smoke);
-	}
 }
 
 #newEvent-basic-info > div {
@@ -215,8 +210,7 @@
 		color: var(--white-smoke);
 		filter: brightness(1);
 		&:hover {
-			border: 1px solid var(--blackberry);
-			background-color: var(--blackberry);
+			filter: brightness(0.9);
 		}
 		&::before {
 			background-image: url("../icons/send-latter.svg");

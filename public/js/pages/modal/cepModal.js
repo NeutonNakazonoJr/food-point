@@ -1,7 +1,6 @@
 import getCep from "../../api/cepApi.js";
 import showToast from "../../components/toast.js";
 import { activeButton, disableButton } from "../../utils/disableButton.js";
-import apiLoading from "../../utils/load/apiLoading.js";
 
 export default function cepModal() {
 	const wrapper = document.createElement("div");
@@ -34,16 +33,13 @@ export default function cepModal() {
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault();
 		if (form.reportValidity()) {
-			apiLoading(true);
 			const res = await getCep(parseInt(input.value.replace("-", "")));
 			if (typeof res !== "object") {
 				showToast(res.message || res || "CEP não encontrado.");
-				apiLoading(false);
 				return;
 			}
 			if (!res.lat || !res.lng) {
 				showToast("CEP existe, mas não possui coordenadas corretas.");
-				apiLoading(false);
 				return;
 			}
 			const event = new CustomEvent("publishCep", {
@@ -53,7 +49,6 @@ export default function cepModal() {
 				},
 			});
 			wrapper.dispatchEvent(event);
-			apiLoading(false);
 		}
 	});
 	input.addEventListener("input", () => {

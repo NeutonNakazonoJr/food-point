@@ -3,7 +3,6 @@ import getHeader from "../components/header.js";
 import htmlCreator from "../utils/htmlCreator.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import showToast from "../components/toast.js";
-import apiLoading from "../utils/load/apiLoading.js";
 
 
 const createDivLogo = () => {
@@ -117,14 +116,6 @@ const createDivBtn = async (igredientsToDownload, eventID) => {
     homeButton.appendChild(homeIcon);
     divBtn.appendChild(homeButton);
 
-    homeButton.addEventListener('mouseover', () => {
-        homeIcon.src = '/assets/icons/home.svg';
-    });
-
-    homeButton.addEventListener('mouseout', () => {
-        homeIcon.src = '/assets/icons/home-vermelho.svg';
-    });
-
     if (igredientsToDownload) {
         const divBtnSaveDownload = htmlCreator.createDiv('div-btn-list');
 
@@ -192,7 +183,7 @@ const createEmptyContentDiv = () => {
 }
 
 function generatePDF() {
-    apiLoading(true);
+    
     const table = document.getElementById('table-purchase-list');
 
     const cartIcon = table.querySelector('img')
@@ -208,7 +199,6 @@ function generatePDF() {
     pdf.html(table, {
         callback: function (pdf) {
             pdf.save('tabela-compras.pdf');
-			apiLoading(false);
         }
     });
 

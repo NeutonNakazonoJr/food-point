@@ -1,6 +1,4 @@
-import { logout } from "../api/userApi.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
-import showToast from "./toast.js";
 
 /** @param {HTMLElement} header
  * @param {boolean} animation
@@ -12,11 +10,11 @@ function setAnimationForHeader(header, animation) {
 	header.style.animationName = headerAnimation;
 }
 
-function redirectToHome(html, homeLink) {
+function redirectToHome(html) {
 	if (html instanceof HTMLElement) {
 		html.style.cursor = "pointer";
 		html.addEventListener("click", () => {
-			dispatchOnStateChange(homeLink, { animation: true });
+			dispatchOnStateChange("/home", { animation: true });
 		});
 	}
 }
@@ -31,37 +29,17 @@ function setANimationForAnchor(anchor, animation) {
 	anchor.style.animationName = buttonAnimation;
 }
 
-function getLogoutButton() {
-	const button = document.createElement("button");
-	button.id = "mainHeader-buttonLogout";
-	button.addEventListener("click", async (e) => {
-		e.preventDefault();
-		const res = await logout();
-		if (res.success) {
-			showToast("Usuário deslogou");
-			dispatchOnStateChange("/");
-		} else {
-			showToast("Erro ao realizar a ação...");
-		}
-	});
-
-	return button;
-}
-
 /** Generates the main header of Food Point.
  * All params are optional
  *
- * @param {boolean} animation
- * @param {boolean} [userIsLogged=true]
- * @param {"/home" | "/"} [homeLink="/home"]
  * @param {string} profilePageUrl
  * @param {string} userImg
+ * @param {boolean} animation
  * @returns {HTMLElement}
  */
 export default function getHeader(
 	animation = true,
 	userIsLogged = true,
-	homeLink = "/home",
 	profilePageUrl = "/profile",
 	userImg = "/assets/icons/profile-placeholder.svg"
 ) {
@@ -73,12 +51,9 @@ export default function getHeader(
 	h1.textContent = "Food Point";
 	header.appendChild(h1);
 
-	redirectToHome(h1, homeLink);
+	redirectToHome(h1);
 
 	if (userIsLogged) {
-		const div = document.createElement("div");
-		div.id = "mainHeader-divButtons";
-
 		const a = document.createElement("a");
 		const img = document.createElement("img");
 
@@ -88,13 +63,13 @@ export default function getHeader(
 		getImage();
 		function getImage() {
 			fetch("/api/upload")
-				.then((response) => {
+				.then(response => {
 					if (!response.ok) {
-						throw new Error();
+						throw new Error()
 					}
 					return response.json();
 				})
-				.then((data) => {
+				.then(data => {
 					if (data.length == 0) {
 						img.src = userImg;
 					} else {
@@ -102,12 +77,9 @@ export default function getHeader(
 						img.src = `/assets/uploads/${hash}`;
 					}
 				})
-				.catch((error) => {
+				.catch(error => {
 					img.src = userImg;
-					console.error(
-						"Erro ao solicitar a imagem de perfil:",
-						error
-					);
+					console.error('Erro ao solicitar a imagem de perfil:', error);
 				});
 		}
 		// setANimationForAnchor(a, animation);
@@ -116,12 +88,8 @@ export default function getHeader(
 			dispatchOnStateChange(a.href, { animation: false });
 		});
 
-		const logoutButton = getLogoutButton();
-
 		a.appendChild(img);
-		div.appendChild(a);
-		div.appendChild(logoutButton);
-		header.appendChild(div);
+		header.appendChild(a);
 	}
 
 	return header;

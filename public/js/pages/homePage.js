@@ -4,9 +4,6 @@ import stringLimiter from "../utils/stringLimiter.js";
 import { getEvents } from "../api/eventApi.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import showToast from "../components/toast.js";
-import { coordinateToAddress } from "../api/nominatimApi.js";
-import locationStrToCityName from "../utils/locationStrToCityName.js";
-import getContentLoading from "../utils/load/contentLoading.js";
 
 const defaultCardValues = {
 	width780: {
@@ -290,35 +287,31 @@ export default async function homePage(constructorInfo = { animation: true }) {
 	const h1 = document.createElement("h1");
 	h1.textContent = "Meus eventos";
 	setAnimationForCard(h1, 0, 100, constructorInfo.animation);
+	main.appendChild(h1);
 
 	const span = document.createElement("span");
 	span.textContent =
 		"Clique em um evento para ver mais detalhes ou crie um novo evento.";
 	setAnimationForCard(span, 0, 100, constructorInfo.animation);
+	main.appendChild(span);
 
 	const result = await getEvents();
+
+	console.log(result.events);
 
 	const events = Array.isArray(result.events) ? result.events : [];
 	if (result instanceof Error) {
 		showToast(JSON.stringify(result.message));
 	}
 
-	const cards = events.map(async (event, index) => {
-		const location = await locationStrToCityName(event.event_location);
-		const infos = {
+	const cards = events.map((event, index) => {
+		const myCard = generateMainCard(event.event_id, `/event`, `/list`, {
 			title: event.event_name,
-			local: location ?? event.event_location,
+			local: event.event_location,
 			theme: event.theme,
 			date: event.event_date,
 			time: event.event_time,
-		};
-
-		const myCard = generateMainCard(
-			event.event_id,
-			`/event`,
-			`/list`,
-			infos
-		);
+		});
 		setAnimationForCard(myCard, index, 100, constructorInfo.animation);
 		return myCard;
 	});
@@ -330,44 +323,11 @@ export default async function homePage(constructorInfo = { animation: true }) {
 		100,
 		constructorInfo.animation
 	);
-	
-	let contentIsLoaded = false;
-	const loadingContent = getContentLoading();
-	main.appendChild(loadingContent);
-	
-	setTimeout(() => {
-		if(cards.length <= 0 && !contentIsLoaded) {
-			main.dispatchEvent(new CustomEvent("contentLoad", {}));
-		}
-	}, 1000);
 
-	const cardsHtml = [];
-	cards.forEach(async (card, index, arr) => {
-		cardsHtml.push(await card);
-		if (index + 1 === arr.length && !contentIsLoaded) {
-			setTimeout(() => {
-				main.dispatchEvent(new CustomEvent("contentLoad", {}));
-			}, 500);
-		}
+	cards.forEach((card) => {
+		main.appendChild(card);
 	});
-	main.addEventListener("contentLoad", () => {
-		loadingContent.style.animationName = "fadeOut";
-		main.style.animationName = "fadeOut";
-		main.style.opacity = 0;
-		setTimeout(() => {
-			loadingContent.remove();
-			main.style.animationName = "fadeIn";
-			main.style.opacity = 1;
-			main.appendChild(h1);
-			main.appendChild(span);
-	
-			cardsHtml.forEach((card) => {
-				main.appendChild(card);
-			});
-	
-			main.appendChild(createEventCard);
-		}, 300);
-	});
+	main.appendChild(createEventCard);
 
 	const wrapper = document.createDocumentFragment();
 	wrapper.appendChild(header);

@@ -6,7 +6,7 @@
             type="rotate"
             from="0 0 0"
             to="360 0 0"
-            dur="2s"
+            dur="1s"
             repeatCount="indefinite" />
 <defs>
 <pattern id="pattern0_1559_40" patternContentUnits="objectBoundingBox" width="1" height="1">

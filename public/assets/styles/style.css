@@ -4,13 +4,11 @@
 :root {
 	--wine-color: #670029;
 	--white-smoke: #f2f7f2;
-	--white-smoke-gray: #a3a3a3;
 	--blackberry: #311432;
 	--blackberry-transparent: #1313138a;
 	--cherry: #a73e5c;
 	--raspberry: #b22222;
 	--salmon: #ffa69e;
-	--hover-red: rgba(187, 48, 48, 0.562);
 
 	--font-pacifico: "Pacifico", cursive;
 
@@ -26,6 +24,7 @@
 	box-sizing: border-box;
 }
 
+
 #modal {
 	position: fixed;
 	display: flex;
@@ -35,16 +34,13 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.4);
-	z-index: 10;
+    background-color: rgba(0, 0, 0, 0.4); 
+    z-index: 10;
 }
 
 #apiLoadingScreen {
-	animation: 300ms ease-in-out;
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: fixed;
+	position: absolute;
 	z-index: 10000;
 	background-color: var(--blackberry-transparent);
 	height: 100vh;
@@ -64,67 +60,5 @@
 	&::after,
 	&::before {
 		background-image: url("../svg-animated/spoon-white.svg") !important;
-	}
-}
-
-@keyframes spin {
-	0%{
-		transform: rotate(0);
-	}
-	0%{
-		transform: rotate(360deg);
-	}
-}
-
-#loadingContentDisplay {
-	--parentSize: 150px;
-	animation: spin 300ms ease-in;
-	width: var(--parentSize);
-	height: var(--parentSize);
-	margin: 0 auto;
-	position: relative;
-	border-radius: 100%;
-	& > * {
-		position: absolute;
-		width: calc(var(--parentSize) / 1.5);
-		height: calc(var(--parentSize) / 1.5);
-		left: calc(var(--parentSize) / 6);
-		top: calc(var(--parentSize) / 6);
-		object-fit: contain;
-		z-index: 2;
-	}
-	&::before,
-	&::after {
-		content: "";
-		outline: 5px solid var(--wine-color);
-		width: calc(var(--parentSize) - 10px);
-		height: calc(var(--parentSize) - 10px);
-		position: absolute;
-		left: 0;
-		display: inline-block;
-		top: 0;
-		border-radius: 100%;
-	}
-	&::before {
-		animation: spin 2s infinite ease-in-out;
-		outline: 0;
-		border: 5px solid var(--raspberry);
-		border-color: var(--raspberry) var(--white-smoke) var(--white-smoke) var(--white-smoke);
-		z-index: 2;
-	}
-	&::after {
-		border: 5px solid var(--white-smoke);
-		background-color: var(--wine-color);
-		z-index: 1;
-	}
-}
-
-@media screen and (max-width: 1000px) {
-	#loadingContentDisplay {
-		--parentSize: 100px;
-		& > * {
-			left: calc(var(--parentSize) / 6);
-			top: calc(var(--parentSize) / 6);
-		}
 	}
 }

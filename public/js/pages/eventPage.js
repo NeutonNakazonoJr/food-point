@@ -5,10 +5,6 @@ import dispatchOnStateChange from "../events/onStateChange.js";
 import modalUpdateInfosComponent from "./modal/basicInfoModal.js";
 import showToast from "../components/toast.js";
 import  menuUpdateModalComponent from "./modal/menuModal.js"
-import cancelThisEventModal from "./modal/deleteEventModal.js";
-import locationStrToCityName from "../utils/locationStrToCityName.js";
-import modalLocationComponent from "./modal/locationModal.js";
-import apiLoading from "../utils/load/apiLoading.js";
 import guestList from "./modal/guestModal.js";
 
 const createEventMainTitleDiv = () => {
@@ -267,7 +263,7 @@ const createCardDiv = async (dishInfos, eventID, editMode) => {
 }
 
 
-const createLocationSection = async (eventLocation, eventID) => {
+const createLocationSection = (eventLocation) => {
     const locationIcon = htmlCreator.createImg('./assets/icons/location-event-page-icon.svg');
     const locationTitle = htmlCreator.createTitle('h1', 'Localização');
     
@@ -277,8 +273,7 @@ const createLocationSection = async (eventLocation, eventID) => {
     divTitle.appendChild(locationTitle);
 
     const locationSecondIcon = htmlCreator.createImg('./assets/icons/location-event.svg');
-	const legibleAddress = await locationStrToCityName(eventLocation);
-    const textContent = htmlCreator.createParagraph(legibleAddress || eventLocation || 'Aguardando definição ...');
+    const textContent = htmlCreator.createParagraph(eventLocation || 'Aguardando definição ...');
     const divLocation = htmlCreator.createDiv('div-location');
 
     divLocation.appendChild(locationSecondIcon);
@@ -287,11 +282,6 @@ const createLocationSection = async (eventLocation, eventID) => {
     const editBtn = htmlCreator.createImg('./assets/images/edit-btn.svg');
     editBtn.classList.add('edit-event-btn');
     editBtn.classList.add('edit-hidden');
-	editBtn.addEventListener('click', () => {
-		const modalUpdate = modalLocationComponent(eventLocation, eventID);
-		const mainContainer = document.getElementById('event-main-container');
-		mainContainer.appendChild(modalUpdate);
-	})
     divLocation.appendChild(editBtn);
 
     const locationSection = htmlCreator.createSection('location-section');
@@ -301,9 +291,8 @@ const createLocationSection = async (eventLocation, eventID) => {
     return locationSection;
 }
 
-const createButtonSection = (eventID, modal) => {
+const createButtonSection = (eventID) => {
     const guestButton = htmlCreator.createButton('Lista de convidados', null, 'btn-section');
-    guestButton.id = 'guest-button-event-page'
     const guestIcon = htmlCreator.createImg('./assets/icons/guest-list-icon.svg');
     guestButton.appendChild(guestIcon);
     guestButton.addEventListener("click", () =>{
@@ -313,33 +302,12 @@ const createButtonSection = (eventID, modal) => {
     })
 
     const homeButton = htmlCreator.createButton('Página inicial', null, 'btn-section');
-    homeButton.id = 'home-button-event-page';
-    homeButton.src = 
     homeButton.addEventListener('click', () => {
         dispatchOnStateChange('/home');
     });
 
-    const homeIcon = htmlCreator.createImg('./assets/icons/home-vermelho.svg');
+    const homeIcon = htmlCreator.createImg('./assets/icons/home-icon.svg');
     homeButton.appendChild(homeIcon);
-
-    guestButton.addEventListener('mouseover', () => {
-        guestIcon.src = '/assets/icons/guest-list-icon-white.svg';
-    });
-
-    guestButton.addEventListener('mouseout', () => {
-        guestIcon.src = '/assets/icons/guest-list-icon.svg';
-    });
-
-
-
-    homeButton.addEventListener('mouseover', () => {
-        homeIcon.src = '/assets/icons/home.svg';
-    });
-
-    homeButton.addEventListener('mouseout', () => {
-        homeIcon.src = '/assets/icons/home-vermelho.svg';
-    });
-
 
     const buttonSection = htmlCreator.createSection('btn-section');
     buttonSection.classList.add('none-to-download');
@@ -351,21 +319,10 @@ const createButtonSection = (eventID, modal) => {
     downloadPngBtn.classList.add('none-to-download');
     downloadPngBtn.classList.add('btn-section');
     downloadPngBtn.addEventListener('click', handleDownloadPNG);
+    buttonSection.appendChild(downloadPngBtn);
 
-	const deleteEventBtn = htmlCreator.createButton("Deletar Evento", "event-page-delete-this-event", null);
-	deleteEventBtn.classList.add('none-to-download');
-	deleteEventBtn.classList.add('btn-section');
-	deleteEventBtn.addEventListener('click', (e) => {
-		e.preventDefault();
-		if(modal instanceof HTMLElement) {
-			modal.style.display = 'flex';
-		}
-	})
-    
-	buttonSection.appendChild(downloadPngBtn);
     buttonSection.appendChild(guestButton);
     buttonSection.appendChild(homeButton);
-    buttonSection.appendChild(deleteEventBtn);
     return buttonSection;
 }
 
@@ -412,7 +369,6 @@ const createHeaderEvent = () => {
 }
 
 function handleDownloadPNG() {
-	apiLoading(true);
     const main = document.getElementById('main-page-event');
     const cardDishes = document.querySelectorAll('.card-dishes');
 
@@ -441,7 +397,6 @@ function handleDownloadPNG() {
         for (const card of cardDishes) {
             card.classList.remove('clean-to-download');
         }
-		apiLoading(false);
     });
 }
 
@@ -471,17 +426,14 @@ const createEventPageComponent = async (constructorInfo =  { eventID: '' }) => {
     const initialDiv = createEventMainTitleDiv();
     const basicInfosSection = createSectionBasicInfos(eventInfos.basicInfos, eventID || storageEventID.eventID);
     const menuSection = await createMenuSection(eventInfos.dishes, eventID || storageEventID.eventID);
-    const locationSection = await createLocationSection(eventInfos.basicInfos?.eventLocation,  eventID || storageEventID.eventID);
-	
-	const modal = cancelThisEventModal(eventID || storageEventID.eventID, "Continuar edição", "Deletar evento", "Deletar evento?");
-    const buttonSection = createButtonSection(eventID, modal);
+    const locationSection = createLocationSection(eventInfos.eventLocation);
+    const buttonSection = createButtonSection(eventID);
     
     const mainContainer = htmlCreator.createSection('event-main-container');
     mainContainer.appendChild(basicInfosSection);
     mainContainer.appendChild(menuSection);
     mainContainer.appendChild(locationSection);
     mainContainer.appendChild(buttonSection);
-	mainContainer.appendChild(modal);
 
     const main = document.createElement('main');
     main.id = 'main-page-event'

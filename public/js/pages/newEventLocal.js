@@ -8,12 +8,6 @@ import { setButtonAfterInLoadState } from "../utils/load/buttonLoadState.js";
 import cepModal from "./modal/cepModal.js";
 
 function getUserLocation(div, callbackFn) {
-	const controller = document.createElement("p");
-	const apiLoadedEvent = new CustomEvent("apiLoaded", {});
-	const finishApiLoad = () => {
-		controller.dispatchEvent(apiLoadedEvent);
-	}
-	
 	if (navigator && navigator.geolocation) {
 		const options = {
 			timeout: 10000,
@@ -33,10 +27,11 @@ function getUserLocation(div, callbackFn) {
 				});
 				div.dispatchEvent(event);
 			}
-			finishApiLoad();
+			apiLoading(false);
 			callbackFn();
 		}
 		function informError(error) {
+			console.log(error);
 			if (error instanceof GeolocationPositionError) {
 				if (error.code === 1) {
 					showToast("O usuário recusou informar a localização.");
@@ -54,7 +49,7 @@ function getUserLocation(div, callbackFn) {
 					"Ocorreu um erro inesperado durante o processamento da localização."
 				);
 			}
-			finishApiLoad();
+			apiLoading(false);
 			callbackFn()
 		}
 		navigator.geolocation.getCurrentPosition(
@@ -62,12 +57,12 @@ function getUserLocation(div, callbackFn) {
 			informError,
 			options
 		);
+		setTimeout(() => {
+			apiLoading(false);
+		}, options.timeout);
 	} else {
 		showToast("Geolocalização não suportada pelo navegador.");
 	}
-	controller.addEventListener("apiLoaded", () => {
-		apiLoading(false);
-	})
 }
 
 function dispatchSelectLatLng(htmlElement, latLng) {
@@ -143,7 +138,7 @@ function getMap(main) {
 		modal.addEventListener("publishCep", (e) => {
 			modal.remove();
 			div.dispatchEvent(new CustomEvent("postUserGeoLocation", e));
-			setButtonAfterInLoadState(buttonCep, false);
+			setButtonAfterInLoadState(buttonCep, true);
 		});
 	});
 
@@ -186,6 +181,7 @@ function getFooter(eventId, href) {
 	};
 
 	footer.id = "newEventLocal-footer";
+	a.style.backgroundColor = "var(--blackberry)";
 	a.href = href;
 	a.textContent = "Decidir mais tarde";
 	a.addEventListener("click", async (e) => {
@@ -204,6 +200,7 @@ function getFooter(eventId, href) {
 			const result = await updateEventLocation(eventId, {
 				location: `${lat},${lng}`,
 			});
+			console.log(result);
 			dispatchOnStateChange(href, constructorInfo);
 			return;
 		}

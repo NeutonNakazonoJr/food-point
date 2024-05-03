@@ -28,7 +28,7 @@ function createErrorPage(constructorInfo) {
     imageError.id = 'image-error';
     const errorImage = document.createElement('img');
     errorImage.alt = 'Imagem de error';
-    errorImage.src = './assets/images/error-image.webp';
+    errorImage.src = '../images/error-image.png';
     imageError.appendChild(errorImage);
 
     const buttonErrorPageContainer = document.createElement('div');

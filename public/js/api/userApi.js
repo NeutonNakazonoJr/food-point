@@ -34,24 +34,3 @@ export async function getMyLogin() {
 		return error;
 	}
 }
-
-export async function logout() {
-	try {
-		const url = "/api/logout";
-		const headers = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		};
-		const res = await fetch(url, headers);
-		if (!res.ok) {
-			const err = await res.json();
-			throw err;
-		}
-		const data = await res.json();
-		return data;
-	} catch (error) {
-		return error;
-	}
-}

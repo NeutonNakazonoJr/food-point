@@ -6,7 +6,7 @@ const createRegisterForm = () => {
     const bodyRegister = document.createElement('div');
     bodyRegister.classList.add('body-register');
 
-    const headerRegister = getHeader(true, false, "/");
+    const headerRegister = getHeader(true, false);
     bodyRegister.appendChild(headerRegister);
 
     const blackOverlayRegister = document.createElement('div');
@@ -24,19 +24,6 @@ const createRegisterForm = () => {
     const registerFormDiv = document.createElement('div');
     registerFormDiv.id = 'register-form';
     registerForm.appendChild(registerFormDiv);
-
-    const landing = document.createElement("div");
-    landing.id = "landing-button"
-    const home = document.createElement("button");
-    home.id = "back-landing"
-    home.textContent = "Voltar"
-    const backIcon = document.createElement("img")
-    backIcon.id = "back-flag"
-    backIcon.src = "/assets/icons/flag-back-wine.svg";
-
-    home.appendChild(backIcon)
-    landing.appendChild(home)
-    registerFormDiv.appendChild(landing)
 
     const imgLogoDiv = document.createElement('div');
     imgLogoDiv.id = 'img-logo';
@@ -267,8 +254,6 @@ const createRegisterForm = () => {
         const fullName = document.getElementById('fullName-register').value;
         const password = document.getElementById('password-register').value;
         const confirmPassword = document.getElementById('confirm-password').value;
-        const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-        const emailValid = regex.test(email);
 
         if (!email || !fullName || !password || !confirmPassword) {
             showToast('Por favor, preencha todos os campos.');
@@ -277,10 +262,6 @@ const createRegisterForm = () => {
 
         if (password !== confirmPassword) {
             showToast("As senhas não correspondem");
-            return false;
-        }
-        if (!emailValid){
-            showToast("Insira um email valido!");
             return false;
         }
 
@@ -343,10 +324,6 @@ const createRegisterForm = () => {
     });
 
     registerFormDiv.appendChild(registerButton);
-
-    home.addEventListener("click", () => {
-        dispatchOnStateChange("/")
-    })
 
     return bodyRegister;
 };
