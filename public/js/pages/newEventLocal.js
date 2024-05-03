@@ -186,7 +186,6 @@ function getFooter(eventId, href) {
 	};
 
 	footer.id = "newEventLocal-footer";
-	a.style.backgroundColor = "var(--blackberry)";
 	a.href = href;
 	a.textContent = "Decidir mais tarde";
 	a.addEventListener("click", async (e) => {

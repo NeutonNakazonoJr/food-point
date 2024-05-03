@@ -35,6 +35,7 @@
 	transition-duration: 0.3s;
 	margin: 1rem;
 }
+
 #back-icon {
 	width: 2rem;
 	position: absolute;
@@ -42,6 +43,7 @@
 	margin-left: 0.3rem;
 	transition-duration: 0.3s;
 }
+
 #back:hover {
 	color: transparent;
 }
@@ -197,7 +199,7 @@
 	align-items: center;
 }
 .save:hover {
-	background-color: var(--cherry);
+	background-color: var(--blackberry);
 }
 .save-icon {
 	padding-right: 0.5rem;

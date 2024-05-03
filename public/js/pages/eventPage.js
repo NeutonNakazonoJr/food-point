@@ -303,6 +303,7 @@ const createLocationSection = async (eventLocation, eventID) => {
 
 const createButtonSection = (eventID, modal) => {
     const guestButton = htmlCreator.createButton('Lista de convidados', null, 'btn-section');
+    guestButton.id = 'guest-button-event-page'
     const guestIcon = htmlCreator.createImg('./assets/icons/guest-list-icon.svg');
     guestButton.appendChild(guestIcon);
     guestButton.addEventListener("click", () =>{
@@ -312,12 +313,33 @@ const createButtonSection = (eventID, modal) => {
     })
 
     const homeButton = htmlCreator.createButton('Página inicial', null, 'btn-section');
+    homeButton.id = 'home-button-event-page';
+    homeButton.src = 
     homeButton.addEventListener('click', () => {
         dispatchOnStateChange('/home');
     });
 
-    const homeIcon = htmlCreator.createImg('./assets/icons/home-icon.svg');
+    const homeIcon = htmlCreator.createImg('./assets/icons/home-vermelho.svg');
     homeButton.appendChild(homeIcon);
+
+    guestButton.addEventListener('mouseover', () => {
+        guestIcon.src = '/assets/icons/guest-list-icon-white.svg';
+    });
+
+    guestButton.addEventListener('mouseout', () => {
+        guestIcon.src = '/assets/icons/guest-list-icon.svg';
+    });
+
+
+
+    homeButton.addEventListener('mouseover', () => {
+        homeIcon.src = '/assets/icons/home.svg';
+    });
+
+    homeButton.addEventListener('mouseout', () => {
+        homeIcon.src = '/assets/icons/home-vermelho.svg';
+    });
+
 
     const buttonSection = htmlCreator.createSection('btn-section');
     buttonSection.classList.add('none-to-download');
