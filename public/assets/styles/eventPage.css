@@ -201,7 +201,7 @@
 		max-width: 20rem;
 	}
 }
-
+.card-dishes {
     width: 20rem;
     min-height: 15rem;
     flex: 1 1 auto;
