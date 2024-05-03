@@ -278,15 +278,15 @@ const createProfileDesktop = () => {
     emails.id = "help-mails";
     const topic = document.createElement("h3");
     topic.className = "help-topic";
-    topic.textContent = "Entre em contato conosco através do GitHub: "
+    topic.textContent = "Entre em contato conosco através de um dos endereços de email abaixo: "
     const e1 = document.createElement("h4");
-    e1.textContent = "delfo2";
+    e1.textContent = "carlos13bem@gmail.com";
     const e2 = document.createElement("h4");
-    e2.textContent = "Kevineduardof";
+    e2.textContent = "kevineduardoferreira@gmail.com";
     const e3 = document.createElement("h4");
-    e3.textContent = "NeutonNakazonoJr";
+    e3.textContent = "junior_nakazono@hotmail.com";
     const e4 = document.createElement("h4");
-    e4.textContent = "Ligia-Santiago";
+    e4.textContent = "santiago.ligia.751@gmail.com";
     const repositoryTitle = document.createElement("h3");
     repositoryTitle.className = "help-topic";
     repositoryTitle.textContent = "Quer saber mais sobre o nosso projeto? Visite nosso repositorio no GitHub: "
@@ -377,7 +377,7 @@ const createProfileDesktop = () => {
                 formData.append("image", picture);
 
                 fetch("/api/upload", {
-                    method: "POST",
+                    method: "PUT",
                     body: formData
                 })
                     .then(response => {
@@ -385,10 +385,7 @@ const createProfileDesktop = () => {
                             throw new Error();
                         }
                         profileImage.style.backgroundImage = `url("${newPicture}")`;
-                        notification("Imagem Atualizada! A pagina será recarregada!")
-                        setTimeout(() => {
-                            window.location.reload()
-                        }, 3000)
+                        notification("Imagem Atualizada!")
                     })
                     .catch(error => {
                         notification("Erro ao enviar imagem", error)
@@ -400,7 +397,7 @@ const createProfileDesktop = () => {
 
     //edit profile informations
     save.addEventListener("click", () => {
-        if (validateEmail()) {
+        if (validateInfo()) {
             submitUserInfo();
         };
     })
@@ -409,20 +406,29 @@ const createProfileDesktop = () => {
         nameInput.value = name.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '')
     });
 
-    function validateEmail() {
-        const email = emailInput.value.trim().toLowerCase();
+    function validateInfo() {
+        const email = emailInput.value.trim();
+        const fullName = nameInput.value.trim();
         const regex = /^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
         const emailValid = regex.test(email);
 
-        if (emailValid === false && email !== "") {
+        if (fullName == "" && email == "") {
+            notification("Insira suas novas informações!");
+            return false;
+        }
+        else if (emailValid === false) {
             notification("Insira um endereço de email valido!");
+            return false;
+        }
+        else if (fullName == "") {
+            notification("O nome não pode estar vazio!");
             return false;
         }
         return true;
     }
     function submitUserInfo() {
-        const fullName = nameInput.value.trim().toLowerCase();
-        const email = emailInput.value.trim().toLowerCase();
+        const fullName = nameInput.value.trim();
+        const email = emailInput.value.trim();
 
         fetch("/api/user", {
             method: "PATCH",

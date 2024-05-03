@@ -185,6 +185,78 @@
 	animation: slideIn 0.5s ease forwards;
 }
 
+#login-form-forget-pass {
+	background-color: var(--white-smoke);
+	border: none;
+	height: 20rem;
+	width: 25rem;
+	border-radius: var(--border-radius-1x);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1rem;
+	padding: 2rem;
+	color: var(--wine-color);
+	margin: 0 0.5rem;
+
+	& h3 {
+		text-align: center;
+		font-weight: 500;
+	} 
+}
+
+#fieldset-login-recover-pass {
+	border: none;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	
+	& div {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+	}
+
+	& label {
+		font-weight: 400;
+	}
+
+	& input {
+		border-radius: 20px;
+		border: 2px solid var(--wine-color);
+		outline: none;
+		padding: 0.3rem 0.8rem;
+		font-size: 0.9rem;
+		background-color: var(--white-smoke);
+	}
+
+	& span {
+		font-size: 0.9rem;
+		color: var(--raspberry);
+	}
+}
+
+#forget-pass-btn-login {
+	border: none;
+	outline: none;
+	color: var(--raspberry);
+	cursor: pointer;
+	font-weight: 500;
+}
+
+#submit-recover-pass-btn {
+	width: 30%;
+	border: none;
+	padding: 0.5rem 0;
+	border-radius: var(--border-radius-1x);
+	background-color: var(--wine-color);
+	color: var(--white-smoke);
+	cursor: pointer	;
+	font-size: 1rem;
+	font-weight: bold;
+	margin: 1rem auto 0	;
+}
+
 @keyframes slideIn {
 	from {
 		bottom: -50px;
@@ -256,5 +328,4 @@
 	#login-form {
 		padding-top: 25em;
 	}
-
 }
