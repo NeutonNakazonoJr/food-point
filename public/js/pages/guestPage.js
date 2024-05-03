@@ -223,6 +223,7 @@ const createGuestPage = (
 		div.className = "input-div";
 		const editInput = document.createElement("input");
 		editInput.className = "guest-input";
+		editInput.value = guest;
 		const save = document.createElement("button");
 		save.className = "guest-button"
 		save.textContent = "Salvar";
@@ -341,7 +342,6 @@ const createGuestPage = (
 	});
 	//logic that sends the array with the guest list to the api
 	finish.addEventListener("click", () => {
-		console.log(guests);
 		dispatchOnStateChange("/home");
 	});
 	return body;

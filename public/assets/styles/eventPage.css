@@ -76,6 +76,7 @@
     border: 1px solid rgb(212, 212, 212);
 }
 
+
 #basic-infos-section {
     position: relative;
 }
@@ -173,6 +174,19 @@
     margin-top: 4rem;
 }
 
+#select-dish-type {
+    border-radius: 0.3rem;
+    border: 2px solid var(--wine-color);
+    color: var(--wine-color);
+    padding: 0.3rem 0.8rem;
+    font-weight: 700;   
+    position: absolute;
+    top: 7rem;
+    z-index: 2;
+    cursor: pointer;
+    background-color: var(--white-smoke);
+}
+
 .menu-undefined {
     display: block;
     position: relative;
@@ -192,8 +206,8 @@
 }
 
 .card-dishes {
-    width: 13rem;
-    height: 15rem;
+    width: 20rem;
+    min-height: 15rem;
     flex: 1 1 auto;
     padding: 1rem;
     border-radius: 0.3rem;
@@ -215,7 +229,6 @@
     }
 
     & h4::first-letter {
-        font-size: 10rem;
         font-weight: bolder;
     }
 
@@ -240,7 +253,7 @@
     width: 3rem;
     height: 3rem;
     top: 0;
-    right: 0;
+    right: -8px;
     background-color: var(--blackberry-transparent); 
     border-radius: 0 0 0 100%;
 }
@@ -281,6 +294,7 @@
     align-items: end;
     padding-top: 4rem;
     gap: 1rem;
+    position: relative;
 }
 
 .btn-section {
@@ -300,6 +314,7 @@
     color: var(--raspberry);
     cursor: pointer;
     transition: background-color ease 0.5s;
+    z-index: 2;
 }
 
 .btn-section:hover {
@@ -326,6 +341,46 @@
 
 .edit-hidden {
     display: none;
+}
+
+.clean-to-download #event-main-container {
+    box-shadow: none;
+    height: 1700px;
+    text-align: left;
+
+    & p {
+        font-size: 1.3rem;
+    }
+}
+
+.clean-to-download #initial-div-events {
+    display: none;
+
+}
+
+.clean-to-download #btn-section {
+    display: none;
+}
+
+.clean-to-download #download-png {
+    display: none;
+}
+
+.clean-to-download .card-dishes {
+    box-shadow: none;
+    border: 1px solid var(--blackberry);
+    
+    & h3 {
+        font-size: 1.8rem;
+    }
+
+    & h4 {
+        font-size: 1.3rem;
+    }
+
+    & button {
+        display: none;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -399,5 +454,10 @@
     
     #btn-section {
         align-items: center;
+    }
+
+    #div-title-update-menu h2 {
+        font-weight: 600;
+        font-size: 1.3rem;
     }
 }

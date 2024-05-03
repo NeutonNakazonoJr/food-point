@@ -21,17 +21,18 @@ eventRoutes.use('/event/:id', eventMiddleware.validateEventId);
 eventRoutes.get('/event/:id', eventController.getAllEventInfos);
 eventRoutes.delete('/event/:id', eventController.deleteEvent);
 
+eventRoutes.put('/event/:id/location', validateRequestBody(eventSchema.eventLocation), eventController.updateEventLocation);
 eventRoutes.put('/event/:id/basic-infos', validateRequestBody(eventSchema.eventBasicInfos), eventController.updateEventBasicInfos);
 eventRoutes.get('/event/:id/purchase-list', eventController.getEventPurchaseList);
 eventRoutes.put('/event/:id/purchase-list', validateRequestBody(purchaseListSchema),eventController.updateIngredientPurchaseList);
 
 eventRoutes.post('/event/:id/dish', validateRequestBody(eventSchema.dish), eventController.createNewDish);
+eventRoutes.get('/event/:id/dish', eventController.getAllDishes);
 eventRoutes.use('/event/:id/dish/:dishId', validateDishId);
 eventRoutes.put('/event/:id/dish/:dishId', validateRequestBody(dishSchema), dishController.updateDishName);
 eventRoutes.delete('/event/:id/dish/:dishId', dishController.deleteDish);
 
-
-eventRoutes.get('/event/:id/dish/:dishId/ingredient', ingredientController.getIngredientsName);
+eventRoutes.get('/event/:id/dish/:dishId/ingredient', ingredientController.getIngredientsInfo);
 eventRoutes.use('/event/:id/dish/:dishId/ingredient/:ingredientId', validateIngredientId);
 eventRoutes.delete('/event/:id/dish/:dishId/ingredient/:ingredientId', ingredientController.deleteIngredient);
 eventRoutes.use('/event/:id/dish/:dishId/ingredient', validateRequestBody(ingredientSchema));

@@ -119,6 +119,27 @@ export async function updatePurchaseList(eventId, updatedList) {
 	}
 }
 
+export async function deleteEvent(eventId) {
+	try {
+		const url = `/api/event/${eventId}`;
+		const requestOptions = {
+			method: "DELETE",
+			headers: { "Content-Type": "application/json" },
+		};
+
+		const res = await fetch(url, requestOptions);
+
+		if (!res.ok) {
+			const error = await res.json();
+			throw error;
+		}
+
+		return await res.json();
+	} catch (error) {
+		return error;
+	}
+}
+
 //-----------------DISH ENDPOINTS-----------------
 
 export async function postDish(eventID, dish) {
@@ -181,6 +202,23 @@ export async function deleteDish(eventID, dishID) {
 
 		const data = await res.json();
 		return data;
+	} catch (error) {
+		return error;
+	}
+}
+
+
+export async function getAllDishes(eventID) {
+	try {
+		const url = `api/event/${eventID}/dish`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			const error = await res.json();
+			throw error;
+		}
+
+		return await res.json();
 	} catch (error) {
 		return error;
 	}
@@ -253,6 +291,22 @@ export async function deleteIngredient(eventID, dishID, ingredientID) {
 
 		const data = await res.json();
 		return data;
+	} catch (error) {
+		return error;
+	}
+}
+
+export async function getIngredientsByDishID(eventID, dishID) {
+	try {
+		const url = `/api/event/${eventID}/dish/${dishID}/ingredient`;
+		const res = await fetch(url);
+
+		if (!res.ok) {
+			const error = await res.json();
+			throw error;
+		}
+
+		return await res.json();
 	} catch (error) {
 		return error;
 	}

@@ -64,7 +64,7 @@
 		background-image: url("../icons/icecream.svg");
 	}
 	& > button:nth-of-type(6)::before {
-		background-image: url("../icons/drink.svg");
+		background-image: url("../icons/drink-event.svg");
 	}
 	& > button:last-child {
 		border: none;
@@ -97,6 +97,7 @@
 	display: flex;
 	flex-direction: column;
 	width: 45%;
+	margin-bottom: 5rem;
 	& > h1 {
 		width: 100%;
 		line-height: 2rem;
@@ -312,6 +313,9 @@
 	bottom: 0;
 	padding-bottom: 1rem;
 	padding-right: 2rem;
+	& > .do__latter {
+		background-color: var(--blackberry);
+	}
 	& > a {
 		border: 3px solid var(--white-smoke);
 		cursor: pointer;

@@ -3,35 +3,75 @@ import eventProgressBar from "../components/eventProgressBar.js";
 import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
+import apiLoading from "../utils/load/apiLoading.js";
+import { setButtonAfterInLoadState } from "../utils/load/buttonLoadState.js";
+import cepModal from "./modal/cepModal.js";
 
-function getUserLocation() {
+function getUserLocation(div, callbackFn) {
 	if (navigator && navigator.geolocation) {
+		const options = {
+			timeout: 10000,
+			maximumAge: 0,
+		};
+		apiLoading(true);
 		function publishPosition(position) {
 			const latitude = position.coords.latitude;
 			const longitude = position.coords.longitude;
 
-			const event = new CustomEvent("postUserGeoLocation", {
-				detail: {
-					lat: latitude,
-					lng: longitude,
-				},
-			});
-			window.dispatchEvent(event);
+			if (div instanceof HTMLDivElement) {
+				const event = new CustomEvent("postUserGeoLocation", {
+					detail: {
+						lat: latitude,
+						lng: longitude,
+					},
+				});
+				div.dispatchEvent(event);
+			}
+			apiLoading(false);
+			callbackFn();
 		}
 		function informError(error) {
-			showToast("Usuário recusou o pedido.");
+			console.log(error);
+			if (error instanceof GeolocationPositionError) {
+				if (error.code === 1) {
+					showToast("O usuário recusou informar a localização.");
+				} else if (error.code === 2) {
+					showToast(
+						"Não foi possível adquirir a localização porque uma ou mais fontes retornaram erro."
+					);
+				} else if (error.code === 3) {
+					showToast(
+						"Tempo limite para processar a localização atingido."
+					);
+				}
+			} else {
+				showToast(
+					"Ocorreu um erro inesperado durante o processamento da localização."
+				);
+			}
+			apiLoading(false);
+			callbackFn()
 		}
-		navigator.geolocation.getCurrentPosition(publishPosition, informError);
+		navigator.geolocation.getCurrentPosition(
+			publishPosition,
+			informError,
+			options
+		);
+		setTimeout(() => {
+			apiLoading(false);
+		}, options.timeout);
 	} else {
 		showToast("Geolocalização não suportada pelo navegador.");
 	}
 }
 
-function dispatchSelectLatLng(latLng) {
-	const event = new CustomEvent("selectLatLng", {
-		detail: latLng,
-	});
-	window.dispatchEvent(event);
+function dispatchSelectLatLng(htmlElement, latLng) {
+	if (htmlElement instanceof HTMLDivElement) {
+		const event = new CustomEvent("selectLatLng", {
+			detail: latLng,
+		});
+		htmlElement.dispatchEvent(event);
+	}
 }
 
 function initMap(htmlElement) {
@@ -55,32 +95,58 @@ function initMap(htmlElement) {
 	function onMapClick(e) {
 		const latLng = e.latlng;
 		marker.setLatLng(latLng).addTo(map);
-		dispatchSelectLatLng(latLng);
+		dispatchSelectLatLng(htmlElement, latLng);
 	}
 
 	map.on("click", onMapClick);
-	window.addEventListener("postUserGeoLocation", (e) => {
-		const latLng = {
-			lat: e.detail?.lat || defaultLat,
-			lng: e.detail?.lng || defaultLng,
-		};
-		map.setView(latLng, 15);
-		marker.setLatLng(latLng).addTo(map);
-		dispatchSelectLatLng(latLng);
-	});
+	if (htmlElement instanceof HTMLDivElement) {
+		htmlElement.addEventListener("postUserGeoLocation", (e) => {
+			const latLng = {
+				lat: e.detail?.lat || defaultLat,
+				lng: e.detail?.lng || defaultLng,
+			};
+			map.setView(latLng, 15);
+			marker.setLatLng(latLng).addTo(map);
+			dispatchSelectLatLng(htmlElement, latLng);
+		});
+	}
 }
 
-function getMap() {
+function getMap(main) {
 	const div = document.createElement("div");
 	const button = document.createElement("button");
+	const buttonCep = document.createElement("button");
 
 	button.textContent = "Usar minha localização";
-	button.addEventListener("click", getUserLocation);
+	buttonCep.textContent = "Usar meu cep";
+	button.addEventListener("click", () => {
+		setButtonAfterInLoadState(button, true);
+		getUserLocation(div, () => {
+			setButtonAfterInLoadState(button, false);
+		})
+	});
+	buttonCep.addEventListener("click", (e) => {
+		e.preventDefault();
+		setButtonAfterInLoadState(buttonCep, true);
+		const modal = cepModal(div);
+		const root = document.getElementById("root");
+		root.appendChild(modal);
+		modal.addEventListener("click", () => {
+			modal.remove();
+			setButtonAfterInLoadState(buttonCep, false);
+		});
+		modal.addEventListener("publishCep", (e) => {
+			modal.remove();
+			div.dispatchEvent(new CustomEvent("postUserGeoLocation", e));
+			setButtonAfterInLoadState(buttonCep, true);
+		});
+	});
 
 	div.id = "newEventLocal-map";
 	div.appendChild(button);
+	div.appendChild(buttonCep);
 	div.addEventListener("selectLatLng", (e) => {
-		console.log(e.detail);
+		main.dispatchEvent(new CustomEvent("selectLatLng", e));
 	});
 
 	setTimeout(() => {
@@ -94,7 +160,7 @@ function getMain() {
 	const main = document.createElement("main");
 	const h1 = document.createElement("h1");
 	const p = document.createElement("p");
-	const div = getMap();
+	const div = getMap(main);
 
 	main.id = "newEventLocal";
 	h1.textContent = "Local";
@@ -106,38 +172,46 @@ function getMain() {
 	return main;
 }
 
-function getFooter(href, callBackFunction) {
+function getFooter(eventId, href) {
 	const footer = document.createElement("footer");
 	const a = document.createElement("a");
 	const latLng = {
 		lat: null,
-		lng: null
-	}
+		lng: null,
+	};
 
 	footer.id = "newEventLocal-footer";
+	a.style.backgroundColor = "var(--blackberry)";
 	a.href = href;
 	a.textContent = "Decidir mais tarde";
 	a.addEventListener("click", async (e) => {
 		e.preventDefault();
 		const constructorInfo = {
 			event: {
-				id: null,
+				id: eventId,
 			},
 			stage: {
 				current: 3,
 				last: 2,
 			},
 		};
-		if(latLng.lat && latLng.lng && constructorInfo.event.id) {
-			// await updateEventLocation(constructorInfo.event.id)
+		if (latLng.lat && latLng.lng) {
+			const { lat, lng } = latLng;
+			const result = await updateEventLocation(eventId, {
+				location: `${lat},${lng}`,
+			});
+			console.log(result);
+			dispatchOnStateChange(href, constructorInfo);
+			return;
 		}
-		// dispatchOnStateChange(href, constructorInfo);
+		dispatchOnStateChange(href, constructorInfo);
 	});
 
-	window.addEventListener("selectLatLng", (e) => {
+	footer.addEventListener("selectLatLng", (e) => {
 		latLng.lat = e.detail.lat;
 		latLng.lng = e.detail.lng;
-		console.log(latLng);
+		a.removeAttribute("style");
+		a.textContent = "Salvar e continuar";
 	});
 
 	footer.appendChild(a);
@@ -145,7 +219,11 @@ function getFooter(href, callBackFunction) {
 }
 
 export default function newEventLocalPage(constructorInfo) {
-	const event = null || constructorInfo?.event?.id;
+	if(!constructorInfo || !constructorInfo.event || !constructorInfo.event.id) {
+		showToast("O ID do evento é inválido");
+		dispatchOnStateChange("/home");
+	}
+	const event = constructorInfo.event.id;
 	const stage = constructorInfo?.stage || {
 		current: 2,
 		last: 1,
@@ -160,8 +238,11 @@ export default function newEventLocalPage(constructorInfo) {
 	);
 
 	const main = getMain();
-	const footer = getFooter("/home/create/guest");
+	const footer = getFooter(event, "/home/create/guest");
 	const wrapper = document.createDocumentFragment();
+	main.addEventListener("selectLatLng", (e) => {
+		footer.dispatchEvent(new CustomEvent("selectLatLng", e));
+	});
 
 	wrapper.appendChild(header);
 	wrapper.appendChild(eventProgress);
