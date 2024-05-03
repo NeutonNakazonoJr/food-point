@@ -202,37 +202,40 @@
 	}
 }
 
-.card-dishes {
-	width: 20rem;
-	min-height: 15rem;
-	flex: 1 1 auto;
-	padding: 1rem;
-	border-radius: 0.3rem;
-	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.603);
-	background-color: var(--white-smoke);
-	position: relative;
-	color: var(--blackberry);
-	overflow: hidden;
-	cursor: pointer;
+    width: 20rem;
+    min-height: 15rem;
+    flex: 1 1 auto;
+    padding: 1rem;
+    border-radius: 0.3rem;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.603);
+    background-color: var(--white-smoke); 
+    position: relative;
+    color: var(--blackberry);
+    overflow: hidden;
+    cursor: pointer;
 
-	& h3 {
-		font-weight: 500;
-		font-size: 1.1rem;
-	}
+    & h3 {
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
 
-	& h4 {
-		font-weight: 400;
-		font-size: 1rem;
-	}
+    & h4 {
+        font-weight: 400;
+        font-size: 1rem;
+    }
 
-	& img:first-of-type {
-		position: absolute;
-		top: 0.3rem;
-		right: 0.3rem;
-		width: 1.6rem;
-		height: 1.6rem;
-		z-index: 1;
-	}
+    & h4::first-letter {
+        font-weight: bolder;
+    }
+
+    & img:first-of-type {
+        position: absolute;
+        top: 0.3rem;
+        right: 0.3rem;
+        width: 1.6rem;
+        height: 1.6rem;
+        z-index: 1;
+    }
 }
 
 .card-dishes:nth-child(odd) {

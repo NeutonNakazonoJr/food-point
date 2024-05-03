@@ -11,6 +11,7 @@ pagesRoutes.get("/", goToIndexHTML);
 pagesRoutes.get("/error", goToIndexHTML);
 pagesRoutes.get("/login", goToIndexHTML);
 pagesRoutes.get("/register", goToIndexHTML);
+pagesRoutes.get("/forget-password", goToIndexHTML);
 
 pagesRoutes.get("/home", goToIndexHTML);
 pagesRoutes.get("/home/create", goToIndexHTML);
