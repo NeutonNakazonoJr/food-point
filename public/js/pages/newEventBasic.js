@@ -1,9 +1,10 @@
-import { deleteEvent, putEvent } from "../api/eventApi.js";
+import { putEvent } from "../api/eventApi.js";
 import eventProgressBar from "../components/eventProgressBar.js";
 import getHeader from "../components/header.js";
 import showToast from "../components/toast.js";
 import dispatchOnStateChange from "../events/onStateChange.js";
 import { activeButton, disableButton } from "../utils/disableButton.js";
+import cancelThisEventModal from "./modal/deleteEventModal.js";
 
 const regex = `^[a-zA-ZÀ-ÖØ-öø-ÿ\\s"^\\\`\\~\\:\\.\\,\\?\\!\\-]+$`;
 const regexTitle =
@@ -43,10 +44,10 @@ const fieldsBuilderInfo = [
 	{
 		fieldClassName: "newEvent-basic-genericInput",
 		legend: "Data do evento",
-		labelText: "Por favor não coloque 17/09/2024",
+		labelText: "Recomendamos ser no final de semana!",
 		inputType: "date",
 		inputID: "newEvent-basic-date",
-		title: "Por favor insira uma data maior que a data atual.",
+		title: "Por favor insira uma data válida.",
 	},
 	{
 		fieldClassName: "newEvent-basic-genericInput",
@@ -150,57 +151,10 @@ function getCancelBtn(modal) {
 	return btn;
 }
 
-function cancelThisEventModal(eventID) {
-	const modal = document.createElement("div");
-	const container = document.createElement("div");
-	modal.id = "newEvent-basic-modal";
-	container.id = "newEvent-basic-modal-container";
-
-	const h2 = document.createElement("h2");
-	const p = document.createElement("p");
-	const img = document.createElement("img");
-	const divBtn = document.createElement("div");
-	const btnCancel = document.createElement("button");
-	const btnReturn = document.createElement("button");
-
-	h2.textContent = "Cancelar evento?";
-	p.textContent =
-		"ALERTA: Essa ação irá apagar todos os dados escritos até agora!";
-	img.src = "/assets/svg-backgrounds/doubt.svg";
-	btnCancel.textContent = "Cancelar evento";
-	btnReturn.textContent = "Continuar criação";
-
-	btnCancel.addEventListener("click", async () => {
-		const res = await deleteEvent(eventID);
-		if (res.error) {
-			showToast(res.error);
-		} else {
-			showToast("Evento deletado com sucesso");
-		}
-		dispatchOnStateChange("/home", { animation: false });
-	});
-	btnReturn.addEventListener("click", () => {
-		modal.style.display = "none";
-	});
-
-	divBtn.appendChild(btnCancel);
-	divBtn.appendChild(btnReturn);
-
-	container.appendChild(h2);
-	container.appendChild(p);
-	container.appendChild(img);
-	container.appendChild(divBtn);
-
-	modal.appendChild(container);
-	modal.style.display = "none";
-	return modal;
-}
-
 function appendContinueBtn(eventId, form, div) {
 	if (form instanceof HTMLFormElement && div instanceof HTMLDivElement) {
 		const saveBtn = document.createElement("button");
 		const skipBtn = document.createElement("button");
-		skipBtn.id = 'skip-button-new-event-page';
 
 		const checkForm = () => {
 			if (form.reportValidity()) {
@@ -325,7 +279,7 @@ export default function newEventBasicPage(
 		dispatchOnStateChange("/home", { animation: true });
 		return document.createDocumentFragment();
 	}
-	const header = getHeader(false, true);
+	const header = getHeader(false, false);
 	const timeline = eventProgressBar(
 		true,
 		true,

@@ -8,7 +8,6 @@ import createEventPageComponent from "../pages/eventPage.js";
 import menuPage from "../pages/menu/menuPage.js";
 import createErrorPage from "../pages/errorPage.js";
 import createProfile from "../pages/profilePage.js";
-import createSuccessEventPage from "../pages/sucessEvent.js";
 import { getMyLogin } from "../api/userApi.js";
 import showToast from "../components/toast.js";
 import newEventLocalPage from "../pages/newEventLocal.js";
@@ -93,16 +92,6 @@ const routes = {
 		description: "Informações do evento",
 		needLogin: true,
 	},
-	"/home/create/success":{
-		html: createSuccessEventPage,
-		title: "Evento criado com sucesso | " + title,
-		description: "Evento criado com sucesso!"
-	},
-	"/error": {
-		html: createErrorPage,
-		title: "Error | " + title,
-		description: "Algo deu errado"
-  	},
 	"/profile": {
 		html: createProfile,
 		title: "Perfil | " + title,
