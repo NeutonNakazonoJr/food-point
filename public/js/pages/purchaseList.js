@@ -116,6 +116,14 @@ const createDivBtn = async (igredientsToDownload, eventID) => {
     homeButton.appendChild(homeIcon);
     divBtn.appendChild(homeButton);
 
+    homeButton.addEventListener('mouseover', () => {
+        homeIcon.src = '/assets/icons/home.svg';
+    });
+
+    homeButton.addEventListener('mouseout', () => {
+        homeIcon.src = '/assets/icons/home-vermelho.svg';
+    });
+
     if (igredientsToDownload) {
         const divBtnSaveDownload = htmlCreator.createDiv('div-btn-list');
 

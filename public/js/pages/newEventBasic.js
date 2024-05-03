@@ -200,6 +200,7 @@ function appendContinueBtn(eventId, form, div) {
 	if (form instanceof HTMLFormElement && div instanceof HTMLDivElement) {
 		const saveBtn = document.createElement("button");
 		const skipBtn = document.createElement("button");
+		skipBtn.id = 'skip-button-new-event-page';
 
 		const checkForm = () => {
 			if (form.reportValidity()) {
