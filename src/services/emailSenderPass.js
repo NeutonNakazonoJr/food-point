@@ -22,7 +22,7 @@ const createEmailToRecoverPassword = async (userID, userEmail) => {
           <tr>
             <td style="font-family: sans-serif; text-align: center; padding: 24px;">
               <p style="line-height: 1.5; margin-bottom: 24px; color: #30336b; font-size: 16px; letter-spacing: 1px;">Código de acesso: <strong>${token}</strong></p>
-              <a href="http://localhost:3000/forget-password" style="display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px;">Acessar Página</a>
+              <a href="${process.env.SERVER_URL}/forget-password" style="display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px;">Acessar Página</a>
             </td>
           </tr>
         </tbody>
