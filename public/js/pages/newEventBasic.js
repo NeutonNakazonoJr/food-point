@@ -44,7 +44,7 @@ const fieldsBuilderInfo = [
 	{
 		fieldClassName: "newEvent-basic-genericInput",
 		legend: "Data do evento",
-		labelText: "Recomendamos ser no final de semana!",
+		labelText: "É melhor ser no final de semana!",
 		inputType: "date",
 		inputID: "newEvent-basic-date",
 		title: "Por favor insira uma data válida.",
