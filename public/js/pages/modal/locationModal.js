@@ -1,19 +1,18 @@
-import { updateEventLocation } from "../api/eventApi.js";
-import eventProgressBar from "../components/eventProgressBar.js";
-import getHeader from "../components/header.js";
-import showToast from "../components/toast.js";
-import dispatchOnStateChange from "../events/onStateChange.js";
-import apiLoading from "../utils/load/apiLoading.js";
-import { setButtonAfterInLoadState } from "../utils/load/buttonLoadState.js";
-import cepModal from "./modal/cepModal.js";
+import { updateEventLocation } from "../../api/eventApi.js";
+import showToast from "../../components/toast.js";
+import apiLoading from "../../utils/load/apiLoading.js";
+import { setButtonAfterInLoadState } from "../../utils/load/buttonLoadState.js";
+import locationStrToCityName from "../../utils/locationStrToCityName.js";
+import cepModal from "./cepModal.js";
+import createModal from "./createModal.js";
 
 function getUserLocation(div, callbackFn) {
 	const controller = document.createElement("p");
 	const apiLoadedEvent = new CustomEvent("apiLoaded", {});
 	const finishApiLoad = () => {
 		controller.dispatchEvent(apiLoadedEvent);
-	}
-	
+	};
+
 	if (navigator && navigator.geolocation) {
 		const options = {
 			timeout: 10000,
@@ -55,7 +54,7 @@ function getUserLocation(div, callbackFn) {
 				);
 			}
 			finishApiLoad();
-			callbackFn()
+			callbackFn();
 		}
 		navigator.geolocation.getCurrentPosition(
 			publishPosition,
@@ -67,7 +66,7 @@ function getUserLocation(div, callbackFn) {
 	}
 	controller.addEventListener("apiLoaded", () => {
 		apiLoading(false);
-	})
+	});
 }
 
 function dispatchSelectLatLng(htmlElement, latLng) {
@@ -79,9 +78,9 @@ function dispatchSelectLatLng(htmlElement, latLng) {
 	}
 }
 
-function initMap(htmlElement) {
-	const defaultLat = -13.473684350806952;
-	const defaultLng = -49.5703125;
+function initMap(htmlElement, latLng) {
+	const defaultLat = latLng?.lat || -13.473684350806952;
+	const defaultLng = latLng?.lng || -49.5703125;
 	const defaultMinZoom = 3;
 	const defaultMaxZoom = 19;
 	const map = L.map(htmlElement).setView(
@@ -103,6 +102,11 @@ function initMap(htmlElement) {
 		dispatchSelectLatLng(htmlElement, latLng);
 	}
 
+	if (latLng && latLng.lat && latLng.lng) {
+		map.setView(latLng, 10);
+		marker.setLatLng(latLng).addTo(map);
+	}
+
 	map.on("click", onMapClick);
 	if (htmlElement instanceof HTMLDivElement) {
 		htmlElement.addEventListener("postUserGeoLocation", (e) => {
@@ -117,7 +121,7 @@ function initMap(htmlElement) {
 	}
 }
 
-function getMap(main) {
+function getMap(main, latLng) {
 	const div = document.createElement("div");
 	const button = document.createElement("button");
 	const buttonCep = document.createElement("button");
@@ -128,7 +132,7 @@ function getMap(main) {
 		setButtonAfterInLoadState(button, true);
 		getUserLocation(div, () => {
 			setButtonAfterInLoadState(button, false);
-		})
+		});
 	});
 	buttonCep.addEventListener("click", (e) => {
 		e.preventDefault();
@@ -155,17 +159,17 @@ function getMap(main) {
 	});
 
 	setTimeout(() => {
-		initMap(div);
+		initMap(div, latLng);
 	}, 200);
 
 	return div;
 }
 
-function getMain() {
+function getMain(latLng) {
 	const main = document.createElement("main");
 	const h1 = document.createElement("h1");
 	const p = document.createElement("p");
-	const div = getMap(main);
+	const div = getMap(main, latLng);
 
 	main.id = "newEventLocal";
 	h1.textContent = "Local";
@@ -177,79 +181,111 @@ function getMain() {
 	return main;
 }
 
-function getFooter(eventId, href) {
+function getFooter(eventId, main) {
 	const footer = document.createElement("footer");
-	const a = document.createElement("a");
+	const button = document.createElement("button");
 	const latLng = {
 		lat: null,
 		lng: null,
 	};
 
 	footer.id = "newEventLocal-footer";
-	a.href = href;
-	a.textContent = "Decidir mais tarde";
-	a.addEventListener("click", async (e) => {
+	button.style.backgroundColor = "var(--blackberry)";
+	button.textContent = "Cancelar ação";
+	button.addEventListener("click", async (e) => {
 		e.preventDefault();
-		const constructorInfo = {
-			event: {
-				id: eventId,
-			},
-			stage: {
-				current: 3,
-				last: 2,
-			},
-		};
 		if (latLng.lat && latLng.lng) {
 			const { lat, lng } = latLng;
+			const str = `${lat},${lng}`;
 			const result = await updateEventLocation(eventId, {
-				location: `${lat},${lng}`,
+				location: str,
 			});
-			dispatchOnStateChange(href, constructorInfo);
+			if (result.error || result instanceof Error) {
+				showToast(result.error || "Erro ao atualizar localização");
+				return;
+			}
+			if (main instanceof HTMLElement) {
+				main.dispatchEvent(new CustomEvent("locationPosted", {}));
+				const divLocation = document.getElementById("div-location");
+				const paragraph = divLocation.querySelector("p");
+				if (paragraph && paragraph instanceof HTMLParagraphElement) {
+					paragraph.textContent = await locationStrToCityName(str);
+				}
+			}
+			showToast(result.message || result.success || "Evento atualizado");
 			return;
+		} else {
+			if (main instanceof HTMLElement) {
+				main.dispatchEvent(new CustomEvent("locationPosted", {}));
+			}
 		}
-		dispatchOnStateChange(href, constructorInfo);
 	});
 
 	footer.addEventListener("selectLatLng", (e) => {
 		latLng.lat = e.detail.lat;
 		latLng.lng = e.detail.lng;
-		a.removeAttribute("style");
-		a.textContent = "Salvar e continuar";
+		button.removeAttribute("style");
+		button.textContent = "Salvar e continuar";
 	});
 
-	footer.appendChild(a);
+	footer.appendChild(button);
 	return footer;
 }
 
-export default function newEventLocalPage(constructorInfo) {
-	if(!constructorInfo || !constructorInfo.event || !constructorInfo.event.id) {
-		showToast("O ID do evento é inválido");
-		dispatchOnStateChange("/home");
+function extractLatLng(eventLocation) {
+	if (
+		eventLocation &&
+		typeof eventLocation === "string" &&
+		eventLocation.includes(",")
+	) {
+		const spitedLocation = eventLocation.split(",");
+		if (spitedLocation && spitedLocation.length === 2) {
+			const latLng = {
+				lat: spitedLocation[0],
+				lng: spitedLocation[1],
+			};
+			return latLng;
+		}
 	}
-	const event = constructorInfo.event.id;
-	const stage = constructorInfo?.stage || {
-		current: 2,
-		last: 1,
-	};
+	return null;
+}
 
-	const header = getHeader(false, false);
-	const eventProgress = eventProgressBar(
-		false,
-		true,
-		stage.last,
-		stage.current
-	);
-
-	const main = getMain();
-	const footer = getFooter(event, "/home/create/guest");
-	const wrapper = document.createDocumentFragment();
+let latLng = {
+	lat: null,
+	lng: null,
+};
+const modalLocationComponent = (eventLocation, eventID) => {
+	let latLngTemp = extractLatLng(eventLocation);
+	if (latLng.lat && latLng.lng) {
+		latLngTemp = latLng;
+	}
+	const main = getMain(latLngTemp || null);
+	const footer = getFooter(eventID, main);
 	main.addEventListener("selectLatLng", (e) => {
+		latLng.lat = e.detail.lat;
+		latLng.lng = e.detail.lng;
 		footer.dispatchEvent(new CustomEvent("selectLatLng", e));
 	});
+	main.addEventListener("locationPosted", () => {
+		modal.remove();
+	});
 
-	wrapper.appendChild(header);
-	wrapper.appendChild(eventProgress);
-	wrapper.appendChild(main);
-	wrapper.appendChild(footer);
-	return wrapper;
-}
+	const container = document.createElement("div");
+	container.id = "eventPage-locationModal";
+	container.appendChild(main);
+	container.appendChild(footer);
+	container.addEventListener("click", (e) => {
+		e.stopPropagation();
+	});
+	const modal = createModal(container);
+
+	modal.addEventListener("click", (e) => {
+		if (e.target === modal) {
+			modal.remove();
+		}
+	});
+
+	return modal;
+};
+
+export default modalLocationComponent;

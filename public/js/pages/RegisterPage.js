@@ -6,7 +6,7 @@ const createRegisterForm = () => {
     const bodyRegister = document.createElement('div');
     bodyRegister.classList.add('body-register');
 
-    const headerRegister = getHeader(true, false);
+    const headerRegister = getHeader(true, false, "/");
     bodyRegister.appendChild(headerRegister);
 
     const blackOverlayRegister = document.createElement('div');
