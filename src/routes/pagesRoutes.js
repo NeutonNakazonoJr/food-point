@@ -4,6 +4,7 @@ const path = require("path");
 
 const goToIndexHTML = (req, res) => {
 	res.sendFile(path.join(__dirname, "../../public/index.html"));
+	return;
 };
 pagesRoutes.use(express.static(path.join(__dirname, "../../public")));
 

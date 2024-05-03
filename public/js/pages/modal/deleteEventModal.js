@@ -1,6 +1,7 @@
 import { deleteEvent } from "../../api/eventApi.js";
 import showToast from "../../components/toast.js";
 import dispatchOnStateChange from "../../events/onStateChange.js";
+import apiLoading from "../../utils/load/apiLoading.js";
 
 export default function cancelThisEventModal(
 	eventID,
@@ -31,9 +32,12 @@ export default function cancelThisEventModal(
 	btnReturn.textContent = continueBtnText;
 
 	btnCancel.addEventListener("click", async () => {
+		apiLoading(true);
 		const res = await deleteEvent(eventID);
 		if (res.error) {
 			showToast(res.error);
+			apiLoading(false);
+			return;
 		} else {
 			showToast("Evento deletado com sucesso");
 		}

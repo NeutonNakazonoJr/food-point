@@ -6,9 +6,9 @@ const uploadRepository = {
 
     newImage: async (image) => {
         const query =
-            'INSERT INTO upload (user_id, original_name, hash_name, image_path) VALUES ($1, $2, $3, $4) RETURNING *';
+            'INSERT INTO upload (user_id, hash_name, image_path) VALUES ($1, $2, $3) RETURNING *';
         try {
-            const { rows } = await dbConnection.query(query, [image.user_id, image.original_name, image.hash_name, image.image_path]);
+            const { rows } = await dbConnection.query(query, [image.user_id, image.hash_name, image.image_path]);
             return rows;
         } catch (error) {
             throw new Error("Erro ao inserir imagem no banco de dados", error)
@@ -25,9 +25,9 @@ const uploadRepository = {
         }
     },
     updateImage: async (image) => {
-        const query = 'UPDATE upload SET original_name = $1, hash_name = $2, image_path = $3, uploaded = CURRENT_TIMESTAMP WHERE user_id = $4 RETURNING *';
+        const query = 'UPDATE upload SET hash_name = $1, image_path = $2, uploaded = CURRENT_TIMESTAMP WHERE user_id = $3 RETURNING *';
         try{
-            const {rows} = await dbConnection.query(query, [image.original_name, image.hash_name, image.image_path, image.user_id])
+            const {rows} = await dbConnection.query(query, [image.hash_name, image.image_path, image.user_id])
         return rows[0]
         }
         catch (error) {

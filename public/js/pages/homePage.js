@@ -7,6 +7,7 @@ import showToast from "../components/toast.js";
 import { coordinateToAddress } from "../api/nominatimApi.js";
 import locationStrToCityName from "../utils/locationStrToCityName.js";
 import getContentLoading from "../utils/load/contentLoading.js";
+import apiLoading from "../utils/load/apiLoading.js";
 
 const defaultCardValues = {
 	width780: {
@@ -319,6 +320,9 @@ export default async function homePage(constructorInfo = { animation: true }) {
 			`/list`,
 			infos
 		);
+		myCard.addEventListener("click", (e) => {
+			apiLoading(true);
+		})
 		setAnimationForCard(myCard, index, 100, constructorInfo.animation);
 		return myCard;
 	});
@@ -330,6 +334,9 @@ export default async function homePage(constructorInfo = { animation: true }) {
 		100,
 		constructorInfo.animation
 	);
+	createEventCard.addEventListener("click", () => {
+		apiLoading(true);
+	})
 	
 	let contentIsLoaded = false;
 	const loadingContent = getContentLoading();

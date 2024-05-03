@@ -80,19 +80,6 @@ const createLoginForm = () => {
     loginFormDiv.id = 'login-form';
     loginForm.appendChild(loginFormDiv);
 
-    const landing = document.createElement("div");
-    landing.id = "landing-button"
-    const home = document.createElement("button");
-    home.id = "back-landing"
-    home.textContent = "Voltar"
-    const backIcon = document.createElement("img")
-    backIcon.id = "back-flag"
-    backIcon.src = "/assets/icons/flag-back-wine.svg"
-
-    home.appendChild(backIcon)
-    landing.appendChild(home)
-    loginFormDiv.appendChild(landing)
-
     const imgLogoDiv = document.createElement('div');
     imgLogoDiv.id = 'img-logo';
     
@@ -250,10 +237,6 @@ const createLoginForm = () => {
             }
         }
     });
-
-    home.addEventListener("click", () => {
-        dispatchOnStateChange("/")
-    })
 
     return bodyLogin;
 };
